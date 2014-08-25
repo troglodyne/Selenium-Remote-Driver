@@ -1,10 +1,5 @@
 Revision history for Selenium-Remote-Driver
 
-0.2103 7-16-2014
-        [BUG FIXES]
-        - #148: Fix has_javascript's compatibility with JSON::XS 3.01+
-        - #149: Coerce minimum permissible version of Moo package dependency
-
 0.2102 7-16-2014
         [NEW FEATURES]
         - Add inner_window_size sub and hash key option to accomodate S-R-D-UserAgent use

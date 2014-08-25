@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.2103';
+$Selenium::Remote::Driver::VERSION = '0.2102';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -1137,6 +1137,23 @@ sub set_inner_window_size {
     return $self->execute_script(join(';', @resize)) ? 1 : 0;
 }
 
+
+sub get_local_storage_item {
+    my ($self, $key) = @_;
+    my $res = { 'command' => 'getLocalStorageItem' };
+    my $params = { 'key' => $key };
+    return $self->_execute_command($res, $params);
+}
+
+
+sub delete_local_storage_item {
+    my ($self, $key) = @_;
+    my $res = { 'command' => 'deleteLocalStorageItem' };
+    my $params = { 'key' => $key };
+    return $self->_execute_command($res, $params);
+}
+
+
 1;
 
 __END__
@@ -1151,7 +1168,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.2103
+version 0.2102
 
 =head1 SYNOPSIS
 
@@ -2108,7 +2125,7 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
  Description:
     Send an event to the active element to depress or release a modifier key.
 
-  Input: 2
+ Input: 2
     Required:
       value - String - The modifier key event to be sent. This key must be one 'Ctrl','Shift','Alt',' or 'Command'/'Meta' as defined by the send keys command
       isdown - Boolean/String - Whether to generate a key down or key up
@@ -2225,7 +2242,6 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
 =head2 set_inner_window_size
 
  Description:
-
      Set the inner window size by closing the current window and
      reopening the current page in a new window. This can be useful
      when using browsers to mock as mobile devices.
@@ -2242,6 +2258,33 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
 
  Usage:
      $driver->set_inner_window_size(640, 480)
+
+=head2 get_local_storage_item
+
+ Description:
+     Get the value of a local storage item specified by the given key.
+
+ Input: 1
+    Required:
+        STRING - name of the key to be retrieved
+
+ Output:
+     STRING - value of the local storage item
+
+ Usage:
+     $driver->get_local_storage_item('key')
+
+=head2 delete_local_storage_item
+
+ Description:
+     Get the value of a local storage item specified by the given key.
+
+ Input: 1
+    Required
+        STRING - name of the key to be deleted
+
+ Usage:
+     $driver->delete_local_storage_item('key')
 
 =head1 SEE ALSO
 
@@ -2260,6 +2303,14 @@ L<https://code.google.com/p/selenium/wiki/JsonWireProtocol#Capabilities_JSON_Obj
 =item *
 
 L<https://github.com/gempesaw/Selenium-Remote-Driver/wiki|https://github.com/gempesaw/Selenium-Remote-Driver/wiki>
+
+=item *
+
+L<Brownie|Brownie>
+
+=item *
+
+L<Wight|Wight>
 
 =back
 
