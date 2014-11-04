@@ -11,18 +11,30 @@ my $repo_root = abs_path($this_folder) . '/';
 
 reset_env();
 start_server();
+output_linux_help();
 
-if ($^O eq 'linux') {
-    print "Headless and need a webdriver server started? Try\n\n\tDISPLAY=:1 xvfb-run --auto-servernum java -jar /usr/lib/node_modules/protractor/selenium/selenium-server-standalone-2.42.2.jar\n\n";
-}
-
+my $built_lib = find_built_lib();
 my $export = $^O eq 'MSWin32' ? 'set' : 'export';
 my $wait = $^O eq 'MSWin32' ? 'START /WAIT' : '';
 print `$export WD_MOCKING_RECORD=1 && cd $repo_root && prove -I$built_lib -rv t/Firefox-Profile.t`;
 reset_env();
 
 sub find_built_lib {
+    my $built_lib = glob('Selenium-Remote-Driver-*/lib');
+    if (not defined $built_lib) {
+        print 'Building a dist.' . "\n";
+        print `cd $repo_root && dzil build`;
+    }
+    # If built_lib wasn't around in the first place, we'll have to glob
+    # for it again.
+    $built_lib = $repo_root . ($built_lib || glob('Selenium-Remote-Driver-*/lib'));
+    return $built_lib;
+}
 
+sub output_linux_help {
+    if ($^O eq 'linux') {
+        print "Headless and need a webdriver server started? Try\n\n\tDISPLAY=:1 xvfb-run --auto-servernum java -jar /usr/lib/node_modules/protractor/selenium/selenium-server-standalone-2.42.2.jar\n\n";
+    }
 }
 
 sub start_server {
