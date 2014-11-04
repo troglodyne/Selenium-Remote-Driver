@@ -20,9 +20,9 @@ die "Server failed.\n" unless $server;
 
 while ( my $client = $server->accept() ) {
     $client->autoflush(1);
-    
+
     my $request = <$client>;
-    
+
     my $filename;
     my $filesize;
     my $content_type;
