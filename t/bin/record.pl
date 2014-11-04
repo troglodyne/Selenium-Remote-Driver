@@ -14,16 +14,18 @@ start_server();
 
 my $built_lib = glob('Selenium-Remote-Driver-*/lib');
 if (not defined $built_lib) {
-    print ' Building a dist.';
+    print ' Building a dist.' . "\n";
     print `cd $repo_root && dzil build`;
 }
 # If built_lib wasn't around in the first place, we'll have to glob
 # for it again.
 $built_lib = $repo_root . ($built_lib || glob('Selenium-Remote-Driver-*/lib'));
+use Data::Dumper; use DDP;
+p $built_lib;
 
 if ($^O eq 'linux') {
-    print "Headless and need a webdriver server started? Try\n\n\tDISPLAY=:1 xvfb-run --auto-servernum java -jar /usr/lib/node_modules/protractor/selenium/selenium-server-standalone-2.42.2.jar\n\n";
-}
+      print "Headless and need a webdriver server started? Try\n\n\tDISPLAY=:1 xvfb-run --auto-servernum java -jar /usr/lib/node_modules/protractor/selenium/selenium-server-standalone-2.42.2.jar\n\n";
+  }
 
 my $export = $^O eq 'MSWin32' ? 'set' : 'export';
 my $wait = $^O eq 'MSWin32' ? 'START /WAIT' : '';
@@ -54,6 +56,6 @@ sub reset_env {
         print 'Cleaning. ';
         `cd $repo_root && dzil clean`;
     }
-    print 'Taking out any existing servers. ';
+    print 'Taking out any existing servers. ' . "\n";
     kill_server();
 }

@@ -30,6 +30,7 @@ requires "strict" => "0";
 requires "warnings" => "0";
 
 on 'test' => sub {
+  requires "DDP" => "0";
   requires "File::Basename" => "0";
   requires "File::stat" => "0";
   requires "FindBin" => "0";

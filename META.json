@@ -65,6 +65,7 @@
       },
       "test" : {
          "requires" : {
+            "DDP" : "0",
             "File::Basename" : "0",
             "File::stat" : "0",
             "FindBin" : "0",
