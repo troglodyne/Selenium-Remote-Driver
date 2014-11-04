@@ -27,7 +27,7 @@ if ($^O eq 'linux') {
 
 my $export = $^O eq 'MSWin32' ? 'set' : 'export';
 my $wait = $^O eq 'MSWin32' ? 'START /WAIT' : '';
-print `$export WD_MOCKING_RECORD=1 && cd $repo_root && prove -I$built_lib -rv t/`;
+print `$export WD_MOCKING_RECORD=1 && cd $repo_root && prove -I$built_lib -rv t/Firefox-Profile.t`;
 reset_env();
 
 sub start_server {
