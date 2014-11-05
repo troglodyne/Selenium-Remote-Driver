@@ -1,5 +1,5 @@
 package Selenium::Remote::Commands;
-$Selenium::Remote::Commands::VERSION = '0.2151';
+$Selenium::Remote::Commands::VERSION = '0.2152';
 # ABSTRACT: Implement commands for Selenium::Remote::Driver
 
 use Moo;
@@ -426,7 +426,7 @@ Selenium::Remote::Commands - Implement commands for Selenium::Remote::Driver
 
 =head1 VERSION
 
-version 0.2151
+version 0.2152
 
 =head1 SEE ALSO
 
