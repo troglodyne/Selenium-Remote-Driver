@@ -4,16 +4,26 @@ use 5.010;
 
 use Test::More;
 use Test::Selenium::Remote::Driver;
+use Selenium::Remote::Mock::RemoteConnection;
 
-if (not Test::Selenium::Remote::Driver->server_is_running()) {
-    plan skip_all => 'The Selenium server must be running for this test';
-}
+use FindBin;
+use lib $FindBin::Bin . '/lib';
+use TestHarness;
+
+my $harness = TestHarness->new(
+    this_file => $FindBin::Script
+);
+my %selenium_args = (
+    default_finder => 'css',
+    javascript     => 1,
+    %{ $harness->base_caps }
+);
+$harness->skip_all_unless_mocks_exist;
 
 plan tests => 9;
 
 my $s = Test::Selenium::Remote::Driver->new(
-    default_finder => 'css',
-    javascript     => 1,
+    %selenium_args
 );
 
 my $perl_title = 'The Perl Programming Language - www.perl.org';
@@ -35,7 +45,6 @@ my $handles = $s->get_window_handles;
 is scalar(@$handles), 2;
 # We don't assume any order in the @$handles array:
 my $cpan_handle = $perl_handle eq $handles->[0] ? $handles->[1] : $handles->[0];
-diag explain $handles;
 
 $s->switch_to_window($cpan_handle);
 $s->title_is($cpan_title);
@@ -48,4 +57,3 @@ $s->title_is($cpan_title);
 
 $s->switch_to_window('perlorg');
 $s->title_is($perl_title);
-

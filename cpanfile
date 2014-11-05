@@ -8,6 +8,7 @@ requires "File::Copy" => "0";
 requires "File::Temp" => "0";
 requires "HTTP::Headers" => "0";
 requires "HTTP::Request" => "0";
+requires "HTTP::Response" => "0";
 requires "IO::Compress::Zip" => "0";
 requires "IO::Socket" => "0";
 requires "JSON" => "0";
@@ -31,15 +32,13 @@ requires "warnings" => "0";
 on 'test' => sub {
   requires "File::Basename" => "0";
   requires "File::stat" => "0";
+  requires "FindBin" => "0";
   requires "IO::Socket::INET" => "0";
-  requires "LWP::Protocol::PSGI" => "0.04";
   requires "LWP::Simple" => "0";
   requires "Test::Exception" => "0";
   requires "Test::LWP::UserAgent" => "0";
-  requires "Test::MockObject" => "0";
-  requires "Test::MockObject::Extends" => "0";
   requires "Test::More" => "0";
-  requires "Test::Tester" => "0";
+  requires "lib" => "0";
 };
 
 on 'configure' => sub {

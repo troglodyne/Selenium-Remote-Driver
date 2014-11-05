@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
 
 use strict;
 use warnings;
@@ -10,42 +10,31 @@ use MIME::Base64 qw/decode_base64/;
 use Archive::Extract;
 use File::Temp;
 use JSON;
+use Selenium::Remote::Mock::RemoteConnection;
 use Selenium::Remote::Driver::Firefox::Profile;
 
-BEGIN {
-    if (defined $ENV{'WD_MOCKING_RECORD'} && ($ENV{'WD_MOCKING_RECORD'}==1)) {
-        use t::lib::MockSeleniumWebDriver;
-        my $p = Net::Ping->new("tcp", 2);
-        $p->port_number(4444);
-        unless ($p->ping('localhost')) {
-            plan skip_all => "Selenium server is not running on localhost:4444";
-            exit;
-        }
-        warn "\n\nRecording...\n\n";
-    }
-}
+use FindBin;
+use lib $FindBin::Bin . '/lib';
+use TestHarness;
 
-my $record = (defined $ENV{'WD_MOCKING_RECORD'} && ($ENV{'WD_MOCKING_RECORD'}==1))?1:0;
-my $os  = $^O;
-if ($os =~ m/(aix|freebsd|openbsd|sunos|solaris)/) {
-    $os = 'linux';
-}
-my $mock_file = "firefox-profile-mock-$os.json";
-if (!$record && !(-e "t/mock-recordings/$mock_file")) {
-    plan skip_all => "Mocking of tests is not been enabled for this platform";
-}
-t::lib::MockSeleniumWebDriver::register($record,"t/mock-recordings/$mock_file");
+my $harness = TestHarness->new(
+    this_file => $FindBin::Script
+);
+my %selenium_args = %{ $harness->base_caps };
+$harness->skip_all_unless_mocks_exist;
+
+my $fixture_dir = $FindBin::Bin . '/www/';
 
 CUSTOM_EXTENSION_LOADED: {
     my $profile = Selenium::Remote::Driver::Firefox::Profile->new;
     my $website = 'http://localhost:63636';
-    my $mock_encoded_profile = "t/www/encoded_profile.b64";
+    my $mock_encoded_profile = $fixture_dir . 'encoded_profile.b64';
     my $encoded;
 
     # Set this to true to re-encode the profile. This should not need
     # to happen often.
     my $create_new_profile = 0;
-    if ($record && $create_new_profile) {
+    if ($create_new_profile) {
         $profile->set_preference(
             'browser.startup.homepage' => $website
         );
@@ -60,7 +49,7 @@ CUSTOM_EXTENSION_LOADED: {
         #     contentScript: 'document.body.innerHTML = ' +
         #         ' "<h1>Page matches ruleset</h1>";'
         # });
-        $profile->add_extension('t/www/redisplay.xpi');
+        $profile->add_extension($fixture_dir . 'redisplay.xpi');
 
         $encoded = $profile->_encode;
 
@@ -73,16 +62,17 @@ CUSTOM_EXTENSION_LOADED: {
         $encoded = do {local $/ = undef; <$fh>};
         close ($fh);
     }
-
-    my $driver = Selenium::Remote::Driver->new(extra_capabilities => {
-        firefox_profile => $encoded
-    });
+    my %driver_args = %selenium_args;
+    $driver_args{extra_capabilities} = { firefox_profile => $encoded };
+    my $driver = Selenium::Remote::Driver->new(%driver_args);
 
     ok(defined $driver, "made a driver without dying");
 
-    # the initial automatic homepage load found in the preference
-    # 'browser.startup.homepage' isn't blocking, so we need to wait
-    # until the page is loaded (when we can find elements)
+    # We don't have to `$driver->get` because our extension should do
+    # it for us. However, the initial automatic homepage load found in
+    # the preference 'browser.startup.homepage' isn't blocking, so we
+    # need to wait until the page is loaded (when we can find
+    # elements)
     $driver->set_implicit_wait_timeout(30000);
     $driver->find_element("h1", "tag_name");
     cmp_ok($driver->get_current_url, '=~', qr/localhost/i,
@@ -167,29 +157,27 @@ PREFERENCES: {
 
 CROAKING: {
     my $profile = Selenium::Remote::Driver::Firefox::Profile->new;
-    {
-        eval {
-            $profile->add_extension('t/00-load.t');
-        };
-        cmp_ok($@, '=~', qr/xpi format/i, "caught invalid extension filetype");
-    }
 
-    {
-        eval {
-            $profile->add_extension('t/www/invalid-extension.xpi');
-            my $test = $profile->_encode;
-        };
-        ok($@ =~ /install\.rdf/i, "caught invalid extension structure");
-    }
+    eval { $profile->add_extension('gibberish'); };
+    cmp_ok($@, '=~', qr/File not found/i, 'throws on missing file');
 
-    {
-        eval {
-            my $croakingDriver = Selenium::Remote::Driver->new(
-                firefox_profile => 'clearly invalid!'
-            );
-        };
-        ok ($@ =~ /coercion.*failed/, "caught invalid extension in driver constructor");
-    }
+    eval { $profile->add_extension($FindBin::Bin . '/00-load.t'); };
+    cmp_ok($@, '=~', qr/xpi format/i, "caught invalid extension filetype");
+
+    eval {
+        $profile->add_extension($fixture_dir . 'invalid-extension.xpi') ;
+        $profile->_encode;
+    };
+    ok($@ =~ /install\.rdf/i, "caught invalid extension structure");
+
+    eval {
+        my %driver_args = %selenium_args;
+        $driver_args{firefox_profile} = 'clearly invalid';
+        my $croakingDriver = Selenium::Remote::Driver->new(
+            %driver_args
+        );
+    };
+    ok ($@ =~ /coercion.*failed/, "caught invalid extension in driver constructor");
 }
 
 done_testing;

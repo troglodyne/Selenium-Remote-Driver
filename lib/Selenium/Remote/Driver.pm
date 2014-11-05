@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.2150'; # TRIAL
+$Selenium::Remote::Driver::VERSION = '0.2152'; # TRIAL
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -97,12 +97,12 @@ has 'session_id' => (
 has 'remote_conn' => (
     is      => 'lazy',
     builder => sub {
-        my $self = shift;
-        return Selenium::Remote::RemoteConnection->new(
-            remote_server_addr => $self->remote_server_addr,
-            port               => $self->port,
-            ua                 => $self->ua
-        );
+            my $self = shift;
+            return Selenium::Remote::RemoteConnection->new(
+                remote_server_addr => $self->remote_server_addr,
+                port               => $self->port,
+                ua                 => $self->ua
+            );
     },
 );
 
@@ -113,7 +113,9 @@ has 'ua' => (
 
 has 'commands' => (
     is      => 'lazy',
-    builder => sub { return Selenium::Remote::Commands->new; },
+    builder => sub {
+        return Selenium::Remote::Commands->new;
+    },
 );
 
 has 'auto_close' => (
@@ -200,32 +202,23 @@ has 'inner_window_size' => (
 
 );
 
-has 'testing' => (
-    is => 'rw',
-    default => sub { 0 },
-);
-
 sub BUILD {
     my $self = shift;
 
-    # disable server connection when testing attribute is on
-    unless ($self->testing) {
+    if ($self->has_desired_capabilities) {
+        $self->new_desired_session( $self->desired_capabilities );
+    }
+    else {
+        # Connect to remote server & establish a new session
+        $self->new_session( $self->extra_capabilities );
+    }
 
-        if ($self->has_desired_capabilities) {
-            $self->new_desired_session( $self->desired_capabilities );
-        }
-        else {
-            # Connect to remote server & establish a new session
-            $self->new_session( $self->extra_capabilities );
-        }
-
-        if ( !( defined $self->session_id ) ) {
-            croak "Could not establish a session with the remote server\n";
-        }
-        elsif ($self->has_inner_window_size) {
-            my $size = $self->inner_window_size;
-            $self->set_inner_window_size(@$size);
-        }
+    if ( !( defined $self->session_id ) ) {
+        croak "Could not establish a session with the remote server\n";
+    }
+    elsif ($self->has_inner_window_size) {
+        my $size = $self->inner_window_size;
+        $self->set_inner_window_size(@$size);
     }
 }
 
@@ -255,12 +248,7 @@ sub _execute_command {
 
     if ($resource) {
         $params = {} unless $params;
-        my $resp = $self->remote_conn->request(
-            $resource->{method},
-            $resource->{url},
-            $resource->{no_content_success},
-            $params
-        );
+        my $resp = $self->remote_conn->request( $resource, $params);
         if ( ref($resp) eq 'HASH' ) {
             if ( $resp->{cmd_status} && $resp->{cmd_status} eq 'OK' ) {
                 return $resp->{cmd_return};
@@ -329,13 +317,17 @@ sub new_desired_session {
 
 sub _request_new_session {
     my ( $self, $args ) = @_;
-
+    $self->remote_conn->check_status();
     # command => 'newSession' to fool the tests of commands implemented
     # TODO: rewrite the testing better, this is so fragile.
-    my $resp = $self->remote_conn->request(
-        $self->commands->get_method('newSession'),
-        $self->commands->get_url('newSession'),
-        $self->commands->get_no_content_success('newSession'),
+    my $resource_new_session = {
+        method => $self->commands->get_method('newSession'),
+        url => $self->commands->get_url('newSession'),
+        no_content_success => $self->commands->get_no_content_success('newSession'),
+    };
+    my $rc = $self->remote_conn;
+    my $resp = $rc->request(
+        $resource_new_session,
         $args,
     );
     if ( ( defined $resp->{'sessionId'} ) && $resp->{'sessionId'} ne '' ) {
@@ -343,8 +335,13 @@ sub _request_new_session {
     }
     else {
         my $error = 'Could not create new session';
-        $error .= ': ' . $resp->{cmd_return}->{message}
-          if exists $resp->{cmd_return}->{message};
+
+        if (ref $resp->{cmd_return} eq 'HASH') {
+            $error .= ': ' . $resp->{cmd_return}->{message};
+        }
+        else {
+            $error .= ': ' . $resp->{cmd_return};
+        }
         croak $error;
     }
 }
@@ -771,6 +768,15 @@ sub set_window_size {
 }
 
 
+sub maximize_window {
+    my ( $self, $window ) = @_;
+    $window = ( defined $window ) ? $window : 'current';
+    my $res = { 'command' => 'maximizeWindow', 'window_handle' => $window };
+    my $ret = $self->_execute_command( $res );
+    return $ret ? 1 : 0;
+}
+
+
 sub get_all_cookies {
     my ($self) = @_;
     my $res = { 'command' => 'getAllCookies' };
@@ -1110,6 +1116,13 @@ sub get_path {
 }
 
 
+sub get_user_agent {
+    my $self = shift;
+    return $self->execute_script('return window.navigator.userAgent;');
+}
+
+
+
 sub set_inner_window_size {
     my $self = shift;
     my $height = shift;
@@ -1161,7 +1174,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.2150
+version 0.2152
 
 =head1 SYNOPSIS
 
@@ -1938,6 +1951,20 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
  Usage:
     $driver->set_window_size(640, 480);
 
+=head2 maximize_window
+
+ Description:
+    Maximizes the browser window
+
+ Input:
+    STRING - <optional> - window handle (default is 'current' window)
+
+ Output:
+    BOOLEAN - Success or failure
+
+ Usage:
+    $driver->maximize_window();
+
 =head2 get_all_cookies
 
  Description:
@@ -2233,6 +2260,15 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
  Usage:
      $path = $driver->get_path();
 
+=head2 get_user_agent
+
+ Description:
+    Convenience method to get the user agent string, according to the
+    browser's value for window.navigator.userAgent.
+
+ Usage:
+    $user_agent = $driver->get_user_agent()
+
 =head2 set_inner_window_size
 
  Description:
@@ -2349,6 +2385,14 @@ Allen Lew <allen@alew.org>
 
 =item *
 
+Bas Bloemsaat <bas@bloemsaat.com>
+
+=item *
+
+Bas Bloemsaat <bas@tevreden.nl>
+
+=item *
+
 Brian Horakh <brianh@zoovy.com>
 
 =item *
@@ -2366,6 +2410,10 @@ Dave Rolsky <autarch@urth.org>
 =item *
 
 Dmitry Karasik <dmitry@karasik.eu.org>
+
+=item *
+
+Emmanuel 'BHS_error' Peroumalnaik <peroumalnaik.emmanuel@gmail.com>
 
 =item *
 
