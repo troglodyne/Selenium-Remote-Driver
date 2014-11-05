@@ -4,6 +4,7 @@
 use warnings;
 use strict;
 use IO::Socket;
+use FindBin;
 use File::stat;
 use File::Basename;
 
@@ -14,7 +15,7 @@ my $server = IO::Socket::INET->new(
     ReuseAddr => 1
 );
 
-my $server_root = "t/";
+my $server_root = $FindBin::Bin . '/';
 
 die "Server failed.\n" unless $server;
 

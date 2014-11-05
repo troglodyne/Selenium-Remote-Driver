@@ -33,7 +33,7 @@ CUSTOM_EXTENSION_LOADED: {
 
     # Set this to true to re-encode the profile. This should not need
     # to happen often.
-    my $create_new_profile = 1;
+    my $create_new_profile = 0;
     if ($create_new_profile) {
         $profile->set_preference(
             'browser.startup.homepage' => $website
@@ -68,9 +68,11 @@ CUSTOM_EXTENSION_LOADED: {
 
     ok(defined $driver, "made a driver without dying");
 
-    # the initial automatic homepage load found in the preference
-    # 'browser.startup.homepage' isn't blocking, so we need to wait
-    # until the page is loaded (when we can find elements)
+    # We don't have to `$driver->get` because our extension should do
+    # it for us. However, the initial automatic homepage load found in
+    # the preference 'browser.startup.homepage' isn't blocking, so we
+    # need to wait until the page is loaded (when we can find
+    # elements)
     $driver->set_implicit_wait_timeout(30000);
     $driver->find_element("h1", "tag_name");
     cmp_ok($driver->get_current_url, '=~', qr/localhost/i,

@@ -768,6 +768,15 @@ sub set_window_size {
 }
 
 
+sub maximize_window {
+    my ( $self, $window ) = @_;
+    $window = ( defined $window ) ? $window : 'current';
+    my $res = { 'command' => 'maximizeWindow', 'window_handle' => $window };
+    my $ret = $self->_execute_command( $res );
+    return $ret ? 1 : 0;
+}
+
+
 sub get_all_cookies {
     my ($self) = @_;
     my $res = { 'command' => 'getAllCookies' };
@@ -1942,6 +1951,20 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
  Usage:
     $driver->set_window_size(640, 480);
 
+=head2 maximize_window
+
+ Description:
+    Maximizes the browser window
+
+ Input:
+    STRING - <optional> - window handle (default is 'current' window)
+
+ Output:
+    BOOLEAN - Success or failure
+
+ Usage:
+    $driver->maximize_window();
+
 =head2 get_all_cookies
 
  Description:
@@ -2359,6 +2382,14 @@ Mark Stosberg <mark@stosberg.com>
 =item *
 
 Allen Lew <allen@alew.org>
+
+=item *
+
+Bas Bloemsaat <bas@bloemsaat.com>
+
+=item *
+
+Bas Bloemsaat <bas@tevreden.nl>
 
 =item *
 
