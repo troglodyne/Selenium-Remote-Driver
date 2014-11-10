@@ -1,6 +1,6 @@
 Revision history for Selenium-Remote-Driver
 
-0.22   10-10-2014
+0.22   11-10-2014
         [NEW FEATURES]
         - Improved error messaging for Saucelabs non-json cases
         - Improved error messaging for malconfigured chromedrivers
