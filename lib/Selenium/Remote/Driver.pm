@@ -2409,10 +2409,6 @@ Dmitry Karasik <dmitry@karasik.eu.org>
 
 =item *
 
-Emmanuel 'BHS_error' Peroumalnaik <peroumalnaik.emmanuel@gmail.com>
-
-=item *
-
 Emmanuel Peroumalnaik <eperoumalnaik@weborama.com>
 
 =item *
