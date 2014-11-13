@@ -2,7 +2,7 @@ Revision history for Selenium-Remote-Driver
 
 0.2201 11-13-2014
         [BUG FIXES]
-        - Fix RemoteConnection's redirect handling
+        - Fix redirect handling mishap in RemoteConnection
 
 0.22   11-10-2014
         [NEW FEATURES]
