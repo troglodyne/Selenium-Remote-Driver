@@ -1,5 +1,5 @@
 package Selenium::Remote::ErrorHandler;
-$Selenium::Remote::ErrorHandler::VERSION = '0.2201';
+$Selenium::Remote::ErrorHandler::VERSION = '0.2201'; # TRIAL
 # ABSTRACT: Error handler for Selenium::Remote::Driver
 
 use Moo;

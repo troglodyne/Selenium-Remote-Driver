@@ -77,7 +77,7 @@
          }
       }
    },
-   "release_status" : "stable",
+   "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver/issues"
