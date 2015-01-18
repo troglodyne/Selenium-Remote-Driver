@@ -1,5 +1,5 @@
 package Test::Selenium::Remote::Driver;
-$Test::Selenium::Remote::Driver::VERSION = '0.2250'; # TRIAL
+$Test::Selenium::Remote::Driver::VERSION = '0.2203';
 # ABSTRACT: Useful testing subclass for Selenium::Remote::Driver
 
 use Moo;
@@ -45,6 +45,7 @@ sub has_args {
     my $fun_name      = shift;
     my $hash_fun_args = {
         'find_element'     => 1,
+        'find_elements'     => 1,
         'compare_elements' => 2,
         'get' => 1,
     };
