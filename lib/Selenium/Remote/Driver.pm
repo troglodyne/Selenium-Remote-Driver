@@ -20,6 +20,8 @@ use Scalar::Util;
 use Selenium::Remote::RemoteConnection;
 use Selenium::Remote::Commands;
 use Selenium::Remote::WebElement;
+use File::Spec::Functions ();
+use File::Basename ();
 
 use constant FINDERS => {
     class             => 'class name',
@@ -1007,6 +1009,56 @@ sub get_active_element {
 }
 
 
+sub cache_status {
+    my ($self) = @_;
+    my $res = { 'command' => 'cacheStatus' };
+    return $self->_execute_command($res);
+}
+
+
+sub set_geolocation {
+    my ( $self, %params ) = @_;
+    my $res = { 'command' => 'setGeolocation' };
+    return $self->_execute_command( $res, \%params );
+}
+
+
+sub get_geolocation {
+    my ($self) = @_;
+    my $res = { 'command' => 'getGeolocation' };
+    return $self->_execute_command($res);
+}
+
+
+sub get_log {
+    my ( $self, $type ) = @_;
+    my $res = { 'command' => 'getLog' };
+    return $self->_execute_command( $res, { type => $type });
+}
+
+
+sub get_log_types {
+    my ($self) = @_;
+    my $res = { 'command' => 'getLogTypes' };
+    return $self->_execute_command($res);
+}
+
+
+
+sub set_orientation {
+    my ( $self, $orientation ) = @_;
+    my $res = { 'command' => 'setOrientation' };
+    return $self->_execute_command( $res, { orientation => $orientation } );
+}
+
+
+sub get_orientation {
+    my ($self) = @_;
+    my $res = { 'command' => 'getOrientation' };
+    return $self->_execute_command($res);
+}
+
+
 sub send_modifier {
     my ( $self, $modifier, $isdown ) = @_;
     if ( $isdown =~ /(down|up)/ ) {
@@ -1075,18 +1127,39 @@ sub button_up {
 # org.openqa.selenium.remote.RemoteWebElement java class.
 
 sub upload_file {
-    my ( $self, $filename ) = @_;
+    my ( $self, $filename, $raw_content ) = @_;
+
+    #If no processing is passed, send the argument raw
+    my $params = {
+        file => $raw_content
+    };
+
+    #Otherwise, zip/base64 it.
+    $params = $self->_prepare_file($filename) if !defined($raw_content);
+
+    my $res = { 'command' => 'uploadFile' };    # /session/:SessionId/file
+    my $ret = $self->_execute_command( $res, $params );
+
+    #WORKAROUND: Since this is undocumented selenium functionality, work around a bug.
+    my ($drive, $path, $file) = File::Spec::Functions::splitpath($ret);
+    if ($file ne $filename) {
+        $ret = File::Spec::Functions::catpath($drive,$path,$filename);
+    }
+
+    return $ret;
+}
+
+sub _prepare_file {
+    my ($self,$filename) = @_;
     if ( not -r $filename ) { die "upload_file: no such file: $filename"; }
     my $string = "";    # buffer
     zip $filename => \$string
       or die "zip failed: $ZipError\n";    # compress the file into string
-    my $res = { 'command' => 'uploadFile' };    # /session/:SessionId/file
     require MIME::Base64;
 
-    my $params = {
+    return {
         file => MIME::Base64::encode_base64($string)          # base64-encoded string
     };
-    return $self->_execute_command( $res, $params );
 }
 
 
@@ -2137,6 +2210,110 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
  Usage:
     $driver->get_active_element();
 
+=head2 cache_status
+
+ Description:
+    Get the status of the html5 application cache.
+
+ Usage:
+    print $driver->cache_status;
+
+ Output:
+    <number> - Status code for application cache: {UNCACHED = 0, IDLE = 1, CHECKING = 2, DOWNLOADING = 3, UPDATE_READY = 4, OBSOLETE = 5}
+
+=head2 set_geolocation
+
+ Description:
+    Set the current geographic location - note that your driver must
+    implement this endpoint, or else it will crash your session. At the
+    very least, it works in v2.12 of Chromedriver.
+
+ Input:
+    Required:
+        HASH: A hash with key C<location> whose value is a Location hashref. See
+        usage section for example.
+
+ Usage:
+    $driver->set_geolocation( location => {
+        latitude  => 40.714353,
+        longitude => -74.005973,
+        altitude  => 0.056747
+    });
+
+ Output:
+    BOOLEAN - success or failure
+
+=head2 get_geolocation
+
+ Description:
+    Get the current geographic location. Note that your webdriver must
+    implement this endpoint - otherwise, it will crash your session. At
+    the time of release, we couldn't get this to work on the desktop
+    FirefoxDriver or desktop Chromedriver.
+
+ Usage:
+    print $driver->get_geolocation;
+
+ Output:
+    { latitude: number, longitude: number, altitude: number } - The current geo location.
+
+=head2 get_log
+
+ Description:
+    Get the log for a given log type. Log buffer is reset after each request.
+
+ Input:
+    Required:
+        <STRING> - Type of log to retrieve:
+        {client|driver|browser|server}. There may be others available; see
+        get_log_types for a full list for your driver.
+
+ Usage:
+    $driver->get_log( $log_type );
+
+ Output:
+    <ARRAY|ARRAYREF> - An array of log entries since the most recent request.
+
+=head2 get_log_types
+
+ Description:
+    Get available log types. By default, every driver should have client,
+    driver, browser, and server types, but there may be more available,
+    depending on your driver.
+
+ Usage:
+    my @types = $driver->get_log_types;
+    $driver->get_log($types[0]);
+
+ Output:
+    <ARRAYREF> - The list of log types.
+
+=head2 set_orientation
+
+ Description:
+    Set the browser orientation.
+
+ Input:
+    Required:
+        <STRING> - Orientation {LANDSCAPE|PORTRAIT}
+
+ Usage:
+    $driver->set_orientation( $orientation  );
+
+ Output:
+    BOOLEAN - success or failure
+
+=head2 get_orientation
+
+ Description:
+    Get the current browser orientation. Returns either LANDSCAPE|PORTRAIT.
+
+ Usage:
+    print $driver->get_orientation;
+
+ Output:
+    <STRING> - your orientation.
+
 =head2 send_modifier
 
  Description:
@@ -2225,6 +2402,9 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
     Upload a file from the local machine to the selenium server
     machine. That file then can be used for testing file upload on web
     forms. Returns the remote-server's path to the file.
+
+    Passing raw data as an argument past the filename will upload
+    that rather than the file's contents.
 
  Usage:
     my $remote_fname = $driver->upload_file( $fname );
@@ -2414,6 +2594,10 @@ Eric Johnson <eric.git@iijo.org>
 =item *
 
 Gabor Szabo <gabor@szabgab.com>
+
+=item *
+
+George S. Baugh <george@troglodyne.net>
 
 =item *
 

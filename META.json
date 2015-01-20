@@ -37,7 +37,9 @@
             "Cwd" : "0",
             "Data::Dumper" : "0",
             "Exporter" : "0",
+            "File::Basename" : "0",
             "File::Copy" : "0",
+            "File::Spec::Functions" : "0",
             "File::Temp" : "0",
             "HTTP::Headers" : "0",
             "HTTP::Request" : "0",
@@ -65,12 +67,12 @@
       },
       "test" : {
          "requires" : {
-            "File::Basename" : "0",
             "File::stat" : "0",
             "FindBin" : "0",
             "IO::Socket::INET" : "0",
             "LWP::Simple" : "0",
             "Test::Exception" : "0",
+            "Test::Fatal" : "0",
             "Test::LWP::UserAgent" : "0",
             "Test::More" : "0",
             "lib" : "0"
@@ -100,6 +102,7 @@
       "Emmanuel Peroumalnaik <eperoumalnaik@weborama.com>",
       "Eric Johnson <eric.git@iijo.org>",
       "Gabor Szabo <gabor@szabgab.com>",
+      "George S. Baugh <george@troglodyne.net>",
       "Gordon Child <gordon@gordonchild.com>",
       "GreatFlamingFoo <greatflamingfoo@gmail.com>",
       "Ivan Kurmanov <duraley@gmail.com>",
