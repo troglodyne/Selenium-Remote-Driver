@@ -2553,47 +2553,13 @@ Mark Stosberg <mark@stosberg.com>
 
 =head1 CONTRIBUTORS
 
+=for stopwords Allen Lew George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Ken Swanson Phil Kania Mitchell Robert Utter Bas Bloemsaat Tom Hukins Vishwanath Janmanchi amacleay jamadam Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Emmanuel Peroumalnaik Eric Johnson Gabor Szabo
+
 =over 4
 
 =item *
 
 Allen Lew <allen@alew.org>
-
-=item *
-
-Bas Bloemsaat <bas@bloemsaat.com>
-
-=item *
-
-Brian Horakh <brianh@zoovy.com>
-
-=item *
-
-Charles Howes <charles.howes@globalrelay.net>
-
-=item *
-
-Daniel Fackrell <dfackrell@bluehost.com>
-
-=item *
-
-Dave Rolsky <autarch@urth.org>
-
-=item *
-
-Dmitry Karasik <dmitry@karasik.eu.org>
-
-=item *
-
-Emmanuel Peroumalnaik <eperoumalnaik@weborama.com>
-
-=item *
-
-Eric Johnson <eric.git@iijo.org>
-
-=item *
-
-Gabor Szabo <gabor@szabgab.com>
 
 =item *
 
@@ -2637,6 +2603,10 @@ Robert Utter <utter.robert@gmail.com>
 
 =item *
 
+Bas Bloemsaat <bas@bloemsaat.com>
+
+=item *
+
 Tom Hukins <tom@eborcom.com>
 
 =item *
@@ -2650,6 +2620,38 @@ amacleay <a.macleay@gmail.com>
 =item *
 
 jamadam <sugama@jamadam.com>
+
+=item *
+
+Brian Horakh <brianh@zoovy.com>
+
+=item *
+
+Charles Howes <charles.howes@globalrelay.net>
+
+=item *
+
+Daniel Fackrell <dfackrell@bluehost.com>
+
+=item *
+
+Dave Rolsky <autarch@urth.org>
+
+=item *
+
+Dmitry Karasik <dmitry@karasik.eu.org>
+
+=item *
+
+Emmanuel Peroumalnaik <eperoumalnaik@weborama.com>
+
+=item *
+
+Eric Johnson <eric.git@iijo.org>
+
+=item *
+
+Gabor Szabo <gabor@szabgab.com>
 
 =back
 
