@@ -42,6 +42,7 @@ requires:
   IO::Socket: '0'
   JSON: '0'
   LWP::UserAgent: '0'
+  List::MoreUtils: '0'
   MIME::Base64: '0'
   Moo: '1.005'
   Moo::Role: '0'

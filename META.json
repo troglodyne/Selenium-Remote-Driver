@@ -13,7 +13,7 @@
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
-      "version" : 2
+      "version" : "2"
    },
    "name" : "Selenium-Remote-Driver",
    "prereqs" : {
@@ -48,6 +48,7 @@
             "IO::Socket" : "0",
             "JSON" : "0",
             "LWP::UserAgent" : "0",
+            "List::MoreUtils" : "0",
             "MIME::Base64" : "0",
             "Moo" : "1.005",
             "Moo::Role" : "0",
