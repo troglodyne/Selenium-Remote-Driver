@@ -6,19 +6,19 @@ author:
   - 'Luke Closs <cpan@5thplane.com>'
   - 'Mark Stosberg <mark@stosberg.com>'
 build_requires:
-  File::Basename: '0'
   File::stat: '0'
   FindBin: '0'
   IO::Socket::INET: '0'
   LWP::Simple: '0'
   Test::Exception: '0'
+  Test::Fatal: '0'
   Test::LWP::UserAgent: '0'
   Test::More: '0'
   lib: '0'
 configure_requires:
-  ExtUtils::MakeMaker: '6.30'
+  ExtUtils::MakeMaker: '0'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.014, CPAN::Meta::Converter version 2.140640'
+generated_by: 'Dist::Zilla version 5.031, CPAN::Meta::Converter version 2.143240'
 license: apache
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -31,7 +31,9 @@ requires:
   Cwd: '0'
   Data::Dumper: '0'
   Exporter: '0'
+  File::Basename: '0'
   File::Copy: '0'
+  File::Spec::Functions: '0'
   File::Temp: '0'
   HTTP::Headers: '0'
   HTTP::Request: '0'
@@ -40,6 +42,7 @@ requires:
   IO::Socket: '0'
   JSON: '0'
   LWP::UserAgent: '0'
+  List::MoreUtils: '0'
   MIME::Base64: '0'
   Moo: '1.005'
   Moo::Role: '0'
@@ -58,7 +61,7 @@ requires:
 resources:
   bugtracker: https://github.com/gempesaw/Selenium-Remote-Driver/issues
   repository: git://github.com/gempesaw/Selenium-Remote-Driver.git
-version: '0.2203'
+version: '0.23'
 x_contributors:
   - 'Allen Lew <allen@alew.org>'
   - 'Bas Bloemsaat <bas@bloemsaat.com>'
@@ -70,6 +73,7 @@ x_contributors:
   - 'Emmanuel Peroumalnaik <eperoumalnaik@weborama.com>'
   - 'Eric Johnson <eric.git@iijo.org>'
   - 'Gabor Szabo <gabor@szabgab.com>'
+  - 'George S. Baugh <george@troglodyne.net>'
   - 'Gordon Child <gordon@gordonchild.com>'
   - 'GreatFlamingFoo <greatflamingfoo@gmail.com>'
   - 'Ivan Kurmanov <duraley@gmail.com>'

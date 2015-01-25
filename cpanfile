@@ -4,7 +4,9 @@ requires "Carp" => "0";
 requires "Cwd" => "0";
 requires "Data::Dumper" => "0";
 requires "Exporter" => "0";
+requires "File::Basename" => "0";
 requires "File::Copy" => "0";
+requires "File::Spec::Functions" => "0";
 requires "File::Temp" => "0";
 requires "HTTP::Headers" => "0";
 requires "HTTP::Request" => "0";
@@ -13,6 +15,7 @@ requires "IO::Compress::Zip" => "0";
 requires "IO::Socket" => "0";
 requires "JSON" => "0";
 requires "LWP::UserAgent" => "0";
+requires "List::MoreUtils" => "0";
 requires "MIME::Base64" => "0";
 requires "Moo" => "1.005";
 requires "Moo::Role" => "0";
@@ -30,19 +33,19 @@ requires "strict" => "0";
 requires "warnings" => "0";
 
 on 'test' => sub {
-  requires "File::Basename" => "0";
   requires "File::stat" => "0";
   requires "FindBin" => "0";
   requires "IO::Socket::INET" => "0";
   requires "LWP::Simple" => "0";
   requires "Test::Exception" => "0";
+  requires "Test::Fatal" => "0";
   requires "Test::LWP::UserAgent" => "0";
   requires "Test::More" => "0";
   requires "lib" => "0";
 };
 
 on 'configure' => sub {
-  requires "ExtUtils::MakeMaker" => "6.30";
+  requires "ExtUtils::MakeMaker" => "0";
 };
 
 on 'develop' => sub {
