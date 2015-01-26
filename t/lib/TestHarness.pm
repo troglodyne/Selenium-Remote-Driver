@@ -146,7 +146,7 @@ has website => (
         my $port = 63636;
 
         return 'http://' . $self->domain . ':' . $port;
-    };
+    }
 );
 
 has domain => (
