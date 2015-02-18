@@ -100,17 +100,19 @@ and return control to you at that point.
 
 =item Dying
 
-The BLOCK you pass is called in a L<try/Try::Tiny>, and if any of the
+PLEASE check the return value before proceeding, as we unwisely
+suppress any attempts your BLOCK may make to die or croak. The BLOCK
+you pass is called in a L<try/Try::Tiny>, and if any of the
 invocations of your function throw and the BLOCK never becomes true,
 we'll carp exactly once at the end immediately before returning
 false. We overwrite the death message from each iteration, so at the
-end, you'll see the most recent death message.
+end, you'll only see the most recent death message.
 
     # warns once after thirty seconds: "kept from dying";
     wait_until { die 'kept from dying' };
 
-The output of C<die>s will be supressed unless you pass in debug as one of
-the arguments:
+The output of C<die>s from each iteration can be exposed if you wish
+to see the massacre:
 
     # carps: "kept from dying" once a second for thirty seconds
     wait_until { die 'kept from dying' } debug => 1;
