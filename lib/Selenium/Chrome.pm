@@ -1,5 +1,5 @@
 package Selenium::Chrome;
-$Selenium::Chrome::VERSION = '0.23'; # TRIAL
+$Selenium::Chrome::VERSION = '0.2350'; # TRIAL
 # ABSTRACT: A convenience package for creating a Chrome instance
 use Moo;
 extends 'Selenium::Remote::Driver';
@@ -24,7 +24,7 @@ Selenium::Chrome - A convenience package for creating a Chrome instance
 
 =head1 VERSION
 
-version 0.23
+version 0.2350
 
 =head1 SYNOPSIS
 

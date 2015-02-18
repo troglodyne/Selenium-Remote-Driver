@@ -87,13 +87,14 @@
       "bugtracker" : {
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver/issues"
       },
+      "homepage" : "https://github.com/gempesaw/Selenium-Remote-Driver",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/gempesaw/Selenium-Remote-Driver.git",
+         "url" : "https://github.com/gempesaw/Selenium-Remote-Driver.git",
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver"
       }
    },
-   "version" : "0.23",
+   "version" : "0.2350",
    "x_contributors" : [
       "Allen Lew <allen@alew.org>",
       "Bas Bloemsaat <bas@bloemsaat.com>",
