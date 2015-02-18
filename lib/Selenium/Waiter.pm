@@ -98,7 +98,7 @@ that blocking behavior is on the webdriver server side, and is out of
 our control. We'd run one iteration, get blocked for thirty seconds,
 and return control to you at that point.
 
-=item Dying
+=head4 Dying
 
 PLEASE check the return value before proceeding, as we unwisely
 suppress any attempts your BLOCK may make to die or croak. The BLOCK
@@ -117,7 +117,7 @@ to see the massacre:
     # carps: "kept from dying" once a second for thirty seconds
     wait_until { die 'kept from dying' } debug => 1;
 
-=item Timeouts and Intervals
+=head4 Timeouts and Intervals
 
 You can also customize the timeout, and/or the retry interval between
 iterations.
