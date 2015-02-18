@@ -1,5 +1,5 @@
 package Selenium::InternetExplorer;
-$Selenium::InternetExplorer::VERSION = '0.23';
+$Selenium::InternetExplorer::VERSION = '0.23'; # TRIAL
 # ABSTRACT: A convenience package for creating a IE instance
 use Moo;
 extends 'Selenium::Remote::Driver';

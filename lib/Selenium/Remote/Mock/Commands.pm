@@ -1,5 +1,5 @@
 package Selenium::Remote::Mock::Commands;
-$Selenium::Remote::Mock::Commands::VERSION = '0.23';
+$Selenium::Remote::Mock::Commands::VERSION = '0.23'; # TRIAL
 # ABSTRACT: utility class to mock Selenium::Remote::Commands
 #
 use Moo;
