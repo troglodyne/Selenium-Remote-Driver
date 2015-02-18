@@ -55,8 +55,10 @@ t/mock-recordings/02-webelement-mock-linux.json
 t/mock-recordings/10-switch-to-window-mock-MSWin32.json
 t/mock-recordings/10-switch-to-window-mock-darwin.json
 t/mock-recordings/10-switch-to-window-mock-linux.json
+t/mock-recordings/convenience-mock-MSWin32.json
 t/mock-recordings/convenience-mock-darwin.json
 t/mock-recordings/convenience-mock-linux.json
+t/mock-recordings/finders-mock-MSWin32.json
 t/mock-recordings/finders-mock-darwin.json
 t/mock-recordings/finders-mock-linux.json
 t/mock-recordings/firefox-profile-mock-MSWin32.json
