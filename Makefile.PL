@@ -63,6 +63,7 @@ my %WriteMakefileArgs = (
     "Test::Fatal" => 0,
     "Test::LWP::UserAgent" => 0,
     "Test::More" => 0,
+    "Test::Warn" => 0,
     "lib" => 0
   },
   "VERSION" => "0.23",
@@ -108,6 +109,7 @@ my %FallbackPrereqs = (
   "Test::LWP::UserAgent" => 0,
   "Test::LongString" => 0,
   "Test::More" => 0,
+  "Test::Warn" => 0,
   "Try::Tiny" => 0,
   "base" => 0,
   "constant" => 0,
