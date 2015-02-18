@@ -41,6 +41,8 @@ on 'test' => sub {
   requires "Test::Fatal" => "0";
   requires "Test::LWP::UserAgent" => "0";
   requires "Test::More" => "0";
+  requires "Test::Warn" => "0";
+  requires "Time::Mock" => "0";
   requires "lib" => "0";
 };
 

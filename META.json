@@ -76,22 +76,25 @@
             "Test::Fatal" : "0",
             "Test::LWP::UserAgent" : "0",
             "Test::More" : "0",
+            "Test::Warn" : "0",
+            "Time::Mock" : "0",
             "lib" : "0"
          }
       }
    },
-   "release_status" : "stable",
+   "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver/issues"
       },
+      "homepage" : "https://github.com/gempesaw/Selenium-Remote-Driver",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/gempesaw/Selenium-Remote-Driver.git",
+         "url" : "https://github.com/gempesaw/Selenium-Remote-Driver.git",
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver"
       }
    },
-   "version" : "0.23",
+   "version" : "0.2350",
    "x_contributors" : [
       "Allen Lew <allen@alew.org>",
       "Bas Bloemsaat <bas@bloemsaat.com>",

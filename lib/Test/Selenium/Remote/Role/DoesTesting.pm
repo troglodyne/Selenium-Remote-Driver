@@ -1,7 +1,7 @@
 package Test::Selenium::Remote::Role::DoesTesting;
 # ABSTRACT: Role to cope with everything that is related to testing (could
 # be reused in both testing classes)
-$Test::Selenium::Remote::Role::DoesTesting::VERSION = '0.23';
+$Test::Selenium::Remote::Role::DoesTesting::VERSION = '0.2350'; # TRIAL
 use Moo::Role;
 use Test::Builder;
 use Try::Tiny;
@@ -16,6 +16,17 @@ has _builder => (
     handles => [qw/is_eq isnt_eq like unlike ok croak/],
 );
 
+
+# get back the key value from an already coerced finder (default finder)
+
+sub _get_finder_key { 
+    my $self = shift; 
+    my $finder_value = shift; 
+    foreach my $k (keys %{$self->FINDERS}) { 
+        return $k if ($self->FINDERS->{$k} eq $finder_value);
+    }
+    return; 
+}
 
 # main method for non ok tests
 
@@ -53,7 +64,7 @@ sub _check_ok {
         if ($method =~ m/^find(_no|_child)?_element/) { 
             # case find_element_ok was called with no arguments    
             if (scalar(@r_args) - $num_of_args == 1) { 
-                push @r_args, $self->default_finder; 
+                push @r_args, $self->_get_finder_key($self->default_finder);
             }
             else { 
                 if (scalar(@r_args) == $num_of_args) {
@@ -62,7 +73,7 @@ sub _check_ok {
                     my $finder = $r_args[$num_of_args - 1]; 
                     my @FINDERS = keys (%{$self->FINDERS});
                     unless ( any { $finder eq $_ } @FINDERS) { 
-                        $r_args[$num_of_args - 1] = $self->default_finder; 
+                        $r_args[$num_of_args - 1] = $self->_get_finder_key($self->default_finder);
                         push @args, $finder; 
                     }
                 }
