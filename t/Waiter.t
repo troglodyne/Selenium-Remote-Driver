@@ -37,7 +37,7 @@ EXCEPTIONS: {
     # This test is flaky when accelerated, so let's slow it down.
     Time::Mock->throttle(1);
     my %debug = ( debug => 1, %opts );
-    warnings_are { wait_until { die 'caught!' } %debug } ['caught!', 'caught!'],
+    warnings_exist { wait_until { die 'caught!' } %debug } ['caught!'],
       'exceptions warn repreatedly when in debug mode';
 }
 
