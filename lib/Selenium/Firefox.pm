@@ -1,5 +1,5 @@
 package Selenium::Firefox;
-$Selenium::Firefox::VERSION = '0.2351';
+$Selenium::Firefox::VERSION = '0.2351'; # TRIAL
 # ABSTRACT: A convenience package for creating a Firefox instance
 use Moo;
 extends 'Selenium::Remote::Driver';

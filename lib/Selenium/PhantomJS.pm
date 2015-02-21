@@ -1,5 +1,5 @@
 package Selenium::PhantomJS;
-$Selenium::PhantomJS::VERSION = '0.2351';
+$Selenium::PhantomJS::VERSION = '0.2351'; # TRIAL
 # ABSTRACT: A convenience package for creating a PhantomJS instance
 use Moo;
 extends 'Selenium::Remote::Driver';
