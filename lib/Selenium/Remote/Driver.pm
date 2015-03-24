@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.24';
+$Selenium::Remote::Driver::VERSION = '0.2450'; # TRIAL
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -45,6 +45,7 @@ has 'remote_server_addr' => (
     is      => 'rw',
     coerce  => sub { ( defined($_[0]) ? $_[0] : 'localhost' )},
     default => sub {'localhost'},
+    predicate => 1
 );
 
 has 'browser_name' => (
@@ -74,6 +75,7 @@ has 'port' => (
     is      => 'rw',
     coerce  => sub { ( defined($_[0]) ? $_[0] : '4444' )},
     default => sub {'4444'},
+    predicate => 1
 );
 
 has 'version' => (
@@ -171,8 +173,8 @@ has 'firefox_profile' => (
     coerce    => sub {
         my $profile = shift;
         unless (Scalar::Util::blessed($profile)
-          && $profile->isa('Selenium::Remote::Driver::Firefox::Profile')) {
-            croak "firefox_profile should be a Selenium::Remote::Driver::Firefox::Profile\n";
+          && $profile->isa('Selenium::Firefox::Profile')) {
+            croak "firefox_profile should be a Selenium::Firefox::Profile\n";
         }
 
         return $profile->_encode;
@@ -1267,7 +1269,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.24
+version 0.2450
 
 =head1 SYNOPSIS
 
@@ -1355,7 +1357,7 @@ available here.
         'platform'             - <string>   - desired platform: {WINDOWS|XP|VISTA|MAC|LINUX|UNIX|ANY}
         'javascript'           - <boolean>  - whether javascript should be supported
         'accept_ssl_certs'     - <boolean>  - whether SSL certs should be accepted, default is true.
-        'firefox_profile'      - Profile    - Use S::R::D::Firefox::Profile to create a Firefox profile for the browser to use
+        'firefox_profile'      - Profile    - Use Selenium::Firefox::Profile to create a Firefox profile for the browser to use
         'proxy'                - HASH       - Proxy configuration with the following keys:
             'proxyType' - <string> - REQUIRED, Possible values are:
                 direct     - A direct connection - no proxy in use,

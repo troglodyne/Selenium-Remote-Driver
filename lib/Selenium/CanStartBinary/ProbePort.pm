@@ -1,16 +1,38 @@
-package Selenium::Remote::Driver::Firefox::Profile;
-$Selenium::Remote::Driver::Firefox::Profile::VERSION = '0.2450'; # TRIAL
-# ABSTRACT: Use custom profiles with Selenium::Remote::Driver
-use strict;
-use warnings;
-use Selenium::Firefox::Profile;
+package Selenium::CanStartBinary::ProbePort;
+$Selenium::CanStartBinary::ProbePort::VERSION = '0.2450'; # TRIAL
+# ABSTRACT: Utility functions for finding open ports to eventually bind to
+use IO::Socket::INET;
+use Selenium::Waiter qw/wait_until/;
 
-BEGIN {
-    push our @ISA, 'Selenium::Firefox::Profile';
+require Exporter;
+our @ISA = qw/Exporter/;
+our @EXPORT_OK = qw/find_open_port_above probe_port/;
+
+sub find_open_port_above {
+    my ($port) = @_;
+
+    my $free_port = wait_until {
+        if ( probe_port($port) ) {
+            $port++;
+            return 0;
+        }
+        else {
+            return $port;
+        }
+    };
+
+    return $free_port;
 }
 
+sub probe_port {
+    my ($port) = @_;
 
-1;
+    return IO::Socket::INET->new(
+        PeerAddr => '127.0.0.1',
+        PeerPort => $port,
+        Timeout => 3
+    );
+}
 
 __END__
 
@@ -20,17 +42,11 @@ __END__
 
 =head1 NAME
 
-Selenium::Remote::Driver::Firefox::Profile - Use custom profiles with Selenium::Remote::Driver
+Selenium::CanStartBinary::ProbePort - Utility functions for finding open ports to eventually bind to
 
 =head1 VERSION
 
 version 0.2450
-
-=head1 DESCRIPTION
-
-We've renamed this class to the slightly less wordy
-L<Selenium::Firefox::Profile>. This is only around as an alias to
-hopefully prevent old code from breaking.
 
 =head1 SEE ALSO
 
@@ -41,18 +57,6 @@ Please see those modules/websites for more information related to this module.
 =item *
 
 L<Selenium::Remote::Driver|Selenium::Remote::Driver>
-
-=item *
-
-L<Selenium::Firefox::Profile|Selenium::Firefox::Profile>
-
-=item *
-
-L<http://kb.mozillazine.org/About:config_entries|http://kb.mozillazine.org/About:config_entries>
-
-=item *
-
-L<https://developer.mozilla.org/en-US/docs/Mozilla/Preferences/A_brief_guide_to_Mozilla_preferences|https://developer.mozilla.org/en-US/docs/Mozilla/Preferences/A_brief_guide_to_Mozilla_preferences>
 
 =back
 

@@ -31,7 +31,6 @@
       },
       "runtime" : {
          "requires" : {
-            "Archive::Extract" : "0",
             "Archive::Zip" : "0",
             "Carp" : "0",
             "Cwd" : "0",
@@ -39,13 +38,17 @@
             "Exporter" : "0",
             "File::Basename" : "0",
             "File::Copy" : "0",
+            "File::Spec" : "0",
             "File::Spec::Functions" : "0",
             "File::Temp" : "0",
+            "File::Which" : "0",
             "HTTP::Headers" : "0",
             "HTTP::Request" : "0",
             "HTTP::Response" : "0",
             "IO::Compress::Zip" : "0",
             "IO::Socket" : "0",
+            "IO::Socket::INET" : "0",
+            "IO::Uncompress::Unzip" : "0",
             "JSON" : "0",
             "LWP::UserAgent" : "0",
             "List::MoreUtils" : "0",
@@ -58,6 +61,7 @@
             "Test::Builder" : "0",
             "Test::LongString" : "0",
             "Try::Tiny" : "0",
+            "XML::Simple" : "0",
             "base" : "0",
             "constant" : "0",
             "namespace::clean" : "0",
@@ -70,7 +74,6 @@
          "requires" : {
             "File::stat" : "0",
             "FindBin" : "0",
-            "IO::Socket::INET" : "0",
             "LWP::Simple" : "0",
             "Test::Exception" : "0",
             "Test::Fatal" : "0",
@@ -82,7 +85,7 @@
          }
       }
    },
-   "release_status" : "stable",
+   "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver/issues"
@@ -94,7 +97,7 @@
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver"
       }
    },
-   "version" : "0.24",
+   "version" : "0.2450",
    "x_contributors" : [
       "Allen Lew <allen@alew.org>",
       "Bas Bloemsaat <bas@bloemsaat.com>",

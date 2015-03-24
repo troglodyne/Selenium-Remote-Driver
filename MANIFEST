@@ -11,8 +11,19 @@ cpanfile
 dist.ini
 driver-example.pl
 ide-plugin.js
+lib/Selenium/CanStartBinary.pm
+lib/Selenium/CanStartBinary/FindBinary.pm
+lib/Selenium/CanStartBinary/ProbePort.pm
 lib/Selenium/Chrome.pm
 lib/Selenium/Firefox.pm
+lib/Selenium/Firefox/Binary.pm
+lib/Selenium/Firefox/Profile.pm
+lib/Selenium/Firefox/amd64/libibushandler.so
+lib/Selenium/Firefox/amd64/x_ignore_nofocus.so
+lib/Selenium/Firefox/webdriver.xpi
+lib/Selenium/Firefox/webdriver_prefs.json
+lib/Selenium/Firefox/x86/libibushandler.so
+lib/Selenium/Firefox/x86/x_ignore_nofocus.so
 lib/Selenium/InternetExplorer.pm
 lib/Selenium/PhantomJS.pm
 lib/Selenium/Remote/Commands.pm
@@ -35,6 +46,7 @@ t/02-webelement.t
 t/03-spec-coverage.t
 t/04-commands-implemented.t
 t/10-switch-to-window.t
+t/CanStartBinary.t
 t/Finders.t
 t/Firefox-Profile.t
 t/Remote-Connection.t
