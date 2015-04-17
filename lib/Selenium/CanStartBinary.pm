@@ -1,5 +1,5 @@
 package Selenium::CanStartBinary;
-$Selenium::CanStartBinary::VERSION = '0.2450'; # TRIAL
+$Selenium::CanStartBinary::VERSION = '0.2451';
 # ABSTRACT: Teach a WebDriver how to start its own binary aka no JRE!
 use File::Spec;
 use Selenium::CanStartBinary::ProbePort qw/find_open_port_above probe_port/;
@@ -12,6 +12,9 @@ requires 'binary';
 
 
 requires 'binary_port';
+
+
+requires '_binary_args';
 
 
 has '+port' => (
@@ -84,6 +87,10 @@ sub BUILDARGS {
         # connect to localhost instead of 127.1
         $args{remote_server_addr} = '127.0.0.1';
     }
+    else {
+        $args{try_binary} = 0;
+        $args{binary_mode} = 0;
+    }
 
     return { %args };
 }
@@ -91,107 +98,105 @@ sub BUILDARGS {
 sub _build_binary_mode {
     my ($self) = @_;
 
-    my $executable = $self->binary;
-    return unless $executable;
+    # We don't know what to do without a binary driver to start up
+    return unless $self->binary;
 
+    # Either the user asked for 4444, or we couldn't find an open port
     my $port = $self->port;
     return unless $port != 4444;
+
     if ($self->isa('Selenium::Firefox')) {
         setup_firefox_binary_env($port);
     }
-    my $command = $self->_construct_command($executable, $port);
 
+    my $command = $self->_construct_command;
     system($command);
+
     my $success = wait_until { probe_port($port) } timeout => 10;
     if ($success) {
         return 1;
     }
     else {
-        die 'Unable to connect to the ' . $executable . ' binary on port ' . $port;
+        die 'Unable to connect to the ' . $self->binary . ' binary on port ' . $port;
     }
 }
 
 sub shutdown_binary {
     my ($self) = @_;
 
-    # TODO: Allow user to keep browser open after test
-    $self->quit;
+    if ( $self->auto_close && defined $self->session_id ) {
+        $self->quit();
+    }
 
     if ($self->has_binary_mode && $self->binary_mode) {
+        # Tell the binary itself to shutdown
         my $port = $self->port;
         my $ua = $self->ua;
+        my $res = $ua->get('http://127.0.0.1:' . $port . '/wd/hub/shutdown');
 
-        $ua->get('127.0.0.1:' . $port . '/wd/hub/shutdown');
-
-        # Close the additional command windows on windows
-        if (IS_WIN) {
-            # Blech, handle a race condition that kills the driver
-            # before it's finished cleaning up its sessions
-            sleep(1);
-            $self->shutdown_windows_binary;
-        }
+        # Close the orphaned command windows on windows
+        $self->shutdown_windows_binary;
     }
 }
 
 sub shutdown_windows_binary {
     my ($self) = @_;
 
-    # Firefox doesn't have a Driver/Session architecture - the only
-    # thing running is Firefox itself, so there's no other task to
-    # kill.
-    return if $self->isa('Selenium::Firefox');
-
-    my $kill = 'taskkill /FI "WINDOWTITLE eq ' . $self->window_title . '"';
-    system($kill);
+    if (IS_WIN) {
+        if ($self->isa('Selenium::Firefox')) {
+            # FIXME: Blech, handle a race condition that kills the
+            # driver before it's finished cleaning up its sessions. In
+            # particular, when the perl process ends, it wants to
+            # clean up the temp directory it created for the Firefox
+            # profile. But, if the Firefox process is still running,
+            # it will have a lock on the temp profile directory, and
+            # perl will get upset. This "solution" is _very_ bad.
+            sleep(2);
+            # Firefox doesn't have a Driver/Session architecture - the
+            # only thing running is Firefox itself, so there's no
+            # other task to kill.
+            return;
+        }
+        else {
+            my $kill = 'taskkill /FI "WINDOWTITLE eq ' . $self->window_title . '" > nul 2>&1';
+            system($kill);
+        }
+    }
 }
 
+# We want to do things before the DEMOLISH phase, as during DEMOLISH
+# we apparently have no guarantee that anything is still around
 before DEMOLISH => sub {
     my ($self) = @_;
     $self->shutdown_binary;
 };
 
-sub DEMOLISH { };
-
 sub _construct_command {
-    my ($self, $executable, $port) = @_;
+    my ($self) = @_;
+    my $executable = $self->binary;
 
-    # Handle spaces in executable path names
+    # Executable path names may have spaces
     $executable = '"' . $executable . '"';
 
-    my %args;
-    if ($executable =~ /chromedriver(\.exe)?"$/i) {
-        %args = (
-            port => $port,
-            'url-base' => 'wd/hub'
-        );
-    }
-    elsif ($executable =~ /phantomjs(\.exe)?"$/i) {
-        %args = (
-            webdriver => '127.0.0.1:' . $port
-        );
-    }
-    elsif ($executable =~ /firefox(-bin|\.exe)"$/i) {
-        $executable .= ' -no-remote ';
-    }
-
-    my @args = map { '--' . $_ . '=' . $args{$_} } keys %args;
+    # The different binaries take different arguments for proper setup
+    $executable .= $self->_binary_args;
 
     # Handle Windows vs Unix discrepancies for invoking shell commands
     my ($prefix, $suffix) = ($self->_cmd_prefix, $self->_cmd_suffix);
-    return join(' ', ($prefix, $executable, @args, $suffix) );
+    return join(' ', ($prefix, $executable, $suffix) );
 }
 
 sub _cmd_prefix {
     my ($self) = @_;
 
     if (IS_WIN) {
-        my $prefix = 'start "' . $self->window_title;
+        my $prefix = 'start "' . $self->window_title . '"';
 
         # Let's minimize the command windows for the drivers that have
         # separate binaries - but let's not minimize the Firefox
         # window itself.
         if (! $self->isa('Selenium::Firefox')) {
-            $prefix .= '" /MIN ';
+            $prefix .= ' /MIN ';
         }
         return $prefix;
     }
@@ -227,7 +232,7 @@ Selenium::CanStartBinary - Teach a WebDriver how to start its own binary aka no 
 
 =head1 VERSION
 
-version 0.2450
+version 0.2451
 
 =head1 SYNOPSIS
 
@@ -237,6 +242,9 @@ version 0.2450
 
         has 'binary' => ( is => 'ro', default => 'chromedriver' );
         has 'binary_port' => ( is => 'ro', default => 9515 );
+        has '_binary_args' => ( is => 'ro', default => sub {
+            return ' --port=' . shift->port . ' --url-base=wd/hub ';
+        });
         with 'Selenium::CanStartBinary';
         1
     };
@@ -292,6 +300,17 @@ of the executable for us to find via L<File::Which/which>.
 Required: Specify a default port that for the webdriver binary to try
 to bind to. If that port is unavailable, we'll probe above that port
 until we find a valid one.
+
+=head2 _binary_args
+
+Required: Specify the arguments that the particular binary needs in
+order to start up correctly. In particular, you may need to tell the
+binary about the proper port when we start it up, or that it should
+use a particular prefix to match up with the behavior of the Remote
+Driver server.
+
+If your binary doesn't need any arguments, just have the default be an
+empty string.
 
 =head2 port
 

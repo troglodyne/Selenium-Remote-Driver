@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.2450'; # TRIAL
+$Selenium::Remote::Driver::VERSION = '0.2451';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -23,6 +23,8 @@ use Selenium::Remote::WebElement;
 use File::Spec::Functions ();
 use File::Basename ();
 use Sub::Install ();
+use Cwd ();
+use MIME::Base64 ();
 
 use constant FINDERS => {
     class             => 'class name',
@@ -713,7 +715,6 @@ sub capture_screenshot {
     my ( $self, $filename ) = @_;
     croak '$filename is required' unless $filename;
 
-    require MIME::Base64;
     open( my $fh, '>', $filename );
     binmode $fh;
     print $fh MIME::Base64::decode_base64( $self->screenshot() );
@@ -1155,18 +1156,23 @@ sub button_up {
 sub upload_file {
     my ( $self, $filename, $raw_content ) = @_;
 
-    #If no processing is passed, send the argument raw
-    my $params = {
-        file => $raw_content
-    };
-
-    #Otherwise, zip/base64 it.
-    $params = $self->_prepare_file($filename) if !defined($raw_content);
+    my $params;
+    if (defined $raw_content) {
+        #If no processing is passed, send the argument raw
+        $params = {
+            file => $raw_content
+        };
+    }
+    else {
+        #Otherwise, zip/base64 it.
+        $params = $self->_prepare_file($filename);
+    }
 
     my $res = { 'command' => 'uploadFile' };    # /session/:SessionId/file
     my $ret = $self->_execute_command( $res, $params );
 
-    #WORKAROUND: Since this is undocumented selenium functionality, work around a bug.
+    #WORKAROUND: Since this is undocumented selenium functionality,
+    #work around a bug.
     my ($drive, $path, $file) = File::Spec::Functions::splitpath($ret);
     if ($file ne $filename) {
         $ret = File::Spec::Functions::catpath($drive,$path,$filename);
@@ -1177,11 +1183,15 @@ sub upload_file {
 
 sub _prepare_file {
     my ($self,$filename) = @_;
+
+    #Apparently zip chokes on non-canonical paths, creating double
+    #submissions sometimes
+    $filename = Cwd::abs_path($filename);
+
     if ( not -r $filename ) { die "upload_file: no such file: $filename"; }
     my $string = "";    # buffer
     zip $filename => \$string
       or die "zip failed: $ZipError\n";    # compress the file into string
-    require MIME::Base64;
 
     return {
         file => MIME::Base64::encode_base64($string)          # base64-encoded string
@@ -1269,7 +1279,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.2450
+version 0.2451
 
 =head1 SYNOPSIS
 
@@ -1295,7 +1305,16 @@ together with the Selenium Server, you can automatically control any supported
 browser. To use this module, you need to have already downloaded and started
 the Selenium Server (Selenium Server is a Java application).
 
-=head1 USAGE (read this first)
+=head1 USAGE
+
+=head2 Without Standalone Server
+
+As of v0.25, it's possible to use this module without a standalone
+server - that is, you would not need the JRE or the JDK to run your
+Selenium tests. See L<Selenium::Chrome>, L<Selenium::PhantomJS>, and
+L<Selenium::Firefox> for details. If you'd like additional browsers
+besides these, give us a holler over in
+L<Github|https://github.com/gempesaw/Selenium-Remote-Driver/issues>.
 
 =head2 Remote Driver Response
 
@@ -1334,10 +1353,14 @@ For example, a testing-subclass may extend the web-element object with testing m
 
 =head1 TESTING
 
-If are writing automated tests using this module, make sure you also see
-L<Test::Selenium::Remote::Driver> which is also included in this distribution.
-It includes convenience testing methods for many of the selenum methods
-available here.
+If are writing automated tests using this module, you may be
+interested in L<Test::Selenium::Remote::Driver> which is also included
+in this distribution. It includes convenience testing methods for many
+of the selenum methods available here.
+
+Your other option is to use this module in conjunction with your
+choice of testing modules, like L<Test::Spec> or L<Test::More> as
+you please.
 
 =head1 FUNCTIONS
 
@@ -2490,6 +2513,10 @@ See L</find_element>.
 
     Passing raw data as an argument past the filename will upload
     that rather than the file's contents.
+
+    When passing raw data, be advised that it expects a zipped
+    and then base64 encoded version of a single file.
+    Multiple files are not supported by the remote server.
 
  Usage:
     my $remote_fname = $driver->upload_file( $fname );
