@@ -1,6 +1,6 @@
 package Test::Selenium::Remote::WebElement;
 # ABSTRACT: A sub-class of L<Selenium::Remote::WebElement>, with several test-specific method additions.
-$Test::Selenium::Remote::WebElement::VERSION = '0.2450'; # TRIAL
+$Test::Selenium::Remote::WebElement::VERSION = '0.25';
 use Moo;
 use Sub::Install;
 extends 'Selenium::Remote::WebElement';

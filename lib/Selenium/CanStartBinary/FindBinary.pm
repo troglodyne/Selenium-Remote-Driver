@@ -1,5 +1,5 @@
 package Selenium::CanStartBinary::FindBinary;
-$Selenium::CanStartBinary::FindBinary::VERSION = '0.2450'; # TRIAL
+$Selenium::CanStartBinary::FindBinary::VERSION = '0.25';
 # ABSTRACT: Coercions for finding webdriver binaries on your system
 use File::Which qw/which/;
 use Cwd qw/abs_path/;
@@ -10,6 +10,8 @@ use Selenium::Firefox::Binary qw/firefox_path/;
 require Exporter;
 our @ISA = qw/Exporter/;
 our @EXPORT_OK = qw/coerce_simple_binary coerce_firefox_binary/;
+
+use constant IS_WIN => $^O eq 'MSWin32';
 
 sub coerce_simple_binary {
     my ($executable) = @_;
@@ -45,7 +47,7 @@ sub _validate_manual_binary {
     };
 
     if ( $abs_executable ) {
-        if ( -x $abs_executable ) {
+        if ( -x $abs_executable || IS_WIN ) {
             return $abs_executable;
         }
         else {
@@ -79,7 +81,7 @@ Selenium::CanStartBinary::FindBinary - Coercions for finding webdriver binaries 
 
 =head1 VERSION
 
-version 0.2450
+version 0.25
 
 =head1 SEE ALSO
 

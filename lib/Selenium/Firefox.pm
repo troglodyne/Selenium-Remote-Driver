@@ -1,5 +1,5 @@
 package Selenium::Firefox;
-$Selenium::Firefox::VERSION = '0.2450'; # TRIAL
+$Selenium::Firefox::VERSION = '0.25';
 # ABSTRACT: Use FirefoxDriver without a Selenium server
 use Moo;
 use Selenium::CanStartBinary::FindBinary qw/coerce_firefox_binary/;
@@ -25,6 +25,15 @@ has 'binary_port' => (
     default => sub { 9090 }
 );
 
+has '_binary_args' => (
+    is => 'lazy',
+    builder => sub {
+        my ($self) = @_;
+
+        return ' -no-remote';
+    }
+);
+
 with 'Selenium::CanStartBinary';
 
 1;
@@ -41,7 +50,7 @@ Selenium::Firefox - Use FirefoxDriver without a Selenium server
 
 =head1 VERSION
 
-version 0.2450
+version 0.25
 
 =head1 SYNOPSIS
 

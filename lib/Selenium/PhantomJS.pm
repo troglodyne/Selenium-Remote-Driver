@@ -1,5 +1,5 @@
 package Selenium::PhantomJS;
-$Selenium::PhantomJS::VERSION = '0.2450'; # TRIAL
+$Selenium::PhantomJS::VERSION = '0.25';
 # ABSTRACT: Use GhostDriver without a Selenium server
 use Moo;
 use Selenium::CanStartBinary::FindBinary qw/coerce_simple_binary/;
@@ -25,6 +25,15 @@ has 'binary_port' => (
     default => sub { 8910 }
 );
 
+has '_binary_args' => (
+    is => 'lazy',
+    builder => sub {
+        my ($self) = @_;
+
+        return ' --webdriver=127.0.0.1:' . $self->port;
+    }
+);
+
 with 'Selenium::CanStartBinary';
 
 1;
@@ -41,7 +50,7 @@ Selenium::PhantomJS - Use GhostDriver without a Selenium server
 
 =head1 VERSION
 
-version 0.2450
+version 0.25
 
 =head1 SYNOPSIS
 
@@ -65,6 +74,19 @@ know what you're doing and take no additional behavior.
 If you're curious whether your Selenium::PhantomJS instance is using a
 separate PhantomJS binary, or through the selenium server, you can check
 the C<binary_mode> attr after instantiation.
+
+    my $driver = Selenium::PhantomJS->new;
+    print $driver->binary_mode;
+
+N.B. - if you're using Windows and you installed C<phantomjs> via
+C<npm install -g phantomjs>, there is a very high probability that we
+will _not_ close down your phantomjs binary correctly after your
+test. You will be able to tell if we leave around empty command
+windows that you didn't start yourself. The easiest way to fix this is
+to download PhantomJS manually from their
+L<website|http://phantomjs.org/download.html> and put it in your
+c<%PATH%>. If this is a blocking issue for you, let us know in
+L<Github|https://github.com/gempesaw/Selenium-Remote-Driver>; thanks!
 
 =head1 ATTRIBUTES
 
