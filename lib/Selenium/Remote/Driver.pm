@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.2451';
+$Selenium::Remote::Driver::VERSION = '0.25';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -1279,7 +1279,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.2451
+version 0.25
 
 =head1 SYNOPSIS
 
