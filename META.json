@@ -45,9 +45,9 @@
             "HTTP::Headers" : "0",
             "HTTP::Request" : "0",
             "HTTP::Response" : "0",
-            "IO::Compress::Zip" : "0",
             "IO::Socket" : "0",
             "IO::Socket::INET" : "0",
+            "IO::String" : "0",
             "IO::Uncompress::Unzip" : "0",
             "JSON" : "0",
             "LWP::UserAgent" : "0",
@@ -74,8 +74,6 @@
          "requires" : {
             "File::stat" : "0",
             "FindBin" : "0",
-            "LWP::Simple" : "0",
-            "Test::Exception" : "0",
             "Test::Fatal" : "0",
             "Test::LWP::UserAgent" : "0",
             "Test::More" : "0",
@@ -97,7 +95,7 @@
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver"
       }
    },
-   "version" : "0.25",
+   "version" : "0.2550",
    "x_contributors" : [
       "Allen Lew <allen@alew.org>",
       "Bas Bloemsaat <bas@bloemsaat.com>",
@@ -115,6 +113,7 @@
       "Ivan Kurmanov <duraley@gmail.com>",
       "Joe Higton <draxil@gmail.com>",
       "Jon Hermansen <jon.hermansen@gmail.com>",
+      "Keita Sugama <sugama@jamadam.com>",
       "Ken Swanson <kswanson@genome.wustl.edu>",
       "Phil Kania <phil@vivox.com>",
       "Phil Mitchell <phil.mitchell@pobox.com>",

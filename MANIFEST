@@ -11,6 +11,7 @@ cpanfile
 dist.ini
 driver-example.pl
 ide-plugin.js
+lib/Selenium/ActionChains.pm
 lib/Selenium/CanStartBinary.pm
 lib/Selenium/CanStartBinary/FindBinary.pm
 lib/Selenium/CanStartBinary/ProbePort.pm
@@ -46,6 +47,7 @@ t/02-webelement.t
 t/03-spec-coverage.t
 t/04-commands-implemented.t
 t/10-switch-to-window.t
+t/11-action-chains.t
 t/CanStartBinary.t
 t/Finders.t
 t/Firefox-Profile.t
@@ -68,6 +70,9 @@ t/mock-recordings/02-webelement-mock-linux.json
 t/mock-recordings/10-switch-to-window-mock-MSWin32.json
 t/mock-recordings/10-switch-to-window-mock-darwin.json
 t/mock-recordings/10-switch-to-window-mock-linux.json
+t/mock-recordings/11-action-chains-mock-MSWin32.json
+t/mock-recordings/11-action-chains-mock-darwin.json
+t/mock-recordings/11-action-chains-mock-linux.json
 t/mock-recordings/convenience-mock-MSWin32.json
 t/mock-recordings/convenience-mock-darwin.json
 t/mock-recordings/convenience-mock-linux.json

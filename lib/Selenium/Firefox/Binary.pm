@@ -1,5 +1,5 @@
 package Selenium::Firefox::Binary;
-$Selenium::Firefox::Binary::VERSION = '0.25';
+$Selenium::Firefox::Binary::VERSION = '0.2550';
 # ABSTRACT: Subroutines for locating and properly initializing the Firefox Binary
 use File::Which qw/which/;
 use Selenium::Firefox::Profile;
@@ -64,10 +64,9 @@ sub firefox_path {
 # the end of this function.
 my $profile;
 sub setup_firefox_binary_env {
-    my ($port) = @_;
+    my ($port, $caller_profile) = @_;
 
-    # TODO: respect the user's profile instead of overwriting it
-    $profile = Selenium::Firefox::Profile->new;
+    $profile = $caller_profile || Selenium::Firefox::Profile->new;
     $profile->add_webdriver($port);
 
     $ENV{'XRE_PROFILE_PATH'} = $profile->_layout_on_disk;
@@ -91,7 +90,7 @@ Selenium::Firefox::Binary - Subroutines for locating and properly initializing t
 
 =head1 VERSION
 
-version 0.25
+version 0.2550
 
 =head1 SEE ALSO
 

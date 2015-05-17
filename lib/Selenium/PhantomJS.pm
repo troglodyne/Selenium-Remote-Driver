@@ -1,5 +1,5 @@
 package Selenium::PhantomJS;
-$Selenium::PhantomJS::VERSION = '0.25';
+$Selenium::PhantomJS::VERSION = '0.2550';
 # ABSTRACT: Use GhostDriver without a Selenium server
 use Moo;
 use Selenium::CanStartBinary::FindBinary qw/coerce_simple_binary/;
@@ -50,7 +50,7 @@ Selenium::PhantomJS - Use GhostDriver without a Selenium server
 
 =head1 VERSION
 
-version 0.25
+version 0.2550
 
 =head1 SYNOPSIS
 
@@ -85,7 +85,7 @@ test. You will be able to tell if we leave around empty command
 windows that you didn't start yourself. The easiest way to fix this is
 to download PhantomJS manually from their
 L<website|http://phantomjs.org/download.html> and put it in your
-c<%PATH%>. If this is a blocking issue for you, let us know in
+C<%PATH%>. If this is a blocking issue for you, let us know in
 L<Github|https://github.com/gempesaw/Selenium-Remote-Driver>; thanks!
 
 =head1 ATTRIBUTES
