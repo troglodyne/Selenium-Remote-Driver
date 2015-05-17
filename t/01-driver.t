@@ -9,6 +9,7 @@ use IO::Socket::INET;
 use Selenium::Remote::Driver;
 use Selenium::Remote::Mock::Commands;
 use Selenium::Remote::Mock::RemoteConnection;
+use Carp;
 
 use FindBin;
 use lib $FindBin::Bin . '/lib';
@@ -504,8 +505,8 @@ UPLOAD: {
     my $testFile = "UEsDBBQACAAIAFtuNEYAAAAAAAAAAAAAAAAKABUAdXBsb2FkVGVzdFVUCQADjbG+VJ6xvlRVeAQA\n6APoAytJLS4BAFBLBwgMfn/YBgAAAAQAAABQSwECFAMUAAgACABbbjRGDH5/2AYAAAAEAAAACgAN\nAAAAAAAAAAAApIEAAAAAdXBsb2FkVGVzdFVUBQABjbG+VFV4AABQSwUGAAAAAAEAAQBFAAAAUwAA\nAAAA\n";
     my $otherTestFile = "UEsDBBQACAAIAFtuNEYAAAAAAAAAAAAAAAAMABUAdC91cGxvYWRUZXN0VVQJAAOesb5UnrG+VFV4\nBADoA+gDK0ktLgEAUEsHCAx+f9gGAAAABAAAAFBLAQIUAxQACAAIAFtuNEYMfn/YBgAAAAQAAAAM\nAA0AAAAAAAAAAACkgQAAAAB0L3VwbG9hZFRlc3RVVAUAAZ6xvlRVeAAAUEsFBgAAAAABAAEARwAA\nAFUAAAAAAA==\n";
 
-    like( $driver->upload_file('uploadTest',$testFile),qr/uploadTest$/,'upload_file returns FULL path to the file: cwd');
-    like( $driver->upload_file('t/uploadTest',$otherTestFile),qr/uploadTest$/,'upload_file returns FULL path to the file: subdir');
+    like( my $path1 = $driver->upload_file('uploadTest',$testFile),qr/uploadTest$/,'upload_file returns FULL path to the file: cwd');
+    ok(-f $path1) if $harness->record;
 
     my $fake_driver;
     if ($harness->record) {
@@ -523,8 +524,11 @@ UPLOAD: {
     }
 
     #In the case this is not mocked, it tests a real issue (.. in paths), if not, it makes sure the zip/base64 bits at least don't make us explode.
-    like( $fake_driver->upload_file('t/uploadTest'),qr/uploadTest$/,'upload_file: zip/base64 branch' );
-    like( $fake_driver->upload_file('t/../t/uploadTest'),qr/uploadTest$/,'upload_file: zip/base64 branch with .. in path' );
+    like( my $path2 = $fake_driver->upload_file('t/uploadTest'),qr/uploadTest$/,'upload_file: zip/base64 branch' );
+    like( my $path3 = $fake_driver->upload_file('t/../t/uploadTest'),qr/uploadTest$/,'upload_file: zip/base64 branch with .. in path' );
+    unlike( $path3,qr/\.\./,'upload_file: zip/base64 branch with .. in path' );
+    ok(-f $path2) if $harness->record;
+    ok(-f $path3) if $harness->record;
 
     #Negative tests to verify that our expected behavior codepath is travelled by tests
     like( exception { $driver->upload_file('@@@SomeFileThatDoesNotExist@@@')},qr/no such file/i,"Passing missing file terminates program");
@@ -533,6 +537,16 @@ UPLOAD: {
           if $harness->record;
         like( exception { $driver->upload_file(__FILE__) },qr/501/,"Passing this file rightly fails due to mock not being present");
     }
+}
+
+ERROR: {
+    # driver behaviour on error
+    $driver->error_handler(sub { my ($self,$error_msg) = @_; croak("Got message: $error_msg");});
+    like( exception { $driver->find_element("somethingthatdoesnotexist") }, qr/^Got message:/, "Error handler catches correctly an error");
+    $driver->clear_error_handler;
+    unlike( exception { $driver->find_element("somethingthatdoesnotexist") }, qr/^Got message:/, "Error handler was correctly cleared");
+
+    like( exception { $driver->error_handler( 'hello' ) }, qr/must be a code ref/, 'we only accept code refs as error handlers');
 }
 
 QUIT: {
