@@ -68,7 +68,7 @@ my %WriteMakefileArgs = (
     "Time::Mock" => 0,
     "lib" => 0
   },
-  "VERSION" => "0.2550",
+  "VERSION" => "0.26",
   "test" => {
     "TESTS" => "t/*.t"
   }
