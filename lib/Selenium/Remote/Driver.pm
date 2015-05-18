@@ -2727,9 +2727,11 @@ feature.
 
 =head1 AUTHORS
 
-Current Maintainers:
-
 =over 4
+
+=item *
+
+Aditya Ivaturi <ivaturi@gmail.com>
 
 =item *
 
@@ -2739,12 +2741,6 @@ Daniel Gempesaw <gempesaw@gmail.com>
 
 Emmanuel Peroumalnaïk <peroumalnaik.emmanuel@gmail.com>
 
-=back
-
-Previous maintainers:
-
-=over 4
-
 =item *
 
 Luke Closs <cpan@5thplane.com>
@@ -2752,16 +2748,6 @@ Luke Closs <cpan@5thplane.com>
 =item *
 
 Mark Stosberg <mark@stosberg.com>
-
-=back
-
-Original author:
-
-=over 4
-
-=item *
-
-Aditya Ivaturi <ivaturi@gmail.com>
 
 =back
 
