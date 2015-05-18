@@ -2739,7 +2739,7 @@ Daniel Gempesaw <gempesaw@gmail.com>
 
 =item *
 
-Emmanuel Peroumalnaïk
+Emmanuel Peroumalnaïk <peroumalnaik.emmanuel@gmail.com>
 
 =item *
 
@@ -2753,13 +2753,17 @@ Mark Stosberg <mark@stosberg.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Allen Lew George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Mitchell Bas Bloemsaat Robert Utter Tom Hukins Vishwanath Janmanchi amacleay jamadam Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Emmanuel Peroumalnaik Eric Johnson Gabor Szabo
+=for stopwords Allen Lew Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Bas Bloemsaat Mitchell Robert Utter Tom Hukins Vishwanath Janmanchi amacleay jamadam Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Emmanuel Peroumalnaik Peroumalnaïk Eric Johnson
 
 =over 4
 
 =item *
 
 Allen Lew <allen@alew.org>
+
+=item *
+
+Gabor Szabo <gabor@szabgab.com>
 
 =item *
 
@@ -2799,11 +2803,11 @@ Phil Kania <phil@vivox.com>
 
 =item *
 
-Phil Mitchell <phil.mitchell@pobox.com>
+Bas Bloemsaat <bas@bloemsaat.com>
 
 =item *
 
-Bas Bloemsaat <bas@bloemsaat.com>
+Phil Mitchell <phil.mitchell@pobox.com>
 
 =item *
 
@@ -2851,11 +2855,11 @@ Emmanuel Peroumalnaik <eperoumalnaik@weborama.com>
 
 =item *
 
-Eric Johnson <eric.git@iijo.org>
+Emmanuel Peroumalnaïk <eperoumalnaik@weborama.com>
 
 =item *
 
-Gabor Szabo <gabor@szabgab.com>
+Eric Johnson <eric.git@iijo.org>
 
 =back
 

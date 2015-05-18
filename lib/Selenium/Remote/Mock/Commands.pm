@@ -89,7 +89,7 @@ Daniel Gempesaw <gempesaw@gmail.com>
 
 =item *
 
-Emmanuel Peroumalnaïk
+Emmanuel Peroumalnaïk <peroumalnaik.emmanuel@gmail.com>
 
 =item *
 
