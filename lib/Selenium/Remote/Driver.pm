@@ -2753,21 +2753,13 @@ Mark Stosberg <mark@stosberg.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Allen Lew Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Bas Bloemsaat Mitchell Robert Utter Tom Hukins Vishwanath Janmanchi amacleay jamadam Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Emmanuel Peroumalnaik Peroumalnaïk Eric Johnson
+=for stopwords Allen Lew Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Mitchell Robert Utter Bas Bloemsaat Tom Hukins Vishwanath Janmanchi amacleay jamadam Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Eric Johnson Gabor Szabo George S. Baugh
 
 =over 4
 
 =item *
 
 Allen Lew <allen@alew.org>
-
-=item *
-
-Gabor Szabo <gabor@szabgab.com>
-
-=item *
-
-George S. Baugh <george@troglodyne.net>
 
 =item *
 
@@ -2803,15 +2795,15 @@ Phil Kania <phil@vivox.com>
 
 =item *
 
-Bas Bloemsaat <bas@bloemsaat.com>
-
-=item *
-
 Phil Mitchell <phil.mitchell@pobox.com>
 
 =item *
 
 Robert Utter <utter.robert@gmail.com>
+
+=item *
+
+Bas Bloemsaat <bas@bloemsaat.com>
 
 =item *
 
@@ -2851,15 +2843,15 @@ Dmitry Karasik <dmitry@karasik.eu.org>
 
 =item *
 
-Emmanuel Peroumalnaik <eperoumalnaik@weborama.com>
-
-=item *
-
-Emmanuel Peroumalnaïk <eperoumalnaik@weborama.com>
-
-=item *
-
 Eric Johnson <eric.git@iijo.org>
+
+=item *
+
+Gabor Szabo <gabor@szabgab.com>
+
+=item *
+
+George S. Baugh <george@troglodyne.net>
 
 =back
 
