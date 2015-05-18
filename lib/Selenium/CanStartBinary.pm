@@ -1,5 +1,5 @@
 package Selenium::CanStartBinary;
-$Selenium::CanStartBinary::VERSION = '0.2550'; # TRIAL
+$Selenium::CanStartBinary::VERSION = '0.2551';
 # ABSTRACT: Teach a WebDriver how to start its own binary aka no JRE!
 use File::Spec;
 use Selenium::CanStartBinary::ProbePort qw/find_open_port_above probe_port/;
@@ -238,7 +238,7 @@ Selenium::CanStartBinary - Teach a WebDriver how to start its own binary aka no 
 
 =head1 VERSION
 
-version 0.2550
+version 0.2551
 
 =head1 SYNOPSIS
 
@@ -390,6 +390,10 @@ Aditya Ivaturi <ivaturi@gmail.com>
 =item *
 
 Daniel Gempesaw <gempesaw@gmail.com>
+
+=item *
+
+Emmanuel Peroumalnaïk
 
 =item *
 

@@ -1,5 +1,5 @@
 package Selenium::Firefox::Binary;
-$Selenium::Firefox::Binary::VERSION = '0.2550'; # TRIAL
+$Selenium::Firefox::Binary::VERSION = '0.2551';
 # ABSTRACT: Subroutines for locating and properly initializing the Firefox Binary
 use File::Which qw/which/;
 use Selenium::Firefox::Profile;
@@ -90,7 +90,7 @@ Selenium::Firefox::Binary - Subroutines for locating and properly initializing t
 
 =head1 VERSION
 
-version 0.2550
+version 0.2551
 
 =head1 SEE ALSO
 
@@ -124,6 +124,10 @@ Aditya Ivaturi <ivaturi@gmail.com>
 =item *
 
 Daniel Gempesaw <gempesaw@gmail.com>
+
+=item *
+
+Emmanuel Peroumalnaïk
 
 =item *
 

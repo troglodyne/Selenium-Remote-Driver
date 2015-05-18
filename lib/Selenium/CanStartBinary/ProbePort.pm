@@ -1,5 +1,5 @@
 package Selenium::CanStartBinary::ProbePort;
-$Selenium::CanStartBinary::ProbePort::VERSION = '0.2550'; # TRIAL
+$Selenium::CanStartBinary::ProbePort::VERSION = '0.2551';
 # ABSTRACT: Utility functions for finding open ports to eventually bind to
 use IO::Socket::INET;
 use Selenium::Waiter qw/wait_until/;
@@ -46,7 +46,7 @@ Selenium::CanStartBinary::ProbePort - Utility functions for finding open ports t
 
 =head1 VERSION
 
-version 0.2550
+version 0.2551
 
 =head1 SEE ALSO
 
@@ -80,6 +80,10 @@ Aditya Ivaturi <ivaturi@gmail.com>
 =item *
 
 Daniel Gempesaw <gempesaw@gmail.com>
+
+=item *
+
+Emmanuel Peroumalnaïk
 
 =item *
 

@@ -3,6 +3,7 @@ abstract: 'Perl Client for Selenium Remote Driver'
 author:
   - 'Aditya Ivaturi <ivaturi@gmail.com>'
   - 'Daniel Gempesaw <gempesaw@gmail.com>'
+  - 'Emmanuel Peroumalnaïk'
   - 'Luke Closs <cpan@5thplane.com>'
   - 'Mark Stosberg <mark@stosberg.com>'
 build_requires:
@@ -65,7 +66,7 @@ resources:
   bugtracker: https://github.com/gempesaw/Selenium-Remote-Driver/issues
   homepage: https://github.com/gempesaw/Selenium-Remote-Driver
   repository: https://github.com/gempesaw/Selenium-Remote-Driver.git
-version: '0.2550'
+version: '0.2551'
 x_contributors:
   - 'Allen Lew <allen@alew.org>'
   - 'Bas Bloemsaat <bas@bloemsaat.com>'
