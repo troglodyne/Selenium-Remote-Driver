@@ -2727,11 +2727,9 @@ feature.
 
 =head1 AUTHORS
 
+Current Maintainers:
+
 =over 4
-
-=item *
-
-Aditya Ivaturi <ivaturi@gmail.com>
 
 =item *
 
@@ -2741,6 +2739,12 @@ Daniel Gempesaw <gempesaw@gmail.com>
 
 Emmanuel Peroumalnaïk <peroumalnaik.emmanuel@gmail.com>
 
+=back
+
+Previous maintainers:
+
+=over 4
+
 =item *
 
 Luke Closs <cpan@5thplane.com>
@@ -2748,6 +2752,16 @@ Luke Closs <cpan@5thplane.com>
 =item *
 
 Mark Stosberg <mark@stosberg.com>
+
+=back
+
+Original author:
+
+=over 4
+
+=item *
+
+Aditya Ivaturi <ivaturi@gmail.com>
 
 =back
 
@@ -2859,7 +2873,7 @@ George S. Baugh <george@troglodyne.net>
 
 Copyright (c) 2010-2011 Aditya Ivaturi, Gordon Child
 
-Copyright (c) 2014 Daniel Gempesaw
+Copyright (c) 2014-2015 Daniel Gempesaw
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
