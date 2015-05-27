@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.2550'; # TRIAL
+$Selenium::Remote::Driver::VERSION = '0.26';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -1308,7 +1308,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.2550
+version 0.26
 
 =head1 SYNOPSIS
 
@@ -2727,15 +2727,23 @@ feature.
 
 =head1 AUTHORS
 
+Current Maintainers:
+
 =over 4
 
 =item *
 
-Aditya Ivaturi <ivaturi@gmail.com>
+Daniel Gempesaw <gempesaw@gmail.com>
 
 =item *
 
-Daniel Gempesaw <gempesaw@gmail.com>
+Emmanuel Peroumalnaïk <peroumalnaik.emmanuel@gmail.com>
+
+=back
+
+Previous maintainers:
+
+=over 4
 
 =item *
 
@@ -2747,19 +2755,25 @@ Mark Stosberg <mark@stosberg.com>
 
 =back
 
+Original authors:
+
+=over 4
+
+=item *
+
+Aditya Ivaturi <ivaturi@gmail.com>
+
+=back
+
 =head1 CONTRIBUTORS
 
-=for stopwords Allen Lew George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Mitchell Bas Bloemsaat Robert Utter Tom Hukins Vishwanath Janmanchi amacleay jamadam Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Emmanuel Peroumalnaik Eric Johnson Gabor Szabo
+=for stopwords Allen Lew Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Mitchell Robert Utter Bas Bloemsaat Tom Hukins Vishwanath Janmanchi amacleay jamadam Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Eric Johnson Gabor Szabo George S. Baugh
 
 =over 4
 
 =item *
 
 Allen Lew <allen@alew.org>
-
-=item *
-
-George S. Baugh <george@troglodyne.net>
 
 =item *
 
@@ -2799,11 +2813,11 @@ Phil Mitchell <phil.mitchell@pobox.com>
 
 =item *
 
-Bas Bloemsaat <bas@bloemsaat.com>
+Robert Utter <utter.robert@gmail.com>
 
 =item *
 
-Robert Utter <utter.robert@gmail.com>
+Bas Bloemsaat <bas@bloemsaat.com>
 
 =item *
 
@@ -2843,15 +2857,15 @@ Dmitry Karasik <dmitry@karasik.eu.org>
 
 =item *
 
-Emmanuel Peroumalnaik <eperoumalnaik@weborama.com>
-
-=item *
-
 Eric Johnson <eric.git@iijo.org>
 
 =item *
 
 Gabor Szabo <gabor@szabgab.com>
+
+=item *
+
+George S. Baugh <george@troglodyne.net>
 
 =back
 
@@ -2859,7 +2873,7 @@ Gabor Szabo <gabor@szabgab.com>
 
 Copyright (c) 2010-2011 Aditya Ivaturi, Gordon Child
 
-Copyright (c) 2014 Daniel Gempesaw
+Copyright (c) 2014-2015 Daniel Gempesaw
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

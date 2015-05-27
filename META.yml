@@ -3,6 +3,7 @@ abstract: 'Perl Client for Selenium Remote Driver'
 author:
   - 'Aditya Ivaturi <ivaturi@gmail.com>'
   - 'Daniel Gempesaw <gempesaw@gmail.com>'
+  - 'Emmanuel Peroumalnaïk <peroumalnaik.emmanuel@gmail.com>'
   - 'Luke Closs <cpan@5thplane.com>'
   - 'Mark Stosberg <mark@stosberg.com>'
 build_requires:
@@ -17,7 +18,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: '0'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.031, CPAN::Meta::Converter version 2.143240'
+generated_by: 'Dist::Zilla version 5.036, CPAN::Meta::Converter version 2.143240'
 license: apache
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -65,7 +66,7 @@ resources:
   bugtracker: https://github.com/gempesaw/Selenium-Remote-Driver/issues
   homepage: https://github.com/gempesaw/Selenium-Remote-Driver
   repository: https://github.com/gempesaw/Selenium-Remote-Driver.git
-version: '0.2550'
+version: '0.26'
 x_contributors:
   - 'Allen Lew <allen@alew.org>'
   - 'Bas Bloemsaat <bas@bloemsaat.com>'
@@ -74,7 +75,6 @@ x_contributors:
   - 'Daniel Fackrell <dfackrell@bluehost.com>'
   - 'Dave Rolsky <autarch@urth.org>'
   - 'Dmitry Karasik <dmitry@karasik.eu.org>'
-  - 'Emmanuel Peroumalnaik <eperoumalnaik@weborama.com>'
   - 'Eric Johnson <eric.git@iijo.org>'
   - 'Gabor Szabo <gabor@szabgab.com>'
   - 'George S. Baugh <george@troglodyne.net>'

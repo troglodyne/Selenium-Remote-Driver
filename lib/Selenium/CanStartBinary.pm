@@ -1,5 +1,5 @@
 package Selenium::CanStartBinary;
-$Selenium::CanStartBinary::VERSION = '0.2550'; # TRIAL
+$Selenium::CanStartBinary::VERSION = '0.26';
 # ABSTRACT: Teach a WebDriver how to start its own binary aka no JRE!
 use File::Spec;
 use Selenium::CanStartBinary::ProbePort qw/find_open_port_above probe_port/;
@@ -238,7 +238,7 @@ Selenium::CanStartBinary - Teach a WebDriver how to start its own binary aka no 
 
 =head1 VERSION
 
-version 0.2550
+version 0.26
 
 =head1 SYNOPSIS
 
@@ -381,15 +381,23 @@ feature.
 
 =head1 AUTHORS
 
+Current Maintainers:
+
 =over 4
 
 =item *
 
-Aditya Ivaturi <ivaturi@gmail.com>
+Daniel Gempesaw <gempesaw@gmail.com>
 
 =item *
 
-Daniel Gempesaw <gempesaw@gmail.com>
+Emmanuel Peroumalnaïk <peroumalnaik.emmanuel@gmail.com>
+
+=back
+
+Previous maintainers:
+
+=over 4
 
 =item *
 
@@ -401,11 +409,21 @@ Mark Stosberg <mark@stosberg.com>
 
 =back
 
+Original authors:
+
+=over 4
+
+=item *
+
+Aditya Ivaturi <ivaturi@gmail.com>
+
+=back
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (c) 2010-2011 Aditya Ivaturi, Gordon Child
 
-Copyright (c) 2014 Daniel Gempesaw
+Copyright (c) 2014-2015 Daniel Gempesaw
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
