@@ -60,12 +60,12 @@ my %WriteMakefileArgs = (
     "FindBin" => 0,
     "Test::Fatal" => 0,
     "Test::LWP::UserAgent" => 0,
+    "Test::MockTime" => 0,
     "Test::More" => 0,
     "Test::Warn" => 0,
-    "Time::Mock" => 0,
     "lib" => 0
   },
-  "VERSION" => "0.26",
+  "VERSION" => "0.27",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -107,9 +107,9 @@ my %FallbackPrereqs = (
   "Test::Fatal" => 0,
   "Test::LWP::UserAgent" => 0,
   "Test::LongString" => 0,
+  "Test::MockTime" => 0,
   "Test::More" => 0,
   "Test::Warn" => 0,
-  "Time::Mock" => 0,
   "Try::Tiny" => 0,
   "XML::Simple" => 0,
   "base" => 0,

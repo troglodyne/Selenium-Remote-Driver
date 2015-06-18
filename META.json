@@ -77,9 +77,9 @@
             "FindBin" : "0",
             "Test::Fatal" : "0",
             "Test::LWP::UserAgent" : "0",
+            "Test::MockTime" : "0",
             "Test::More" : "0",
             "Test::Warn" : "0",
-            "Time::Mock" : "0",
             "lib" : "0"
          }
       }
@@ -96,7 +96,7 @@
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver"
       }
    },
-   "version" : "0.26",
+   "version" : "0.27",
    "x_contributors" : [
       "Allen Lew <allen@alew.org>",
       "Bas Bloemsaat <bas@bloemsaat.com>",
