@@ -1,5 +1,5 @@
 package Selenium::Waiter;
-$Selenium::Waiter::VERSION = '0.27';
+$Selenium::Waiter::VERSION = '0.2650'; # TRIAL
 # ABSTRACT: Provides a utility wait_until function
 use Try::Tiny;
 require Exporter;
@@ -59,7 +59,7 @@ Selenium::Waiter - Provides a utility wait_until function
 
 =head1 VERSION
 
-version 0.27
+version 0.2650
 
 =head1 SYNOPSIS
 
