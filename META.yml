@@ -13,8 +13,8 @@ build_requires:
   Test::Fatal: '0'
   Test::LWP::UserAgent: '0'
   Test::More: '0'
+  Test::Time: '0'
   Test::Warn: '0'
-  Time::Mock: '0'
   lib: '0'
 configure_requires:
   ExtUtils::MakeMaker: '0'

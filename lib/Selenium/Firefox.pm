@@ -36,6 +36,7 @@ has '_binary_args' => (
 
 with 'Selenium::CanStartBinary';
 
+
 1;
 
 __END__
@@ -95,6 +96,17 @@ already bound, we'll search above it until we find an open one.
 See L<Selenium::CanStartBinary/port> for more details, and
 L<Selenium::Remote::Driver/port> after instantiation to see what the
 actual port turned out to be.
+
+=head2 startup_timeout
+
+Optional: specify how long to wait for the binary to start itself and
+listen on its port. The default duration is arbitrarily 10 seconds. It
+accepts an integer number of seconds to wait: the following will wait
+up to 20 seconds:
+
+    Selenium::Firefox->new( startup_timeout => 20 );
+
+See L<Selenium::CanStartBinary/startup_timeout> for more information.
 
 =head1 SEE ALSO
 
