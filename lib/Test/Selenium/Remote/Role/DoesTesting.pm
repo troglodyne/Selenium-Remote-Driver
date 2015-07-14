@@ -1,10 +1,11 @@
 package Test::Selenium::Remote::Role::DoesTesting;
 # ABSTRACT: Role to cope with everything that is related to testing (could
 # be reused in both testing classes)
-$Test::Selenium::Remote::Role::DoesTesting::VERSION = '0.26';
+$Test::Selenium::Remote::Role::DoesTesting::VERSION = '0.2650'; # TRIAL
 use Moo::Role;
 use Test::Builder;
 use Try::Tiny;
+use Scalar::Util 'blessed';
 use List::MoreUtils qw/any/;
 use namespace::clean;
 
@@ -96,11 +97,19 @@ sub _check_ok {
         }
     };
 
+
     my $default_test_name = $method;
     $default_test_name .= "'" . join("' ", @r_args) . "'"
         if $num_of_args > 0;
 
     my $test_name = pop @args // $default_test_name;
+
+    # case when find_no_element found an element, we should croak
+    if ($real_method eq 'find_no_element') { 
+        if (blessed($rv) && $rv->isa('Selenium::Remote::WebElement')) { 
+            $self->croak($test_name);
+        }
+    }
     return $self->ok( $rv, $test_name);
 }
 

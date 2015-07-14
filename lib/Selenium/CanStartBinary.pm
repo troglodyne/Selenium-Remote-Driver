@@ -1,5 +1,5 @@
 package Selenium::CanStartBinary;
-$Selenium::CanStartBinary::VERSION = '0.26';
+$Selenium::CanStartBinary::VERSION = '0.2650'; # TRIAL
 # ABSTRACT: Teach a WebDriver how to start its own binary aka no JRE!
 use File::Spec;
 use Selenium::CanStartBinary::ProbePort qw/find_open_port_above probe_port/;
@@ -29,6 +29,12 @@ has '+port' => (
             return 4444
         }
     }
+);
+
+
+has startup_timeout => (
+    is => 'lazy',
+    default => sub { 10 }
 );
 
 
@@ -118,7 +124,7 @@ sub _build_binary_mode {
     my $command = $self->_construct_command;
     system($command);
 
-    my $success = wait_until { probe_port($port) } timeout => 10;
+    my $success = wait_until { probe_port($port) } timeout => $self->startup_timeout;
     if ($success) {
         return 1;
     }
@@ -238,7 +244,7 @@ Selenium::CanStartBinary - Teach a WebDriver how to start its own binary aka no 
 
 =head1 VERSION
 
-version 0.26
+version 0.2650
 
 =head1 SYNOPSIS
 
@@ -327,6 +333,25 @@ begin searching for an open port.
 Note that if we cannot locate a suitable L</binary>, port will be set
 to 4444 so we can attempt to look for a Selenium server at
 C<127.0.0.1:4444>.
+
+=head2 startup_timeout
+
+Optional: you can modify how long we will wait for the binary to start
+up. By default, we will start the binary and check the intended
+destination port for 10 seconds before giving up. If the machine
+you're using to run your browsers is slower or smaller, you may need
+to increase this timeout.
+
+The following:
+
+    my $f = Selenium::Firefox->new(
+        startup_timeout => 60
+    );
+
+will wait up to 60 seconds for the firefox binary to respond on the
+proper port. To use this constructor option, you should specify a time
+in seconds as an integer, and it will be passed to the arguments
+section of a L<Selenium::Waiter/wait_until> subroutine call.
 
 =head2 binary_mode
 
