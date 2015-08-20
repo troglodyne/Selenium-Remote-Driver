@@ -135,7 +135,7 @@ sub is_hidden {
 
 
 sub drag {
-    carp 'drag is no longer available in the JSONWireProtocol and will be removed in the next version of this module';
+    carp 'drag is no longer available in the JSONWireProtocol.';
 }
 
 
