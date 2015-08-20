@@ -1842,12 +1842,16 @@ Synonymous with mouse_move_to_location
 =head2 quit
 
  Description:
-    Delete the session & close open browsers. We will try to call this
-    on our down when we get DEMOLISHed, but in the event that we are
-    only demolished during global destruction, we will not be able to
-    close the browser. For your own unattended and/or complicated tests,
-    we recommend explicitly calling quit to make sure you're not leaving
-    orphan browsers around.
+
+    DELETE the session, closing open browsers. We will try to call
+    this on our down when we get DEMOLISHed, but in the event that we
+    are demolished during global destruction, we will not be able to
+    close the browser. For your own unattended and/or complicated
+    tests, we recommend explicitly calling quit to make sure you're
+    not leaving orphan browsers around.
+
+    Note that as a Moo class, DEMOLISH takes the place of DESTROY; see
+    L<Moo/DEMOLISH> for more information.
 
  Usage:
     $driver->quit();
