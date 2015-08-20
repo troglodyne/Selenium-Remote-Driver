@@ -1,5 +1,5 @@
 package Selenium::Remote::Finders;
-$Selenium::Remote::Finders::VERSION = '0.2651';
+$Selenium::Remote::Finders::VERSION = '0.2651'; # TRIAL
 # ABSTRACT: Handle construction of generic parameter finders
 use Try::Tiny;
 use Carp qw/carp/;

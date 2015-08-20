@@ -1,5 +1,5 @@
 package Selenium::Chrome;
-$Selenium::Chrome::VERSION = '0.2651';
+$Selenium::Chrome::VERSION = '0.2651'; # TRIAL
 # ABSTRACT: Use ChromeDriver without a Selenium server
 use Moo;
 use Selenium::CanStartBinary::FindBinary qw/coerce_simple_binary/;

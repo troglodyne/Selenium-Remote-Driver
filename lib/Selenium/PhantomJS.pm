@@ -1,5 +1,5 @@
 package Selenium::PhantomJS;
-$Selenium::PhantomJS::VERSION = '0.2651';
+$Selenium::PhantomJS::VERSION = '0.2651'; # TRIAL
 # ABSTRACT: Use GhostDriver without a Selenium server
 use Moo;
 use Selenium::CanStartBinary::FindBinary qw/coerce_simple_binary/;
