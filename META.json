@@ -97,7 +97,7 @@
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver"
       }
    },
-   "version" : "0.2650",
+   "version" : "0.2651",
    "x_contributors" : [
       "Allen Lew <allen@alew.org>",
       "Bas Bloemsaat <bas@bloemsaat.com>",
@@ -122,7 +122,8 @@
       "Tom Hukins <tom@eborcom.com>",
       "Vishwanath Janmanchi <jvishwanath@gmail.com>",
       "amacleay <a.macleay@gmail.com>",
-      "jamadam <sugama@jamadam.com>"
+      "jamadam <sugama@jamadam.com>",
+      "lembark <lembark@wrkhors.com>"
    ]
 }
 

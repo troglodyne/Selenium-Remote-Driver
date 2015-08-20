@@ -1,5 +1,5 @@
 package Selenium::CanStartBinary;
-$Selenium::CanStartBinary::VERSION = '0.2650'; # TRIAL
+$Selenium::CanStartBinary::VERSION = '0.2651'; # TRIAL
 # ABSTRACT: Teach a WebDriver how to start its own binary aka no JRE!
 use File::Spec;
 use Selenium::CanStartBinary::ProbePort qw/find_open_port_above probe_port/;
@@ -176,10 +176,11 @@ sub shutdown_windows_binary {
     }
 }
 
-# We want to do things before the DEMOLISH phase, as during DEMOLISH
-# we apparently have no guarantee that anything is still around
-before DEMOLISH => sub {
-    my ($self) = @_;
+sub DEMOLISH {
+    my ($self, $in_gd) = @_;
+
+    # if we're in global destruction, all bets are off.
+    return if $in_gd;
     $self->shutdown_binary;
 };
 
@@ -244,7 +245,7 @@ Selenium::CanStartBinary - Teach a WebDriver how to start its own binary aka no 
 
 =head1 VERSION
 
-version 0.2650
+version 0.2651
 
 =head1 SYNOPSIS
 

@@ -1,5 +1,5 @@
 package Selenium::Remote::WebElement;
-$Selenium::Remote::WebElement::VERSION = '0.2650'; # TRIAL
+$Selenium::Remote::WebElement::VERSION = '0.2651'; # TRIAL
 # ABSTRACT: Representation of an HTML Element used by Selenium Remote Driver
 
 use Moo;
@@ -135,7 +135,7 @@ sub is_hidden {
 
 
 sub drag {
-    carp 'drag is no longer available in the JSONWireProtocol and will be removed in the next version of this module';
+    carp 'drag is no longer available in the JSONWireProtocol.';
 }
 
 
@@ -187,7 +187,7 @@ Selenium::Remote::WebElement - Representation of an HTML Element used by Seleniu
 
 =head1 VERSION
 
-version 0.2650
+version 0.2651
 
 =head1 DESCRIPTION
 

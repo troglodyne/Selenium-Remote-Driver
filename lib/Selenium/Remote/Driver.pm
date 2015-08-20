@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.2650'; # TRIAL
+$Selenium::Remote::Driver::VERSION = '0.2651'; # TRIAL
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -504,9 +504,11 @@ sub get_capabilities {
 
 sub set_timeout {
     my ( $self, $type, $ms ) = @_;
-    if ( not defined $type or not defined $ms ) {
-        croak "Expecting type & timeout in ms";
+    if ( not defined $type  ) {
+        croak "Expecting type";
     }
+    $ms = _coerce_timeout_ms( $ms );
+
     my $res = { 'command' => 'setTimeout' };
     my $params = { 'type' => $type, 'ms' => $ms };
     return $self->_execute_command( $res, $params );
@@ -515,9 +517,8 @@ sub set_timeout {
 
 sub set_async_script_timeout {
     my ( $self, $ms ) = @_;
-    if ( not defined $ms ) {
-        croak "Expecting timeout in ms";
-    }
+    $ms = _coerce_timeout_ms( $ms );
+
     my $res    = { 'command' => 'setAsyncScriptTimeout' };
     my $params = { 'ms'      => $ms };
     return $self->_execute_command( $res, $params );
@@ -526,6 +527,8 @@ sub set_async_script_timeout {
 
 sub set_implicit_wait_timeout {
     my ( $self, $ms ) = @_;
+    $ms = _coerce_timeout_ms( $ms );
+
     my $res    = { 'command' => 'setImplicitWaitTimeout' };
     my $params = { 'ms'      => $ms };
     return $self->_execute_command( $res, $params );
@@ -1214,7 +1217,7 @@ sub upload_file {
 sub _prepare_file {
     my ($self,$filename) = @_;
 
-    if ( not -r $filename ) { die "upload_file: no such file: $filename"; }
+    if ( not -r $filename ) { croak "upload_file: no such file: $filename"; }
     my $string = "";    # buffer
     my $zip = Archive::Zip->new();
     $zip->addFile($filename, basename($filename));
@@ -1293,6 +1296,28 @@ sub delete_local_storage_item {
     return $self->_execute_command($res, $params);
 }
 
+sub _coerce_timeout_ms {
+    my ($ms) = @_;
+
+    if ( defined $ms ) {
+        return _coerce_number( $ms );
+    }
+    else {
+        croak 'Expecting a timeout in ms';
+    }
+}
+
+sub _coerce_number {
+    my ($maybe_number) = @_;
+
+    if ( Scalar::Util::looks_like_number( $maybe_number )) {
+        return $maybe_number + 0;
+    }
+    else {
+        croak "Expecting a number, not: $maybe_number";
+    }
+}
+
 
 1;
 
@@ -1308,7 +1333,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.2650
+version 0.2651
 
 =head1 SYNOPSIS
 
@@ -1817,12 +1842,16 @@ Synonymous with mouse_move_to_location
 =head2 quit
 
  Description:
-    Delete the session & close open browsers. We will try to call this
-    on our down when we get DEMOLISHed, but in the event that we are
-    only demolished during global destruction, we will not be able to
-    close the browser. For your own unattended and/or complicated tests,
-    we recommend explicitly calling quit to make sure you're not leaving
-    orphan browsers around.
+    DELETE the session, closing open browsers. We will try to call
+    this on our down when we get destroyed, but in the event that we
+    are demolished during global destruction, we will not be able to
+    close the browser. For your own unattended and/or complicated
+    tests, we recommend explicitly calling quit to make sure you're
+    not leaving orphan browsers around.
+
+    Note that as a Moo class, we use a subroutine called DEMOLISH that
+    takes the place of DESTROY; for more information, see
+    https://metacpan.org/pod/Moo#DEMOLISH.
 
  Usage:
     $driver->quit();
@@ -2767,7 +2796,7 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Allen Lew Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Mitchell Robert Utter Bas Bloemsaat Tom Hukins Vishwanath Janmanchi amacleay jamadam Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Eric Johnson Gabor Szabo George S. Baugh
+=for stopwords Allen Lew Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Mitchell Robert Utter Bas Bloemsaat Tom Hukins Vishwanath Janmanchi amacleay jamadam lembark Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Eric Johnson Gabor Szabo George S. Baugh
 
 =over 4
 
@@ -2834,6 +2863,10 @@ amacleay <a.macleay@gmail.com>
 =item *
 
 jamadam <sugama@jamadam.com>
+
+=item *
+
+lembark <lembark@wrkhors.com>
 
 =item *
 

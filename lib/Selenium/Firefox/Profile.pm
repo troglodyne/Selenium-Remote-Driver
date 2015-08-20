@@ -1,5 +1,5 @@
 package Selenium::Firefox::Profile;
-$Selenium::Firefox::Profile::VERSION = '0.2650'; # TRIAL
+$Selenium::Firefox::Profile::VERSION = '0.2651'; # TRIAL
 # ABSTRACT: Use custom profiles with Selenium::Remote::Driver
 # TODO: convert this to Moo!
 
@@ -201,7 +201,7 @@ Selenium::Firefox::Profile - Use custom profiles with Selenium::Remote::Driver
 
 =head1 VERSION
 
-version 0.2650
+version 0.2651
 
 =head1 DESCRIPTION
 
