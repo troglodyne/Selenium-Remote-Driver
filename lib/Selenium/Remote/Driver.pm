@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.2652'; # TRIAL
+$Selenium::Remote::Driver::VERSION = '0.2653';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -172,8 +172,8 @@ has 'proxy' => (
             if ( not defined $proxy->{proxyAutoconfigUrl} ) {
                 croak "proxyAutoconfigUrl not provided\n";
             }
-            elsif ( not( $proxy->{proxyAutoconfigUrl} =~ /^http/g ) ) {
-                croak "proxyAutoconfigUrl should be of format http://";
+            elsif ( not( $proxy->{proxyAutoconfigUrl} =~ /^(http|file)/g ) ) {
+                croak "proxyAutoconfigUrl should be of format http:// or file://";
             }
         }
         $proxy;
@@ -1333,7 +1333,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.2652
+version 0.2653
 
 =head1 SYNOPSIS
 
