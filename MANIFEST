@@ -43,6 +43,7 @@ lib/Test/Selenium/Remote/Driver.pm
 lib/Test/Selenium/Remote/Role/DoesTesting.pm
 lib/Test/Selenium/Remote/WebElement.pm
 t/00-load.t
+t/01-driver-pac.t
 t/01-driver.t
 t/02-webelement.t
 t/03-spec-coverage.t
