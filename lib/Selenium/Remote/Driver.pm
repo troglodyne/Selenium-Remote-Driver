@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.27';
+$Selenium::Remote::Driver::VERSION = '0.28';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -1343,7 +1343,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.27
+version 0.28
 
 =head1 SYNOPSIS
 
@@ -2387,7 +2387,8 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
 
  Usage:
     my $elem1 = $driver->find_element("//select[\@name='ned']");
-    my $child = $driver->find_child_elements($elem1, "//option");
+    # note the usage of ./ when searching for a child element instead of //
+    my $child = $driver->find_child_elements($elem1, "./option");
 
 =head2 find_element_by_class
 
