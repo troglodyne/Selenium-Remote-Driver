@@ -104,12 +104,13 @@ has 'session_id' => (
 has 'remote_conn' => (
     is      => 'lazy',
     builder => sub {
-            my $self = shift;
-            return Selenium::Remote::RemoteConnection->new(
-                remote_server_addr => $self->remote_server_addr,
-                port               => $self->port,
-                ua                 => $self->ua
-            );
+        my $self = shift;
+        return Selenium::Remote::RemoteConnection->new(
+            remote_server_addr => $self->remote_server_addr,
+            port               => $self->port,
+            ua                 => $self->ua,
+            wd_context_prefix  => $self->wd_context_prefix
+        );
     },
 );
 
@@ -234,6 +235,7 @@ has 'inner_window_size' => (
 );
 
 with 'Selenium::Remote::Finders';
+with 'Selenium::Remote::Driver::CanSetWebdriverContext';
 
 sub BUILD {
     my $self = shift;

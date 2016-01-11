@@ -34,6 +34,11 @@ has '_binary_args' => (
     }
 );
 
+has '+wd_context_prefix' => (
+    is => 'ro',
+    default => sub { '/hub' }
+);
+
 with 'Selenium::CanStartBinary';
 
 

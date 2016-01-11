@@ -49,7 +49,7 @@
             "IO::Socket" : "0",
             "IO::Socket::INET" : "0",
             "IO::String" : "0",
-            "IO::Uncompress::Unzip" : "0",
+            "IO::Uncompress::Unzip" : "2.030",
             "JSON" : "0",
             "LWP::UserAgent" : "0",
             "List::MoreUtils" : "0",
