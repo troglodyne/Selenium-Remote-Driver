@@ -1,5 +1,5 @@
 package Selenium::Chrome;
-$Selenium::Chrome::VERSION = '0.27';
+$Selenium::Chrome::VERSION = '0.2701'; # TRIAL
 # ABSTRACT: Use ChromeDriver without a Selenium server
 use Moo;
 use Selenium::CanStartBinary::FindBinary qw/coerce_simple_binary/;
@@ -30,7 +30,10 @@ has '_binary_args' => (
     builder => sub {
         my ($self) = @_;
 
-        return ' --port=' . $self->port . ' --url-base=wd/hub ';
+        my $context = $self->wd_context_prefix;
+        $context =~ s{^/}{};
+
+        return ' --port=' . $self->port . ' --url-base=' . $context . ' ';
     }
 );
 
@@ -51,7 +54,7 @@ Selenium::Chrome - Use ChromeDriver without a Selenium server
 
 =head1 VERSION
 
-version 0.27
+version 0.2701
 
 =head1 SYNOPSIS
 

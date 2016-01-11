@@ -1,6 +1,14 @@
 Revision history for Selenium-Remote-Driver
 
-0.27 08-30-2015
+0.2701 01-11-2016
+        (firefox driver version: 2.48.2)
+
+        [BUG FIXES]
+        - #239: Respect existing prefs when using custom profile with Selenium::Firefox
+        - #238: Update firefox driver extension to latest 2.48.2
+        - #21: Update docs about using child finders with xpath
+
+0.27   08-30-2015
         [NEW FEATURES]
         - #219: Add `startup_timeout` to CanStartBinary role
         - #211: @peroumal1: Document locator usage for Test::SRD functions
@@ -10,7 +18,7 @@ Revision history for Selenium-Remote-Driver
         - #212: @peroumal1: Fix bug in find_no_element_ok
         - #209: @peroumal1: Make error_handler catch non-webdriver exceptions in Test::SRD
         - #222: Describe demolish/destroy behavior.
-        - #206: Allow local file URLs for PAC url
+        - #226: Allow local file URLs for PAC url
         - Stop trying to do things during global destruction
 
 0.26   05-16-2015

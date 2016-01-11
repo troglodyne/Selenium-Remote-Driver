@@ -35,7 +35,7 @@ my %WriteMakefileArgs = (
     "IO::Socket" => 0,
     "IO::Socket::INET" => 0,
     "IO::String" => 0,
-    "IO::Uncompress::Unzip" => 0,
+    "IO::Uncompress::Unzip" => "2.030",
     "JSON" => 0,
     "LWP::UserAgent" => 0,
     "List::MoreUtils" => 0,
@@ -66,7 +66,7 @@ my %WriteMakefileArgs = (
     "Test::Warn" => 0,
     "lib" => 0
   },
-  "VERSION" => "0.27",
+  "VERSION" => "0.2701",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -94,7 +94,7 @@ my %FallbackPrereqs = (
   "IO::Socket" => 0,
   "IO::Socket::INET" => 0,
   "IO::String" => 0,
-  "IO::Uncompress::Unzip" => 0,
+  "IO::Uncompress::Unzip" => "2.030",
   "JSON" => 0,
   "LWP::UserAgent" => 0,
   "List::MoreUtils" => 0,

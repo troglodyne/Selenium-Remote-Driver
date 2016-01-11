@@ -1,5 +1,5 @@
 package Selenium::Firefox::Profile;
-$Selenium::Firefox::Profile::VERSION = '0.27';
+$Selenium::Firefox::Profile::VERSION = '0.2701'; # TRIAL
 # ABSTRACT: Use custom profiles with Selenium::Remote::Driver
 # TODO: convert this to Moo!
 
@@ -12,8 +12,8 @@ use Cwd qw(abs_path);
 use File::Copy qw(copy);
 use File::Temp;
 use File::Basename qw(dirname);
-use IO::Uncompress::Unzip qw(unzip $UnzipError);
-use JSON qw/decode_json/;
+use IO::Uncompress::Unzip 2.030 qw($UnzipError);
+use JSON qw(decode_json);
 use MIME::Base64;
 use Scalar::Util qw(blessed looks_like_number);
 use XML::Simple;
@@ -110,10 +110,12 @@ sub add_webdriver {
         close ($fh);
     }
     my $webdriver_prefs = decode_json($json);
+    my $current_user_prefs = $self->{user_prefs};
 
-    # TODO: Let the user's mutable preferences persist instead of
-    # overwriting them here.
-    $self->set_preference(%{ $webdriver_prefs->{mutable} });
+    $self->set_preference(
+        %{ $webdriver_prefs->{mutable} },
+        %{ $current_user_prefs }
+    );
     $self->set_preference(%{ $webdriver_prefs->{frozen} });
 
     $self->add_extension($webdriver_extension);
@@ -174,17 +176,35 @@ sub _install_extensions {
         # its id, which is found in the install.rdf in the root of the
         # zip.
 
-        my $fh;
-        unzip $xpi => \$fh, Name => "install.rdf"
-          or die "unzip failed: $UnzipError\n";
-
-        my $rdf = XMLin($fh);
+        my $rdf_string = $self->_extract_install_rdf($xpi);
+        my $rdf = XMLin($rdf_string);
         my $name = $rdf->{Description}->{'em:id'};
 
         my $xpi_dest = $extension_dir . $name . ".xpi";
         copy($xpi, $xpi_dest)
             or croak "Error copying $_ to $xpi_dest : $!";
     }
+}
+
+sub _extract_install_rdf {
+    my ($self, $xpi) = @_;
+
+    my $unzipped = IO::Uncompress::Unzip->new($xpi)
+      or die "Cannot unzip $xpi: $UnzipError";
+
+    my $install_rdf = '';
+    while ($unzipped->nextStream) {
+        my $filename = $unzipped->getHeaderInfo->{Name};
+        if ($filename eq 'install.rdf') {
+            my $buffer;
+            while ((my $status = $unzipped->read($buffer)) > 0) {
+                $install_rdf .= $buffer;
+            }
+            return $install_rdf;
+        }
+    }
+
+    croak 'Invalid Firefox extension: could not find install.rdf in the .XPI at: ' . $xpi
 }
 
 1;
@@ -201,7 +221,7 @@ Selenium::Firefox::Profile - Use custom profiles with Selenium::Remote::Driver
 
 =head1 VERSION
 
-version 0.27
+version 0.2701
 
 =head1 DESCRIPTION
 
