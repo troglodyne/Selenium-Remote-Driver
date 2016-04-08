@@ -97,9 +97,10 @@
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver"
       }
    },
-   "version" : "0.2701",
+   "version" : "0.2702",
    "x_contributors" : [
       "Allen Lew <allen@alew.org>",
+      "Andy Jack <andyjack@users.noreply.github.com>",
       "Bas Bloemsaat <bas@bloemsaat.com>",
       "Brian Horakh <brianh@zoovy.com>",
       "Charles Howes <charles.howes@globalrelay.net>",

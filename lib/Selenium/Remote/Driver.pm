@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.2701';
+$Selenium::Remote::Driver::VERSION = '0.2702';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -1345,7 +1345,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.2701
+version 0.2702
 
 =head1 SYNOPSIS
 
@@ -2809,13 +2809,17 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Allen Lew Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Mitchell Robert Utter Bas Bloemsaat Tom Hukins Vishwanath Janmanchi amacleay jamadam lembark Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Eric Johnson Gabor Szabo George S. Baugh
+=for stopwords Allen Lew George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Mitchell Andy Jack Robert Utter Tom Hukins Vishwanath Janmanchi amacleay jamadam lembark Bas Bloemsaat Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Eric Johnson Gabor Szabo
 
 =over 4
 
 =item *
 
 Allen Lew <allen@alew.org>
+
+=item *
+
+George S. Baugh <george@troglodyne.net>
 
 =item *
 
@@ -2855,11 +2859,11 @@ Phil Mitchell <phil.mitchell@pobox.com>
 
 =item *
 
-Robert Utter <utter.robert@gmail.com>
+Andy Jack <andyjack@users.noreply.github.com>
 
 =item *
 
-Bas Bloemsaat <bas@bloemsaat.com>
+Robert Utter <utter.robert@gmail.com>
 
 =item *
 
@@ -2880,6 +2884,10 @@ jamadam <sugama@jamadam.com>
 =item *
 
 lembark <lembark@wrkhors.com>
+
+=item *
+
+Bas Bloemsaat <bas@bloemsaat.com>
 
 =item *
 
@@ -2908,10 +2916,6 @@ Eric Johnson <eric.git@iijo.org>
 =item *
 
 Gabor Szabo <gabor@szabgab.com>
-
-=item *
-
-George S. Baugh <george@troglodyne.net>
 
 =back
 

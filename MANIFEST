@@ -45,6 +45,7 @@ lib/Selenium/Waiter.pm
 lib/Test/Selenium/Remote/Driver.pm
 lib/Test/Selenium/Remote/Role/DoesTesting.pm
 lib/Test/Selenium/Remote/WebElement.pm
+perl.pl
 t/00-load.t
 t/01-driver-pac.t
 t/01-driver.t

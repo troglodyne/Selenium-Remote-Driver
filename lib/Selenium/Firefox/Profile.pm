@@ -1,5 +1,5 @@
 package Selenium::Firefox::Profile;
-$Selenium::Firefox::Profile::VERSION = '0.2701';
+$Selenium::Firefox::Profile::VERSION = '0.2702';
 # ABSTRACT: Use custom profiles with Selenium::Remote::Driver
 # TODO: convert this to Moo!
 
@@ -21,14 +21,20 @@ use XML::Simple;
 
 sub new {
     my $class = shift;
+    my %args  = @_;
 
-    # TODO: add handling for a pre-existing profile folder passed into
-    # the constructor
+    my $profile_dir;
+    if ( $args{profile_dir} && -d $args{profile_dir} ) {
+        $profile_dir = $args{profile_dir};
+    }
+    else {
+        $profile_dir = File::Temp->newdir();
+    }
 
     # TODO: accept user prefs, boolean prefs, and extensions in
     # constructor
     my $self = {
-        profile_dir => File::Temp->newdir(),
+        profile_dir => $profile_dir,
         user_prefs => {},
         extensions => []
       };
@@ -221,7 +227,7 @@ Selenium::Firefox::Profile - Use custom profiles with Selenium::Remote::Driver
 
 =head1 VERSION
 
-version 0.2701
+version 0.2702
 
 =head1 DESCRIPTION
 
