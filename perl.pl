@@ -1,16 +1,7 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::Selenium::Remote::Driver;
 
-package Test::Selenium::Firefox {
-    use Moo;
-    extends 'Selenium::Firefox', 'Test::Selenium::Remote::Driver';
-
-    1;
-};
-
-my $f = Test::Selenium::Firefox->new;
-
-$f->get_ok('about:config');
-
-done_testing;
+my $tsrd = Test::Selenium::Remote::Driver->new( browser_name => 'chrome');
+$DB::single=2;
+print 'hi';
