@@ -98,11 +98,13 @@
    },
    "version" : "0.2702",
    "x_contributors" : [
+      "A.MacLeay <a.macleay@gmail.com>",
       "Allen Lew <allen@alew.org>",
       "Andy Jack <andyjack@users.noreply.github.com>",
       "Bas Bloemsaat <bas@bloemsaat.com>",
       "Brian Horakh <brianh@zoovy.com>",
       "Charles Howes <charles.howes@globalrelay.net>",
+      "Chris Davies <FMQA@users.noreply.github.com>",
       "Daniel Fackrell <dfackrell@bluehost.com>",
       "Dave Rolsky <autarch@urth.org>",
       "Dmitry Karasik <dmitry@karasik.eu.org>",
@@ -123,7 +125,8 @@
       "Vishwanath Janmanchi <jvishwanath@gmail.com>",
       "amacleay <a.macleay@gmail.com>",
       "jamadam <sugama@jamadam.com>",
-      "lembark <lembark@wrkhors.com>"
+      "lembark <lembark@wrkhors.com>",
+      "rouzier <rouzier@gmail.com>"
    ]
 }
 

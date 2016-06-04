@@ -2077,7 +2077,7 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
 
  Description:
     Capture a screenshot and save as a PNG to provided file name.
-    (The method is compatible with the WWW::Selenium method fo the same name)
+    (The method is compatible with the WWW::Selenium method of the same name)
 
  Output:
     TRUE - (Screenshot is written to file)
@@ -2809,13 +2809,21 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Allen Lew George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Mitchell Andy Jack Robert Utter Tom Hukins Vishwanath Janmanchi amacleay jamadam lembark Bas Bloemsaat Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Eric Johnson Gabor Szabo
+=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Robert Utter Tom Hukins Vishwanath Janmanchi amacleay jamadam lembark rouzier Andy Jack Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
 
 =over 4
 
 =item *
 
-Allen Lew <allen@alew.org>
+A.MacLeay <a.macleay@gmail.com>
+
+=item *
+
+Eric Johnson <eric.git@iijo.org>
+
+=item *
+
+Gabor Szabo <gabor@szabgab.com>
 
 =item *
 
@@ -2851,15 +2859,15 @@ Ken Swanson <kswanson@genome.wustl.edu>
 
 =item *
 
+Allen Lew <allen@alew.org>
+
+=item *
+
 Phil Kania <phil@vivox.com>
 
 =item *
 
 Phil Mitchell <phil.mitchell@pobox.com>
-
-=item *
-
-Andy Jack <andyjack@users.noreply.github.com>
 
 =item *
 
@@ -2887,6 +2895,14 @@ lembark <lembark@wrkhors.com>
 
 =item *
 
+rouzier <rouzier@gmail.com>
+
+=item *
+
+Andy Jack <andyjack@users.noreply.github.com>
+
+=item *
+
 Bas Bloemsaat <bas@bloemsaat.com>
 
 =item *
@@ -2899,6 +2915,10 @@ Charles Howes <charles.howes@globalrelay.net>
 
 =item *
 
+Chris Davies <FMQA@users.noreply.github.com>
+
+=item *
+
 Daniel Fackrell <dfackrell@bluehost.com>
 
 =item *
@@ -2908,14 +2928,6 @@ Dave Rolsky <autarch@urth.org>
 =item *
 
 Dmitry Karasik <dmitry@karasik.eu.org>
-
-=item *
-
-Eric Johnson <eric.git@iijo.org>
-
-=item *
-
-Gabor Szabo <gabor@szabgab.com>
 
 =back
 

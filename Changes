@@ -8,9 +8,6 @@ Revision history for Selenium-Remote-Driver
 
         [BUG FIXES]
         - #260 Update firefox driver artifacts to 2.53.0
-        - #
-
-
 
 0.2701 01-11-2016
         (firefox driver version: 2.48.2)
