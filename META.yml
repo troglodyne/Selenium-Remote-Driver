@@ -15,7 +15,6 @@ build_requires:
   Test::More: '0'
   Test::Time: '0'
   Test::Warn: '0'
-  feature: '0'
   lib: '0'
 configure_requires:
   ExtUtils::MakeMaker: '0'

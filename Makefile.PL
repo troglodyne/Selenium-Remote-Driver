@@ -63,7 +63,6 @@ my %WriteMakefileArgs = (
     "Test::More" => 0,
     "Test::Time" => 0,
     "Test::Warn" => 0,
-    "feature" => 0,
     "lib" => 0
   },
   "VERSION" => "0.2702",
@@ -115,7 +114,6 @@ my %FallbackPrereqs = (
   "XML::Simple" => 0,
   "base" => 0,
   "constant" => 0,
-  "feature" => 0,
   "lib" => 0,
   "namespace::clean" => 0,
   "strict" => 0,

@@ -8,23 +8,19 @@ use FindBin;
 my $this_folder = $FindBin::Bin . '/../../'; # t/bin/../../
 my $repo_root = abs_path($this_folder) . '/';
 
-# reset_env();
-# start_server();
+reset_env();
+start_server();
 
 my $built_lib = find_built_lib();
 my $export = $^O eq 'MSWin32' ? 'set' : 'export';
 my $wait = $^O eq 'MSWin32' ? 'START /WAIT' : '';
 my $prove_opts = '-I' . $built_lib .' -j9 -r --verbose --trap --merge --state=save,slow';
 my $default_prove = "prove $prove_opts t/";
-my $executable = $ARGV[0] ? "perl -Ilib $ARGV[0]" : $default_prove;
-
+my $executable = $ARGV[0] ? "perl -I$built_lib $ARGV[0]" : $default_prove;
 my $command = "$export WD_MOCKING_RECORD=1 && cd $repo_root && $executable";
-use feature qw/say/;
-say $command;
-
-
-
-# reset_env();
+print "Executing: $command\n";
+print `$command`;
+reset_env();
 
 sub find_built_lib {
     my $built_lib = glob($repo_root . 'Selenium-Remote-Driver-*/lib');
