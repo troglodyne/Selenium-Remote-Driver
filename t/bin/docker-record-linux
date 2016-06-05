@@ -3,8 +3,7 @@
 REPO=$(git rev-parse --show-toplevel)
 cd $REPO
 
-# docker pull gempesaw/selenium-remote-driver
-
+docker pull gempesaw/docker-selenium-remote-driver
 docker run --security-opt=seccomp=unconfined \
        -v $REPO:/opt/Selenium-Remote-Driver \
-       -it --rm gempesaw/selenium-remote-driver $1
+       -it --rm gempesaw/docker-selenium-remote-driver $1
