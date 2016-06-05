@@ -1,22 +1,28 @@
 use strict;
 use warnings;
+use lib 'lib';
+use Selenium::Firefox::Profile;
+use Selenium::Firefox;
+use Parallel::ForkManager;
 
-use Selenium::Remote::WDKeys 'KEYS';
-use Selenium::Remote::Driver;
-use Selenium::ActionChains;
+my $pm = Parallel::ForkManager->new(5);
 
-my $driver = Selenium::Remote::Driver->new;
-$driver->get('https://www.perl.org');
-$driver->find_element('body', 'tag_name')->click;
+for (1..1) {
+    my $pid = $pm->start and next;
 
-my $action_chains = Selenium::ActionChains->new(driver => $driver);
+    my $p = Selenium::Firefox::Profile->new;
+    my $NEVER_LOAD_IMAGES = '2';
+    my $FORCE_RESPECT_DEFAULT_IMAGE = 9999;
+    $p->set_preference(
+        'permissions.default.image' => $NEVER_LOAD_IMAGES,
+        'browser.migration.version' => $FORCE_RESPECT_DEFAULT_IMAGE
+    );
 
-$action_chains->key_down([KEYS->{'command_meta'}, 'a'])
-  ->key_up([KEYS->{'command_meta'}])->perform;
-sleep(2); # for visual verification
+    my $f = Selenium::Firefox->new(firefox_profile => $p);
+    sleep(99);
+    # $f->quit;
 
-$action_chains->key_down([KEYS->{'command_meta'}, 't'])
-  ->key_up([KEYS->{'command_meta'}])->perform;
-sleep(2); # for visual verification
+    $pm->finish;
+}
 
-$driver->quit;
+$pm->wait_all_children;

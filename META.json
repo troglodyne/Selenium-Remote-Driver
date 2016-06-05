@@ -3,18 +3,18 @@
    "author" : [
       "Aditya Ivaturi <ivaturi@gmail.com>",
       "Daniel Gempesaw <gempesaw@gmail.com>",
-      "Emmanuel Peroumalna\u00efk <peroumalnaik.emmanuel@gmail.com>",
+      "Emmanuel Peroumalnaïk <peroumalnaik.emmanuel@gmail.com>",
       "Luke Closs <cpan@5thplane.com>",
       "Mark Stosberg <mark@stosberg.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 6.005, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Dist::Zilla version 5.036, CPAN::Meta::Converter version 2.143240",
    "license" : [
       "apache_2_0"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
-      "version" : 2
+      "version" : "2"
    },
    "name" : "Selenium-Remote-Driver",
    "prereqs" : {
@@ -26,7 +26,6 @@
       "develop" : {
          "requires" : {
             "Pod::Coverage::TrustPod" : "0",
-            "Test::More" : "0",
             "Test::Pod" : "1.41",
             "Test::Pod::Coverage" : "1.08"
          }

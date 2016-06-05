@@ -119,11 +119,10 @@ sub _build_binary_mode {
     return if $port == 4444;
 
     if ($self->isa('Selenium::Firefox')) {
-        my @args = ($port);
+        my @args = ($port, $self->firefox_profile);
 
-        if ($self->has_firefox_profile) {
-            push @args, $self->firefox_profile;
-        }
+        # prevent Driver.pm from eventually _encode'ing the profile
+        $self->clear_firefox_profile;
 
         setup_firefox_binary_env(@args);
     }
