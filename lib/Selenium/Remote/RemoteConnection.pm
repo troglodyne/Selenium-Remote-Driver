@@ -22,7 +22,7 @@ has 'port' => (
 
 has 'debug' => (
     is => 'rw',
-    default => sub { 0 }
+    default => sub { 1 }
 );
 
 has 'ua' => (
