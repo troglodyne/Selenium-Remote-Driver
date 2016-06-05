@@ -101,17 +101,8 @@ sub BUILDARGS {
         $args{remote_server_addr} = '127.0.0.1';
     }
     else {
-        # The user has called ->new on a class that consumes our role,
-        # but provided either a remote server address, or a
-        # port. These are the hints we use to assume that they
-        # actually intend to use the selenium standalone server jar,
-        # instead of starting up the binary automatically. This should
-        # be a pretty rare case, as it's not well documented.
         $args{try_binary} = 0;
         $args{binary_mode} = 0;
-
-        $args{port} ||= 4444;
-        $args{wd_context_prefix} = '/wd/hub';
     }
 
     return { %args };

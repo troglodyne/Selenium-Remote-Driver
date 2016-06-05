@@ -1,11 +1,8 @@
 package Selenium::Firefox;
 $Selenium::Firefox::VERSION = '0.2702';
 # ABSTRACT: Use FirefoxDriver without a Selenium server
-use Carp qw/croak/;
-use Selenium::Firefox::Profile;
-use Scalar::Util qw/blessed/;
-use Selenium::CanStartBinary::FindBinary qw/coerce_firefox_binary/;
 use Moo;
+use Selenium::CanStartBinary::FindBinary qw/coerce_firefox_binary/;
 extends 'Selenium::Remote::Driver';
 
 
@@ -36,23 +33,6 @@ has '_binary_args' => (
         return ' -no-remote';
     }
 );
-
-has '+firefox_profile' => (
-    is => 'rw',
-    clearer => 1,
-    predicate => 1,
-    coerce => sub {
-        my $profile = shift;
-        unless (blessed($profile)
-                && $profile->isa('Selenium::Firefox::Profile')) {
-            croak "firefox_profile should be a Selenium::Firefox::Profile\n";
-        }
-
-        return $profile;
-    },
-    default => sub { Selenium::Firefox::Profile->new }
-);
-
 
 has '+wd_context_prefix' => (
     is => 'ro',

@@ -2,6 +2,7 @@ package Selenium::Firefox::Binary;
 $Selenium::Firefox::Binary::VERSION = '0.2702';
 # ABSTRACT: Subroutines for locating and properly initializing the Firefox Binary
 use File::Which qw/which/;
+use Selenium::Firefox::Profile;
 
 require Exporter;
 our @ISA = qw/Exporter/;
@@ -63,8 +64,9 @@ sub firefox_path {
 # the end of this function.
 my $profile;
 sub setup_firefox_binary_env {
-    my ($port, $profile) = @_;
+    my ($port, $caller_profile) = @_;
 
+    $profile = $caller_profile || Selenium::Firefox::Profile->new;
     $profile->add_webdriver($port);
 
     $ENV{'XRE_PROFILE_PATH'} = $profile->_layout_on_disk;
