@@ -1004,10 +1004,11 @@ sub find_child_element {
     if ( ( not defined $elem ) || ( not defined $query ) ) {
         croak "Missing parameters";
     }
-    my $using = ( defined $method ) ? $method : $self->default_finder;
-    if ( exists $self->FINDERS->{$using} ) {
+    my $using =
+      ( defined $method ) ? $self->FINDERS->{$method} : $self->default_finder;
+    if ( defined $using ) {
         my $res = { 'command' => 'findChildElement', 'id' => $elem->{id} };
-        my $params = { 'using' => $self->FINDERS->{$using}, 'value' => $query };
+        my $params = { 'using' => $using, 'value' => $query };
         my $ret_data = eval { $self->_execute_command( $res, $params ); };
         if ($@) {
             if ( $@
@@ -1038,10 +1039,11 @@ sub find_child_elements {
     if ( ( not defined $elem ) || ( not defined $query ) ) {
         croak "Missing parameters";
     }
-    my $using = ( defined $method ) ? $method : $self->default_finder;
-    if ( exists $self->FINDERS->{$using} ) {
+    my $using =
+      ( defined $method ) ? $self->FINDERS->{$method} : $self->default_finder;
+    if ( defined $using ) {
         my $res = { 'command' => 'findChildElements', 'id' => $elem->{id} };
-        my $params = { 'using' => $self->FINDERS->{$using}, 'value' => $query };
+        my $params = { 'using' => $using, 'value' => $query };
         my $ret_data = eval { $self->_execute_command( $res, $params ); };
         if ($@) {
             if ( $@
@@ -1818,6 +1820,10 @@ Synonymous with mouse_move_to_location
     at least one element is found or the timeout expires, at which point it
     will return an empty list. If this method is never called, the driver will
     default to an implicit wait of 0ms.
+
+    This is exactly equivalent to calling L</set_timeout> with a type
+    arg of C<"implicit">, like C<< $driver->set_timeout('implicit',
+    ...) >>.
 
  Input:
     Time in milliseconds.
