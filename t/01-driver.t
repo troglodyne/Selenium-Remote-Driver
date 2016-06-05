@@ -17,8 +17,7 @@ use TestHarness;
 use Test::Fatal;
 
 my $harness = TestHarness->new(
-    this_file => $FindBin::Script,
-    record => 1
+    this_file => $FindBin::Script
 );
 my %selenium_args = %{ $harness->base_caps };
 
@@ -270,12 +269,6 @@ FIND: {
     ok($elem->isa('Selenium::Remote::WebElement'), 'Got WebElement via Id');
     $elem = $driver->find_element('checky', 'name');
     ok($elem->isa('Selenium::Remote::WebElement'), 'Got WebElement via Name');
-
-    $driver->default_finder('css');
-    $elem = $driver->find_element('#multi');
-    $elem = $driver->find_child_element($elem, "option[selected]");
-    ok($elem->isa('Selenium::Remote::WebElement'), 'Got child WebElement...');
-    $driver->default_finder('xpath');
 
     $elem = $driver->find_element('multi', 'id');
     $elem = $driver->find_child_element($elem, "option");
