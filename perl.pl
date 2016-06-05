@@ -1,14 +1,22 @@
 use strict;
 use warnings;
-use Test::More;
-use lib 'lib';
-use Test::Selenium::Remote::Driver;
 
-my $driver = Test::Selenium::Remote::Driver->new(
-    error_handler => sub { print 'whee' }
-);
+use Selenium::Remote::WDKeys 'KEYS';
+use Selenium::Remote::Driver;
+use Selenium::ActionChains;
 
-$driver->get('https://www.google.com');
-$driver->find_no_element_ok('asdf', 'css');
+my $driver = Selenium::Remote::Driver->new;
+$driver->get('https://www.perl.org');
+$driver->find_element('body', 'tag_name')->click;
 
-done_testing;
+my $action_chains = Selenium::ActionChains->new(driver => $driver);
+
+$action_chains->key_down([KEYS->{'command_meta'}, 'a'])
+  ->key_up([KEYS->{'command_meta'}])->perform;
+sleep(2); # for visual verification
+
+$action_chains->key_down([KEYS->{'command_meta'}, 't'])
+  ->key_up([KEYS->{'command_meta'}])->perform;
+sleep(2); # for visual verification
+
+$driver->quit;

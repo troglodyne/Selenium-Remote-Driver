@@ -44,6 +44,7 @@ on 'test' => sub {
   requires "Test::More" => "0";
   requires "Test::Time" => "0";
   requires "Test::Warn" => "0";
+  requires "feature" => "0";
   requires "lib" => "0";
 };
 
