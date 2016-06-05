@@ -207,7 +207,8 @@ has 'firefox_profile' => (
 
         return $profile;
     },
-    predicate => 'has_firefox_profile'
+    predicate => 'has_firefox_profile',
+    clearer => 1
 );
 
 has 'desired_capabilities' => (

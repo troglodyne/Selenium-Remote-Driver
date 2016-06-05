@@ -37,23 +37,6 @@ has '_binary_args' => (
     }
 );
 
-has '+firefox_profile' => (
-    is => 'rw',
-    clearer => 1,
-    predicate => 1,
-    coerce => sub {
-        my $profile = shift;
-        unless (blessed($profile)
-                && $profile->isa('Selenium::Firefox::Profile')) {
-            croak "firefox_profile should be a Selenium::Firefox::Profile\n";
-        }
-
-        return $profile;
-    },
-    default => sub { Selenium::Firefox::Profile->new }
-);
-
-
 has '+wd_context_prefix' => (
     is => 'ro',
     default => sub { '/hub' }
