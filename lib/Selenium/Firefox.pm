@@ -1,11 +1,8 @@
 package Selenium::Firefox;
 $Selenium::Firefox::VERSION = '0.2702';
 # ABSTRACT: Use FirefoxDriver without a Selenium server
-use Carp qw/croak/;
-use Selenium::Firefox::Profile;
-use Scalar::Util qw/blessed/;
-use Selenium::CanStartBinary::FindBinary qw/coerce_firefox_binary/;
 use Moo;
+use Selenium::CanStartBinary::FindBinary qw/coerce_firefox_binary/;
 extends 'Selenium::Remote::Driver';
 
 
