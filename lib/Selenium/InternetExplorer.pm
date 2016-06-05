@@ -15,6 +15,9 @@ has '+platform' => (
     default => sub { 'WINDOWS' }
 );
 
+with 'Selenium::CanStartBinary';
+
+
 1;
 
 __END__
@@ -34,6 +37,25 @@ version 0.2702
 =head1 SYNOPSIS
 
     my $driver = Selenium::InternetExplorer->new;
+
+=head1 ATTRIBUTES
+
+=head2 custom_args
+
+Optional: specify any additional command line arguments you'd like
+invoked during the binary startup. See
+L<Selenium::CanStartBinary/custom_args> for more information.
+
+=head2 startup_timeout
+
+Optional: specify how long to wait for the binary to start itself and
+listen on its port. The default duration is arbitrarily 10 seconds. It
+accepts an integer number of seconds to wait: the following will wait
+up to 20 seconds:
+
+    Selenium::Chrome->new( startup_timeout => 20 );
+
+See L<Selenium::CanStartBinary/startup_timeout> for more information.
 
 =head1 SEE ALSO
 

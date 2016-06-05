@@ -1822,8 +1822,7 @@ Synonymous with mouse_move_to_location
     default to an implicit wait of 0ms.
 
     This is exactly equivalent to calling L</set_timeout> with a type
-    arg of C<"implicit">, like C<< $driver->set_timeout('implicit',
-    ...) >>.
+    arg of C<"implicit">.
 
  Input:
     Time in milliseconds.

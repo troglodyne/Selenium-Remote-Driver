@@ -32,6 +32,13 @@ has '+port' => (
 );
 
 
+has custom_args => (
+    is => 'lazy',
+    predicate => 1,
+    default => sub { '' }
+);
+
+
 has startup_timeout => (
     is => 'lazy',
     default => sub { 10 }
@@ -193,6 +200,9 @@ sub _construct_command {
 
     # The different binaries take different arguments for proper setup
     $executable .= $self->_binary_args;
+    if ($self->has_custom_args) {
+        $executable .= ' ' . $self->custom_args;
+    }
 
     # Handle Windows vs Unix discrepancies for invoking shell commands
     my ($prefix, $suffix) = ($self->_cmd_prefix, $self->_cmd_suffix);
@@ -334,6 +344,19 @@ begin searching for an open port.
 Note that if we cannot locate a suitable L</binary>, port will be set
 to 4444 so we can attempt to look for a Selenium server at
 C<127.0.0.1:4444>.
+
+=head2 custom_args
+
+Optional: If you want to pass additional options to the binary when it
+starts up, you can add that here. For example, if your binary accepts
+an argument on the command line like C<--log-path=/path/to/log>, and
+you'd like to specify that the binary uses that option, you could do:
+
+    my $chrome = Selenium::Chrome->new(
+        custom_args => '--log-path=/path/to/log'
+    );
+
+To specify multiple arguments, just include them all in the string.
 
 =head2 startup_timeout
 
