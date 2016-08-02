@@ -38,6 +38,20 @@ has custom_args => (
     default => sub { '' }
 );
 
+has 'marionette_port' => (
+    is => 'lazy',
+    builder => sub {
+        my ($self) = @_;
+
+        if ($self->isa('Selenium::Firefox') && $self->marionette_enabled) {
+            return find_open_port_above($self->marionette_binary_port);
+        }
+        else {
+            return;
+        }
+    }
+
+
 
 has startup_timeout => (
     is => 'lazy',
@@ -119,7 +133,10 @@ sub _build_binary_mode {
     return if $port == 4444;
 
     if ($self->isa('Selenium::Firefox')) {
-        my @args = ($port);
+        my $marionette_port = $self->marionette_enabled ?
+        $self->marionette_port : 0;
+
+        my @args = ($port, $marionette_port);
 
         if ($self->has_firefox_profile) {
             push @args, $self->firefox_profile;

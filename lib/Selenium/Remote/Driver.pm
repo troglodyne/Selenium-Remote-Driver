@@ -1450,6 +1450,7 @@ you please.
         'javascript'           - <boolean>  - whether javascript should be supported
         'accept_ssl_certs'     - <boolean>  - whether SSL certs should be accepted, default is true.
         'firefox_profile'      - Profile    - Use Selenium::Firefox::Profile to create a Firefox profile for the browser to use
+        'marionette_enabled'   - <boolean>  - whether Firefox should enable Marionette. default if false
         'proxy'                - HASH       - Proxy configuration with the following keys:
             'proxyType' - <string> - REQUIRED, Possible values are:
                 direct     - A direct connection - no proxy in use,
@@ -1498,7 +1499,7 @@ you please.
                                                'port'               => '2222',
                                                'auto_close'         => 0);
     or
-    my $driver = Selenium::Remote::Driver->new('browser_name' =>'chrome'
+    my $driver = Selenium::Remote::Driver->new('browser_name' =>'chrome',
                                                'extra_capabilities' => {
                                                    'chromeOptions' => {
                                                        'args'  => [
@@ -2815,7 +2816,7 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Robert Utter Tom Hukins Vishwanath Janmanchi amacleay jamadam lembark rouzier Andy Jack Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
+=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Robert Utter Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi amacleay jamadam Andy Jack lembark rouzier Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
 
 =over 4
 
@@ -2881,7 +2882,19 @@ Robert Utter <utter.robert@gmail.com>
 
 =item *
 
+Tetsuya Tatsumi <ttatsumi@ra2.so-net.ne.jp>
+
+=item *
+
 Tom Hukins <tom@eborcom.com>
+
+=item *
+
+Vangelis Katsikaros <vangelis@adzuna.com>
+
+=item *
+
+Vangelis Katsikaros <vkatsikaros@gmail.com>
 
 =item *
 
@@ -2897,15 +2910,15 @@ jamadam <sugama@jamadam.com>
 
 =item *
 
+Andy Jack <andyjack@users.noreply.github.com>
+
+=item *
+
 lembark <lembark@wrkhors.com>
 
 =item *
 
 rouzier <rouzier@gmail.com>
-
-=item *
-
-Andy Jack <andyjack@users.noreply.github.com>
 
 =item *
 
