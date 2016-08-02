@@ -50,7 +50,7 @@ has 'marionette_port' => (
             return;
         }
     }
-
+);
 
 
 has startup_timeout => (
