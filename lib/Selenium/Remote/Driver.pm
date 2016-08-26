@@ -378,7 +378,7 @@ sub new_session {
     }
 
     if ($args->{desiredCapabilities}->{browserName} =~ /firefox/i
-          && $self->has_firefox_profile) {
+        && $self->has_firefox_profile) {
         $args->{desiredCapabilities}->{firefox_profile} = $self->firefox_profile->_encode;
     }
 
@@ -395,7 +395,12 @@ sub new_desired_session {
 
 sub _request_new_session {
     my ( $self, $args ) = @_;
-    $self->remote_conn->check_status();
+
+    # geckodriver has not yet implemented the GET /status endpoint
+    # https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver/status
+    if (! $self->isa('Selenium::Firefox')) {
+        $self->remote_conn->check_status();
+    }
     # command => 'newSession' to fool the tests of commands implemented
     # TODO: rewrite the testing better, this is so fragile.
     my $resource_new_session = {
@@ -2816,7 +2821,7 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Robert Utter Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi amacleay jamadam Andy Jack lembark rouzier Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
+=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Robert Utter Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi amacleay jamadam Andy Jack lembark richi235 rouzier Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
 
 =over 4
 
@@ -2915,6 +2920,10 @@ Andy Jack <andyjack@users.noreply.github.com>
 =item *
 
 lembark <lembark@wrkhors.com>
+
+=item *
+
+richi235 <richard@weltraumpflege.org>
 
 =item *
 
