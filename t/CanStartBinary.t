@@ -71,7 +71,7 @@ FIREFOX: {
         skip 'Firefox will not start up on UNIX without a display', 6
           if ($^O ne 'MSWin32' && ! $ENV{DISPLAY});
 
-      NEWER: {
+      SKIP: {
             my $has_geckodriver = which('geckodriver');
             skip 'Firefox geckodriver not found in path', 3
               unless $has_geckodriver;
@@ -86,7 +86,7 @@ FIREFOX: {
             $firefox->shutdown_binary;
         }
 
-      OLDER: {
+      SKIP: {
             # These are admittedly a very brittle test, so it's getting
             # skipped almost all the time.
             my $ff47_binary = '/Applications/Firefox47.app/Contents/MacOS/firefox-bin';
