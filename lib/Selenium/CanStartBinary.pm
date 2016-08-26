@@ -1,5 +1,5 @@
 package Selenium::CanStartBinary;
-$Selenium::CanStartBinary::VERSION = '0.2701';
+$Selenium::CanStartBinary::VERSION = '0.2750'; # TRIAL
 # ABSTRACT: Teach a WebDriver how to start its own binary aka no JRE!
 use File::Spec;
 use Selenium::CanStartBinary::ProbePort qw/find_open_port_above probe_port/;
@@ -17,16 +17,60 @@ requires 'binary_port';
 requires '_binary_args';
 
 
+has '_real_binary' => (
+    is => 'lazy',
+    builder => sub {
+        my ($self) = @_;
+
+        if ($self->_is_old_ff) {
+            return $self->firefox_binary;
+        }
+        else {
+            return $self->binary;
+        }
+    }
+);
+
+has '_is_old_ff' => (
+    is => 'lazy',
+    builder => sub {
+        my ($self) = @_;
+
+        return $self->isa('Selenium::Firefox') && !$self->marionette_enabled;
+    }
+);
+
 has '+port' => (
     is => 'lazy',
     builder => sub {
         my ($self) = @_;
 
-        if ($self->binary) {
+        if ($self->_real_binary) {
             return find_open_port_above($self->binary_port);
         }
         else {
             return 4444
+        }
+    }
+);
+
+
+has custom_args => (
+    is => 'lazy',
+    predicate => 1,
+    default => sub { '' }
+);
+
+has 'marionette_port' => (
+    is => 'lazy',
+    builder => sub {
+        my ($self) = @_;
+
+        if ($self->_is_old_ff) {
+            return 0;
+        }
+        else {
+            return find_open_port_above($self->marionette_binary_port);
         }
     }
 );
@@ -60,7 +104,7 @@ has 'window_title' => (
     init_arg => undef,
     builder => sub {
         my ($self) = @_;
-        my (undef, undef, $file) = File::Spec->splitpath( $self->binary );
+        my (undef, undef, $file) = File::Spec->splitpath( $self->_real_binary );
         my $port = $self->port;
 
         return $file . ':' . $port;
@@ -105,21 +149,13 @@ sub _build_binary_mode {
     my ($self) = @_;
 
     # We don't know what to do without a binary driver to start up
-    return unless $self->binary;
+    return unless $self->_real_binary;
 
     # Either the user asked for 4444, or we couldn't find an open port
     my $port = $self->port + 0;
     return if $port == 4444;
 
-    if ($self->isa('Selenium::Firefox')) {
-        my @args = ($port);
-
-        if ($self->has_firefox_profile) {
-            push @args, $self->firefox_profile;
-        }
-
-        setup_firefox_binary_env(@args);
-    }
+    $self->_handle_firefox_setup($port);
 
     my $command = $self->_construct_command;
     system($command);
@@ -129,7 +165,37 @@ sub _build_binary_mode {
         return 1;
     }
     else {
-        die 'Unable to connect to the ' . $self->binary . ' binary on port ' . $port;
+        die 'Unable to connect to the ' . $self->_real_binary . ' binary on port ' . $port;
+    }
+}
+
+sub _handle_firefox_setup {
+    my ($self, $port) = @_;
+
+    # This is a no-op for other browsers
+    return unless $self->isa('Selenium::Firefox');
+
+    my $user_profile = $self->has_firefox_profile
+      ? $self->firefox_profile
+      : 0;
+
+    my $profile = setup_firefox_binary_env(
+        $port,
+        $self->marionette_port,
+        $user_profile
+    );
+
+    if ($self->_is_old_ff) {
+        # For non-geckodriver/non-marionette, we want to get rid of
+        # the profile so that we don't accidentally zip it and encode
+        # it down the line while Firefox is trying to read from it.
+        $self->clear_firefox_profile if $self->has_firefox_profile;
+    }
+    else {
+        # For geckodriver/marionette, we keep the enhanced profile around because
+        # we need to send it to geckodriver as a zipped b64-encoded
+        # directory.
+        $self->firefox_profile($profile);
     }
 }
 
@@ -155,7 +221,7 @@ sub shutdown_windows_binary {
     my ($self) = @_;
 
     if (IS_WIN) {
-        if ($self->isa('Selenium::Firefox')) {
+        if ($self->_is_old_ff) {
             # FIXME: Blech, handle a race condition that kills the
             # driver before it's finished cleaning up its sessions. In
             # particular, when the perl process ends, it wants to
@@ -182,17 +248,20 @@ sub DEMOLISH {
     # if we're in global destruction, all bets are off.
     return if $in_gd;
     $self->shutdown_binary;
-};
+}
 
 sub _construct_command {
     my ($self) = @_;
-    my $executable = $self->binary;
+    my $executable = $self->_real_binary;
 
     # Executable path names may have spaces
     $executable = '"' . $executable . '"';
 
     # The different binaries take different arguments for proper setup
     $executable .= $self->_binary_args;
+    if ($self->has_custom_args) {
+        $executable .= ' ' . $self->custom_args;
+    }
 
     # Handle Windows vs Unix discrepancies for invoking shell commands
     my ($prefix, $suffix) = ($self->_cmd_prefix, $self->_cmd_suffix);
@@ -205,13 +274,18 @@ sub _cmd_prefix {
     if (IS_WIN) {
         my $prefix = 'start "' . $self->window_title . '"';
 
-        # Let's minimize the command windows for the drivers that have
-        # separate binaries - but let's not minimize the Firefox
-        # window itself.
-        if (! $self->isa('Selenium::Firefox')) {
-            $prefix .= ' /MIN ';
+        if ($self->_is_old_ff) {
+            # For older versions of Firefox that run without
+            # marionette, the command we're running actually starts up
+            # the browser itself, so we don't want to minimize it.
+            return $prefix;
         }
-        return $prefix;
+        else {
+            # If we're firefox with marionette, or any other browser,
+            # the command we're running is the driver, and we don't
+            # need want the command window in the foreground.
+            return $prefix . ' /MIN ';
+        }
     }
     else {
         return '';
@@ -245,7 +319,7 @@ Selenium::CanStartBinary - Teach a WebDriver how to start its own binary aka no 
 
 =head1 VERSION
 
-version 0.2701
+version 0.2750
 
 =head1 SYNOPSIS
 
@@ -334,6 +408,19 @@ begin searching for an open port.
 Note that if we cannot locate a suitable L</binary>, port will be set
 to 4444 so we can attempt to look for a Selenium server at
 C<127.0.0.1:4444>.
+
+=head2 custom_args
+
+Optional: If you want to pass additional options to the binary when it
+starts up, you can add that here. For example, if your binary accepts
+an argument on the command line like C<--log-path=/path/to/log>, and
+you'd like to specify that the binary uses that option, you could do:
+
+    my $chrome = Selenium::Chrome->new(
+        custom_args => '--log-path=/path/to/log'
+    );
+
+To specify multiple arguments, just include them all in the string.
 
 =head2 startup_timeout
 

@@ -1,5 +1,5 @@
 package Selenium::Firefox::Binary;
-$Selenium::Firefox::Binary::VERSION = '0.2701';
+$Selenium::Firefox::Binary::VERSION = '0.2750'; # TRIAL
 # ABSTRACT: Subroutines for locating and properly initializing the Firefox Binary
 use File::Which qw/which/;
 use Selenium::Firefox::Profile;
@@ -64,15 +64,23 @@ sub firefox_path {
 # the end of this function.
 my $profile;
 sub setup_firefox_binary_env {
-    my ($port, $caller_profile) = @_;
+    my ($port, $marionette_port, $caller_profile) = @_;
 
     $profile = $caller_profile || Selenium::Firefox::Profile->new;
-    $profile->add_webdriver($port);
+    $profile->add_webdriver($port, $marionette_port);
+    $profile->add_marionette($marionette_port);
 
-    $ENV{'XRE_PROFILE_PATH'} = $profile->_layout_on_disk;
-    $ENV{'MOZ_NO_REMOTE'} = '1';             # able to launch multiple instances
-    $ENV{'MOZ_CRASHREPORTER_DISABLE'} = '1'; # disable breakpad
-    $ENV{'NO_EM_RESTART'} = '1';             # prevent the binary from detaching from the console.log
+    # For non-geckodriver/marionette startup, we instruct Firefox to
+    # use the profile by specifying the appropriate environment
+    # variables for it to hook onto.
+    if (! $marionette_port) {
+        $ENV{'XRE_PROFILE_PATH'} = $profile->_layout_on_disk;
+        $ENV{'MOZ_NO_REMOTE'} = '1'; # able to launch multiple instances
+        $ENV{'MOZ_CRASHREPORTER_DISABLE'} = '1'; # disable breakpad
+        $ENV{'NO_EM_RESTART'} = '1'; # prevent the binary from detaching from the console.log
+    }
+
+    return $profile;
 }
 
 
@@ -90,7 +98,7 @@ Selenium::Firefox::Binary - Subroutines for locating and properly initializing t
 
 =head1 VERSION
 
-version 0.2701
+version 0.2750
 
 =head1 SEE ALSO
 

@@ -1,5 +1,5 @@
 package Selenium::Firefox::Profile;
-$Selenium::Firefox::Profile::VERSION = '0.2701';
+$Selenium::Firefox::Profile::VERSION = '0.2750'; # TRIAL
 # ABSTRACT: Use custom profiles with Selenium::Remote::Driver
 # TODO: convert this to Moo!
 
@@ -21,14 +21,20 @@ use XML::Simple;
 
 sub new {
     my $class = shift;
+    my %args  = @_;
 
-    # TODO: add handling for a pre-existing profile folder passed into
-    # the constructor
+    my $profile_dir;
+    if ( $args{profile_dir} && -d $args{profile_dir} ) {
+        $profile_dir = $args{profile_dir};
+    }
+    else {
+        $profile_dir = File::Temp->newdir();
+    }
 
     # TODO: accept user prefs, boolean prefs, and extensions in
     # constructor
     my $self = {
-        profile_dir => File::Temp->newdir(),
+        profile_dir => $profile_dir,
         user_prefs => {},
         extensions => []
       };
@@ -96,10 +102,36 @@ sub add_extension {
 
 
 sub add_webdriver {
-    my ($self, $port) = @_;
+    my ($self, $port, $is_marionette) = @_;
+
+    my $prefs = $self->_load_prefs;
+    my $current_user_prefs = $self->{user_prefs};
+
+    $self->set_preference(
+        %{ $prefs->{mutable} },
+        # having the user prefs here allows them to overwrite the
+        # mutable loaded prefs
+        %{ $current_user_prefs },
+        # but the frozen ones cannot be overwritten
+        %{ $prefs->{frozen} },
+        'webdriver_firefox_port' => $port
+    );
+
+    if (! $is_marionette) {
+        $self->_add_webdriver_xpi;
+    }
+
+    return $self;
+}
+
+sub _load_prefs {
+    # The appropriate webdriver preferences are stored in an adjacent
+    # JSON file; it's useful things like disabling default browser
+    # checks and setting an empty single page as the start up tab
+    # configuration. Unfortunately, these change with each version of
+    # webdriver.
 
     my $this_dir = dirname(abs_path(__FILE__));
-    my $webdriver_extension = $this_dir . '/webdriver.xpi';
     my $default_prefs_filename = $this_dir . '/webdriver_prefs.json';
 
     my $json;
@@ -109,17 +141,27 @@ sub add_webdriver {
         $json = <$fh>;
         close ($fh);
     }
-    my $webdriver_prefs = decode_json($json);
-    my $current_user_prefs = $self->{user_prefs};
 
-    $self->set_preference(
-        %{ $webdriver_prefs->{mutable} },
-        %{ $current_user_prefs }
-    );
-    $self->set_preference(%{ $webdriver_prefs->{frozen} });
+    my $prefs = decode_json($json);
+
+    return $prefs;
+}
+
+
+sub _add_webdriver_xpi {
+    my ($self) = @_;
+
+    my $this_dir = dirname(abs_path(__FILE__));
+    my $webdriver_extension = $this_dir . '/webdriver.xpi';
 
     $self->add_extension($webdriver_extension);
-    $self->set_preference('webdriver_firefox_port', $port);
+}
+
+
+sub add_marionette {
+    my ($self, $port) = @_;
+    return if !$port;
+    $self->set_preference('marionette.defaultPrefs.port', $port);
 }
 
 sub _encode {
@@ -139,7 +181,7 @@ sub _encode {
         die 'write error';
     }
 
-    return encode_base64($string);
+    return encode_base64($string, '');
 }
 
 sub _layout_on_disk {
@@ -221,14 +263,14 @@ Selenium::Firefox::Profile - Use custom profiles with Selenium::Remote::Driver
 
 =head1 VERSION
 
-version 0.2701
+version 0.2750
 
 =head1 DESCRIPTION
 
 You can use this module to create a custom Firefox Profile for your
 Selenium tests. Currently, you can set browser preferences and add
 extensions to the profile before passing it in the constructor for a
-new Selenium::Remote::Driver.
+new L</Selenium::Remote::Driver> or L</Selenium::Firefox>.
 
 =head1 METHODS
 
@@ -281,7 +323,20 @@ directories.
 
 =head2 add_webdriver
 
-Primarily for internal use, we add the webdriver extension to the
+Primarily for internal use, we set the appropriate firefox preferences
+for a new geckodriver session.
+
+=head2 add_webdriver_xpi
+
+Primarily for internal use. This adds the fxgoogle .xpi that is used
+for webdriver communication in FF47 and older. For FF48 and newer, the
+old method using an extension to orchestrate the webdriver
+communication with the Firefox browser has been obsoleted by the
+introduction of C<geckodriver>.
+
+=head2 add_marionette
+
+Primarily for internal use, configure Marionette to the
 current Firefox profile.
 
 =head1 SYNPOSIS

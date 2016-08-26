@@ -53,7 +53,11 @@ CHROME: {
         skip 'Chrome binary not found in path', 3
           unless $has_chromedriver;
 
-        my $chrome = Selenium::Chrome->new;
+        my $chrome = Selenium::Chrome->new(
+            custom_args => ' --fake-arg'
+        );
+
+        like( $chrome->_construct_command, qr/--fake-arg/, 'can pass custom args');
         ok( $chrome->browser_name eq 'chrome', 'convenience chrome is okay' );
         isnt( $chrome->port, 4444, 'chrome can start up its own binary' );
         like( $chrome->_binary_args, qr/--url-base=wd\/hub/, 'chrome has correct webdriver context' );
@@ -64,41 +68,94 @@ CHROME: {
 
 FIREFOX: {
   SKIP: {
-        skip 'Firefox will not start up on UNIX without a display', 3
+        skip 'Firefox will not start up on UNIX without a display', 6
           if ($^O ne 'MSWin32' && ! $ENV{DISPLAY});
-        my $binary = Selenium::Firefox::Binary::firefox_path();
-        skip 'Firefox binary not found in path', 3
-          unless $binary;
 
-        ok(-x $binary, 'we can find some sort of firefox');
+      SKIP: {
+            my $has_geckodriver = which('geckodriver');
+            skip 'Firefox geckodriver not found in path', 3
+              unless $has_geckodriver;
 
-        my $firefox = Selenium::Firefox->new;
-        isnt( $firefox->port, 4444, 'firefox can start up its own binary');
-        ok( Selenium::CanStartBinary::probe_port( $firefox->port ), 'the firefox binary is listening on its port');
+            my $firefox = Selenium::Firefox->new;
+            isnt( $firefox->port, 4444, 'firefox can start up its own binary');
+            ok(Selenium::CanStartBinary::probe_port($firefox->port),
+               'the firefox binary is listening on its port');
+
+            ok(Selenium::CanStartBinary::probe_port($firefox->marionette_port),
+               'the firefox binary is listening on its marionette port');
+            $firefox->shutdown_binary;
+        }
+
+      SKIP: {
+            # These are admittedly a very brittle test, so it's getting
+            # skipped almost all the time.
+            my $ff47_binary = '/Applications/Firefox47.app/Contents/MacOS/firefox-bin';
+            skip 'Firefox 47 compatibility tests require FF47 to be installed', 3
+              unless -x $ff47_binary;
+
+            my $ff47 = Selenium::Firefox->new(
+                marionette_enabled => 0,
+                firefox_binary => $ff47_binary
+            );
+            isnt( $ff47->port, 4444, 'older Firefox47 can start up its own binary');
+            ok( Selenium::CanStartBinary::probe_port( $ff47->port ),
+                'the older Firefox47 is listening on its port');
+            $ff47->shutdown_binary;
+
+
+          PROFILE: {
+                my $encoded = 0;
+                {
+                    package FFProfile;
+                    use Moo;
+                    extends 'Selenium::Firefox::Profile';
+
+                    sub _encode { $encoded++ };
+                    1;
+                }
+
+                my $p = FFProfile->new;
+
+                # we don't need to keep this browser object around at all,
+                # we just want to run through the construction and confirm
+                # that nothing gets encoded
+                Selenium::Firefox->new(
+                    marionette_enabled => 0,
+                    firefox_binary => $ff47_binary,
+                    firefox_profile => $p
+                )->shutdown_binary;
+                is($encoded, 0, 'older Firefox47 does not encode profile unnecessarily');
+            }
+
+        }
     }
 }
 
 TIMEOUT: {
-    my $binary = Selenium::Firefox::Binary::firefox_path();
-    skip 'Firefox binary not found in path', 3
-      unless $binary;
+  SKIP: {
+        my $has_geckodriver = which('geckodriver');
+        skip 'Firefox geckodriver not found in path', 1
+          unless $has_geckodriver;
 
-    # Force the port check to exhaust the wait_until timeout so that
-    # we can exercise the startup_timeout constructor option
-    # functionality.
-    Sub::Install::reinstall_sub({
-        code => sub { return 0 },
-        into => 'Selenium::CanStartBinary',
-        as => 'probe_port'
-    });
+        my $binary = Selenium::Firefox::Binary::firefox_path();
+        skip 'Firefox browser not found in path', 1
+          unless $binary;
 
-    my $start = time;
-    eval { Selenium::Firefox->new( startup_timeout => 1 ) };
-    # The test leaves a bit of a cushion to handle any unexpected
-    # latency issues when starting up the browser - the important part
-    # is that our timeout duration is _not_ the default 10 seconds.
-    ok( time - $start < 10, 'We can specify how long to wait for a binary to be available'  );
+        # Override the binary command construction so that no web driver
+        # will start up.
+        Sub::Install::reinstall_sub({
+            code => sub { return '' },
+            into => 'Selenium::CanStartBinary',
+            as => '_construct_command'
+        });
 
+        my $start = time;
+        eval { Selenium::Firefox->new( startup_timeout => 1 ) };
+        # The test leaves a bit of a cushion to handle any unexpected
+        # latency issues when starting up the browser - the important part
+        # is that our timeout duration is _not_ the default 10 seconds.
+        ok( time - $start < 10, 'We can specify how long to wait for a binary to be available'  );
+    }
 }
 
 sub is_proper_phantomjs_available {

@@ -42,7 +42,6 @@ my %WriteMakefileArgs = (
     "MIME::Base64" => 0,
     "Moo" => "1.005",
     "Moo::Role" => 0,
-    "Net::Ping" => 0,
     "Scalar::Util" => 0,
     "Sub::Install" => 0,
     "Test::Builder" => 0,
@@ -66,7 +65,7 @@ my %WriteMakefileArgs = (
     "Test::Warn" => 0,
     "lib" => 0
   },
-  "VERSION" => "0.2701",
+  "VERSION" => "0.2750",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -101,7 +100,6 @@ my %FallbackPrereqs = (
   "MIME::Base64" => 0,
   "Moo" => "1.005",
   "Moo::Role" => 0,
-  "Net::Ping" => 0,
   "Scalar::Util" => 0,
   "Sub::Install" => 0,
   "Test::Builder" => 0,

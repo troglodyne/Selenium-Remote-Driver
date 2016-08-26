@@ -1,5 +1,5 @@
 package Selenium::PhantomJS;
-$Selenium::PhantomJS::VERSION = '0.2701';
+$Selenium::PhantomJS::VERSION = '0.2750'; # TRIAL
 # ABSTRACT: Use GhostDriver without a Selenium server
 use Moo;
 use Selenium::CanStartBinary::FindBinary qw/coerce_simple_binary/;
@@ -51,11 +51,13 @@ Selenium::PhantomJS - Use GhostDriver without a Selenium server
 
 =head1 VERSION
 
-version 0.2701
+version 0.2750
 
 =head1 SYNOPSIS
 
     my $driver = Selenium::PhantomJS->new;
+    # when you're done
+    $driver->shutdown_binary;
 
 =head1 DESCRIPTION
 
@@ -108,6 +110,12 @@ See L<Selenium::CanStartBinary/port> for more details, and
 L<Selenium::Remote::Driver/port> after instantiation to see what the
 actual port turned out to be.
 
+=head2 custom_args
+
+Optional: specify any additional command line arguments you'd like
+invoked during the binary startup. See
+L<Selenium::CanStartBinary/custom_args> for more information.
+
 =head2 startup_timeout
 
 Optional: specify how long to wait for the binary to start itself and
@@ -118,6 +126,25 @@ up to 20 seconds:
     Selenium::PhantomJS->new( startup_timeout => 20 );
 
 See L<Selenium::CanStartBinary/startup_timeout> for more information.
+
+=head1 METHODS
+
+=head2 shutdown_binary
+
+Call this method instead of L<Selenium::Remote::Driver/quit> to ensure
+that the binary executable is also closed, instead of simply closing
+the browser itself. If the browser is still around, it will call
+C<quit> for you. After that, it will try to shutdown the browser
+binary by making a GET to /shutdown and on Windows, it will attempt to
+do a C<taskkill> on the binary CMD window.
+
+    $self->shutdown_binary;
+
+It doesn't take any arguments, and it doesn't return anything.
+
+We do our best to call this when the C<$driver> option goes out of
+scope, but if that happens during global destruction, there's nothing
+we can do.
 
 =head1 SEE ALSO
 

@@ -1,5 +1,5 @@
 package Selenium::InternetExplorer;
-$Selenium::InternetExplorer::VERSION = '0.2701';
+$Selenium::InternetExplorer::VERSION = '0.2750'; # TRIAL
 # ABSTRACT: A convenience package for creating a IE instance
 use Moo;
 extends 'Selenium::Remote::Driver';
@@ -15,6 +15,7 @@ has '+platform' => (
     default => sub { 'WINDOWS' }
 );
 
+
 1;
 
 __END__
@@ -29,11 +30,32 @@ Selenium::InternetExplorer - A convenience package for creating a IE instance
 
 =head1 VERSION
 
-version 0.2701
+version 0.2750
 
 =head1 SYNOPSIS
 
     my $driver = Selenium::InternetExplorer->new;
+    # when you're done
+    $driver->shutdown_binary;
+
+=head1 METHODS
+
+=head2 shutdown_binary
+
+Call this method instead of L<Selenium::Remote::Driver/quit> to ensure
+that the binary executable is also closed, instead of simply closing
+the browser itself. If the browser is still around, it will call
+C<quit> for you. After that, it will try to shutdown the browser
+binary by making a GET to /shutdown and on Windows, it will attempt to
+do a C<taskkill> on the binary CMD window.
+
+    $self->shutdown_binary;
+
+It doesn't take any arguments, and it doesn't return anything.
+
+We do our best to call this when the C<$driver> option goes out of
+scope, but if that happens during global destruction, there's nothing
+we can do.
 
 =head1 SEE ALSO
 

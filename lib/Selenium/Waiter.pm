@@ -1,5 +1,5 @@
 package Selenium::Waiter;
-$Selenium::Waiter::VERSION = '0.2701';
+$Selenium::Waiter::VERSION = '0.2750'; # TRIAL
 # ABSTRACT: Provides a utility wait_until function
 use Try::Tiny;
 require Exporter;
@@ -24,8 +24,9 @@ sub wait_until (&%) {
 
     my $exception = '';
     while ($timeout_not_elapsed->()) {
+        my $assert_ret;
         my $try_ret = try {
-            my $assert_ret = $assert->();
+            $assert_ret = $assert->();
             return $assert_ret if $assert_ret;
         }
         catch {
@@ -34,7 +35,9 @@ sub wait_until (&%) {
             return '';
         }
         finally {
-            sleep($args->{interval});
+            if (! $assert_ret) {
+                sleep($args->{interval});
+            }
         };
 
         return $try_ret if $try_ret;
@@ -59,7 +62,7 @@ Selenium::Waiter - Provides a utility wait_until function
 
 =head1 VERSION
 
-version 0.2701
+version 0.2750
 
 =head1 SYNOPSIS
 

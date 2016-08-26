@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '0.2701';
+$Selenium::Remote::Driver::VERSION = '0.2750'; # TRIAL
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -207,7 +207,8 @@ has 'firefox_profile' => (
 
         return $profile;
     },
-    predicate => 'has_firefox_profile'
+    predicate => 'has_firefox_profile',
+    clearer => 1
 );
 
 has 'desired_capabilities' => (
@@ -377,7 +378,7 @@ sub new_session {
     }
 
     if ($args->{desiredCapabilities}->{browserName} =~ /firefox/i
-          && $self->has_firefox_profile) {
+        && $self->has_firefox_profile) {
         $args->{desiredCapabilities}->{firefox_profile} = $self->firefox_profile->_encode;
     }
 
@@ -394,7 +395,12 @@ sub new_desired_session {
 
 sub _request_new_session {
     my ( $self, $args ) = @_;
-    $self->remote_conn->check_status();
+
+    # geckodriver has not yet implemented the GET /status endpoint
+    # https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver/status
+    if (! $self->isa('Selenium::Firefox')) {
+        $self->remote_conn->check_status();
+    }
     # command => 'newSession' to fool the tests of commands implemented
     # TODO: rewrite the testing better, this is so fragile.
     my $resource_new_session = {
@@ -1004,10 +1010,11 @@ sub find_child_element {
     if ( ( not defined $elem ) || ( not defined $query ) ) {
         croak "Missing parameters";
     }
-    my $using = ( defined $method ) ? $method : $self->default_finder;
-    if ( exists $self->FINDERS->{$using} ) {
+    my $using =
+      ( defined $method ) ? $self->FINDERS->{$method} : $self->default_finder;
+    if ( defined $using ) {
         my $res = { 'command' => 'findChildElement', 'id' => $elem->{id} };
-        my $params = { 'using' => $self->FINDERS->{$using}, 'value' => $query };
+        my $params = { 'using' => $using, 'value' => $query };
         my $ret_data = eval { $self->_execute_command( $res, $params ); };
         if ($@) {
             if ( $@
@@ -1038,10 +1045,11 @@ sub find_child_elements {
     if ( ( not defined $elem ) || ( not defined $query ) ) {
         croak "Missing parameters";
     }
-    my $using = ( defined $method ) ? $method : $self->default_finder;
-    if ( exists $self->FINDERS->{$using} ) {
+    my $using =
+      ( defined $method ) ? $self->FINDERS->{$method} : $self->default_finder;
+    if ( defined $using ) {
         my $res = { 'command' => 'findChildElements', 'id' => $elem->{id} };
-        my $params = { 'using' => $self->FINDERS->{$using}, 'value' => $query };
+        my $params = { 'using' => $using, 'value' => $query };
         my $ret_data = eval { $self->_execute_command( $res, $params ); };
         if ($@) {
             if ( $@
@@ -1238,7 +1246,7 @@ sub _prepare_file {
     }
 
     return {
-        file => MIME::Base64::encode_base64($string)          # base64-encoded string
+        file => MIME::Base64::encode_base64($string, '')
     };
 }
 
@@ -1345,7 +1353,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 0.2701
+version 0.2750
 
 =head1 SYNOPSIS
 
@@ -1447,6 +1455,7 @@ you please.
         'javascript'           - <boolean>  - whether javascript should be supported
         'accept_ssl_certs'     - <boolean>  - whether SSL certs should be accepted, default is true.
         'firefox_profile'      - Profile    - Use Selenium::Firefox::Profile to create a Firefox profile for the browser to use
+        'marionette_enabled'   - <boolean>  - whether Firefox should enable Marionette. default if false
         'proxy'                - HASH       - Proxy configuration with the following keys:
             'proxyType' - <string> - REQUIRED, Possible values are:
                 direct     - A direct connection - no proxy in use,
@@ -1495,7 +1504,7 @@ you please.
                                                'port'               => '2222',
                                                'auto_close'         => 0);
     or
-    my $driver = Selenium::Remote::Driver->new('browser_name' =>'chrome'
+    my $driver = Selenium::Remote::Driver->new('browser_name' =>'chrome',
                                                'extra_capabilities' => {
                                                    'chromeOptions' => {
                                                        'args'  => [
@@ -1819,6 +1828,9 @@ Synonymous with mouse_move_to_location
     will return an empty list. If this method is never called, the driver will
     default to an implicit wait of 0ms.
 
+    This is exactly equivalent to calling L</set_timeout> with a type
+    arg of C<"implicit">.
+
  Input:
     Time in milliseconds.
 
@@ -2077,7 +2089,7 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
 
  Description:
     Capture a screenshot and save as a PNG to provided file name.
-    (The method is compatible with the WWW::Selenium method fo the same name)
+    (The method is compatible with the WWW::Selenium method of the same name)
 
  Output:
     TRUE - (Screenshot is written to file)
@@ -2809,13 +2821,25 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Allen Lew Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Phil Kania Mitchell Robert Utter Bas Bloemsaat Tom Hukins Vishwanath Janmanchi amacleay jamadam lembark Brian Horakh Charles Howes Daniel Fackrell Dave Rolsky Dmitry Karasik Eric Johnson Gabor Szabo George S. Baugh
+=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Robert Utter Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi amacleay jamadam Andy Jack lembark richi235 rouzier Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
 
 =over 4
 
 =item *
 
-Allen Lew <allen@alew.org>
+A.MacLeay <a.macleay@gmail.com>
+
+=item *
+
+Eric Johnson <eric.git@iijo.org>
+
+=item *
+
+Gabor Szabo <gabor@szabgab.com>
+
+=item *
+
+George S. Baugh <george@troglodyne.net>
 
 =item *
 
@@ -2847,6 +2871,10 @@ Ken Swanson <kswanson@genome.wustl.edu>
 
 =item *
 
+Allen Lew <allen@alew.org>
+
+=item *
+
 Phil Kania <phil@vivox.com>
 
 =item *
@@ -2859,11 +2887,19 @@ Robert Utter <utter.robert@gmail.com>
 
 =item *
 
-Bas Bloemsaat <bas@bloemsaat.com>
+Tetsuya Tatsumi <ttatsumi@ra2.so-net.ne.jp>
 
 =item *
 
 Tom Hukins <tom@eborcom.com>
+
+=item *
+
+Vangelis Katsikaros <vangelis@adzuna.com>
+
+=item *
+
+Vangelis Katsikaros <vkatsikaros@gmail.com>
 
 =item *
 
@@ -2879,7 +2915,23 @@ jamadam <sugama@jamadam.com>
 
 =item *
 
+Andy Jack <andyjack@users.noreply.github.com>
+
+=item *
+
 lembark <lembark@wrkhors.com>
+
+=item *
+
+richi235 <richard@weltraumpflege.org>
+
+=item *
+
+rouzier <rouzier@gmail.com>
+
+=item *
+
+Bas Bloemsaat <bas@bloemsaat.com>
 
 =item *
 
@@ -2888,6 +2940,10 @@ Brian Horakh <brianh@zoovy.com>
 =item *
 
 Charles Howes <charles.howes@globalrelay.net>
+
+=item *
+
+Chris Davies <FMQA@users.noreply.github.com>
 
 =item *
 
@@ -2900,18 +2956,6 @@ Dave Rolsky <autarch@urth.org>
 =item *
 
 Dmitry Karasik <dmitry@karasik.eu.org>
-
-=item *
-
-Eric Johnson <eric.git@iijo.org>
-
-=item *
-
-Gabor Szabo <gabor@szabgab.com>
-
-=item *
-
-George S. Baugh <george@troglodyne.net>
 
 =back
 

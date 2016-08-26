@@ -1,5 +1,5 @@
 package Selenium::Remote::RemoteConnection;
-$Selenium::Remote::RemoteConnection::VERSION = '0.2701';
+$Selenium::Remote::RemoteConnection::VERSION = '0.2750'; # TRIAL
 #ABSTRACT: Connect to a selenium server
 
 use Moo;
@@ -7,7 +7,6 @@ use Try::Tiny;
 use LWP::UserAgent;
 use HTTP::Headers;
 use HTTP::Request;
-use Net::Ping;
 use Carp qw(croak);
 use JSON;
 use Data::Dumper;
@@ -184,7 +183,7 @@ Selenium::Remote::RemoteConnection - Connect to a selenium server
 
 =head1 VERSION
 
-version 0.2701
+version 0.2750
 
 =head1 SEE ALSO
 

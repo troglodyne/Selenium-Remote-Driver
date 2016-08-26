@@ -50,7 +50,6 @@ requires:
   MIME::Base64: '0'
   Moo: '1.005'
   Moo::Role: '0'
-  Net::Ping: '0'
   Scalar::Util: '0'
   Sub::Install: '0'
   Test::Builder: '0'
@@ -67,12 +66,15 @@ resources:
   bugtracker: https://github.com/gempesaw/Selenium-Remote-Driver/issues
   homepage: https://github.com/gempesaw/Selenium-Remote-Driver
   repository: https://github.com/gempesaw/Selenium-Remote-Driver.git
-version: '0.2701'
+version: '0.2750'
 x_contributors:
+  - 'A.MacLeay <a.macleay@gmail.com>'
   - 'Allen Lew <allen@alew.org>'
+  - 'Andy Jack <andyjack@users.noreply.github.com>'
   - 'Bas Bloemsaat <bas@bloemsaat.com>'
   - 'Brian Horakh <brianh@zoovy.com>'
   - 'Charles Howes <charles.howes@globalrelay.net>'
+  - 'Chris Davies <FMQA@users.noreply.github.com>'
   - 'Daniel Fackrell <dfackrell@bluehost.com>'
   - 'Dave Rolsky <autarch@urth.org>'
   - 'Dmitry Karasik <dmitry@karasik.eu.org>'
@@ -89,8 +91,13 @@ x_contributors:
   - 'Phil Kania <phil@vivox.com>'
   - 'Phil Mitchell <phil.mitchell@pobox.com>'
   - 'Robert Utter <utter.robert@gmail.com>'
+  - 'Tetsuya Tatsumi <ttatsumi@ra2.so-net.ne.jp>'
   - 'Tom Hukins <tom@eborcom.com>'
+  - 'Vangelis Katsikaros <vangelis@adzuna.com>'
+  - 'Vangelis Katsikaros <vkatsikaros@gmail.com>'
   - 'Vishwanath Janmanchi <jvishwanath@gmail.com>'
   - 'amacleay <a.macleay@gmail.com>'
   - 'jamadam <sugama@jamadam.com>'
   - 'lembark <lembark@wrkhors.com>'
+  - 'richi235 <richard@weltraumpflege.org>'
+  - 'rouzier <rouzier@gmail.com>'
