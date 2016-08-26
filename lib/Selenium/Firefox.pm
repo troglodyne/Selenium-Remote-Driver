@@ -1,5 +1,5 @@
 package Selenium::Firefox;
-$Selenium::Firefox::VERSION = '0.2702';
+$Selenium::Firefox::VERSION = '0.2750'; # TRIAL
 # ABSTRACT: Use FirefoxDriver without a Selenium server
 use Moo;
 use Selenium::Firefox::Binary qw/firefox_path/;
@@ -101,7 +101,7 @@ Selenium::Firefox - Use FirefoxDriver without a Selenium server
 
 =head1 VERSION
 
-version 0.2702
+version 0.2750
 
 =head1 SYNOPSIS
 
