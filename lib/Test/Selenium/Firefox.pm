@@ -1,5 +1,5 @@
 package Test::Selenium::Firefox;
-$Test::Selenium::Firefox::VERSION = '0.2750'; # TRIAL
+$Test::Selenium::Firefox::VERSION = '0.2751'; # TRIAL
 use Moo;
 extends 'Selenium::Firefox', 'Test::Selenium::Remote::Driver';
 

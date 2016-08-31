@@ -1,5 +1,5 @@
 package Selenium::CanStartBinary::FindBinary;
-$Selenium::CanStartBinary::FindBinary::VERSION = '0.2750'; # TRIAL
+$Selenium::CanStartBinary::FindBinary::VERSION = '0.2751'; # TRIAL
 # ABSTRACT: Coercions for finding webdriver binaries on your system
 use Cwd qw/abs_path/;
 use File::Which qw/which/;
@@ -80,7 +80,7 @@ Selenium::CanStartBinary::FindBinary - Coercions for finding webdriver binaries 
 
 =head1 VERSION
 
-version 0.2750
+version 0.2751
 
 =head1 SEE ALSO
 
