@@ -1,7 +1,12 @@
 Revision history for Selenium-Remote-Driver
 
-0.2751   04-08-2016
+1.00   04-08-2016
         (bundled firefox driver version: 3.0.0b2)
+
+        [BREAKING]
+        - For users of Selenium::Firefox, FF support defaults to v48;
+          if you have 47 installed, your existing scripts will require
+          modification. See docs in Selenium::Firefox for more info.
 
         [NEW FEATURES]
         - #271: Support geckodriver & FF48

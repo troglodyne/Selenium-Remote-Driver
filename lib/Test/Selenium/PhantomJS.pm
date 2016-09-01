@@ -1,5 +1,5 @@
 package Test::Selenium::PhantomJS;
-$Test::Selenium::PhantomJS::VERSION = '0.2751'; # TRIAL
+$Test::Selenium::PhantomJS::VERSION = '0.2752';
 use Moo;
 extends 'Selenium::PhantomJS', 'Test::Selenium::Remote::Driver';
 
