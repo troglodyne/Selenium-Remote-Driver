@@ -121,6 +121,10 @@ and we will search for the Firefox executable in your $PATH. We'll try
 to start the binary, connect to it, and shut it down at the end of the
 test.
 
+B<Breaking Changes:> There are breaking changes in v1.0+ of this
+module if you're using it to start FF47; please see L</"Breaking
+Changes">.
+
 If the Firefox application is not found in the expected places, we'll
 fall back to the default L<Selenium::Remote::Driver> behavior of
 assuming defaults of 127.0.0.1:4444 after waiting a few seconds.
