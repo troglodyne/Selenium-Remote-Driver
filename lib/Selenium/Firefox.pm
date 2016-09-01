@@ -1,5 +1,5 @@
 package Selenium::Firefox;
-$Selenium::Firefox::VERSION = '0.2752';
+$Selenium::Firefox::VERSION = '1.00';
 # ABSTRACT: Use FirefoxDriver without a Selenium server
 use Moo;
 use Selenium::Firefox::Binary qw/firefox_path/;
@@ -98,7 +98,7 @@ Selenium::Firefox - Use FirefoxDriver without a Selenium server
 
 =head1 VERSION
 
-version 0.2752
+version 1.00
 
 =head1 SYNOPSIS
 
@@ -114,16 +114,17 @@ version 0.2752
 
 =head1 DESCRIPTION
 
+B<Breaking Changes:> There are breaking changes in v1.0+ of this
+module if you're using it to start FF47; please see L</"Breaking
+Changes">. You can ignore this if you're using v1.0+ of this module to
+start FF48.
+
 This class allows you to use the FirefoxDriver without needing the JRE
 or a selenium server running. Unlike starting up an instance of
 S::R::D, do not pass the C<remote_server_addr> and C<port> arguments,
 and we will search for the Firefox executable in your $PATH. We'll try
 to start the binary, connect to it, and shut it down at the end of the
 test.
-
-B<Breaking Changes:> There are breaking changes in v1.0+ of this
-module if you're using it to start FF47; please see L</"Breaking
-Changes">.
 
 If the Firefox application is not found in the expected places, we'll
 fall back to the default L<Selenium::Remote::Driver> behavior of
