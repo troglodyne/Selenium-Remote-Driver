@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use lib '/opt/Selenium-Remote-Driver/lib';
 
 use Test::More;
 use Selenium::Remote::Driver;
@@ -107,6 +108,25 @@ VISIBILITY: {
 QUIT: {
     $ret = $driver->quit();
     ok((not defined $driver->{'session_id'}), 'Killed the remote session');
+}
+
+OBJECT_INSTANTIATION: {
+  SRD: {
+        my $value = { ELEMENT => 0 };
+        my $elem = Selenium::Remote::WebElement->new(id => $value);
+        is($elem->id, 0,
+           'Can make element with standard SRD response');
+    }
+
+  GECKODRIVER:{
+        my $value = {
+            'element-6066-11e4-a52e-4f735466cecf' => '4f134cd0-4873-1148-aac8-5d496bea013f'
+        };
+        my $elem = Selenium::Remote::WebElement->new(id => $value);
+        is($elem->id, '4f134cd0-4873-1148-aac8-5d496bea013f',
+           'Can make element with Geckodriver response');
+
+    }
 }
 
 done_testing;

@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '1.00';
+$Selenium::Remote::Driver::VERSION = '1.01';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -692,8 +692,10 @@ sub execute_async_script {
             and ( ref($ret) eq 'HASH' )
             and exists $ret->{'ELEMENT'} )
         {
-            $ret = $self->webelement_class->new( id => $ret->{ELEMENT},
-                driver => $self );
+            $ret = $self->webelement_class->new(
+                id => $ret,
+                driver => $self
+            );
         }
         return $ret;
     }
@@ -742,8 +744,10 @@ sub _convert_to_webelement {
         if ( ( keys %$ret == 1 ) and exists $ret->{'ELEMENT'} ) {
 
             # replace an ELEMENT with WebElement
-            return $self->webelement_class->new( id => $ret->{ELEMENT},
-                driver => $self );
+            return $self->webelement_class->new(
+                id => $ret,
+                driver => $self
+            );
         }
 
         my %hash;
@@ -814,16 +818,6 @@ sub switch_to_window {
     my $res    = { 'command' => 'switchToWindow' };
     my $params = { 'name'    => $name };
     return $self->_execute_command( $res, $params );
-}
-
-
-sub get_speed {
-    carp 'get_speed is deprecated and will be removed in the upcoming version of this module';
-}
-
-
-sub set_speed {
-    carp 'set_speed is deprecated and will be removed in the upcoming version of this module';
 }
 
 
@@ -951,8 +945,10 @@ sub find_element {
                 die $@;
             }
         }
-        return $self->webelement_class->new( id => $ret_data->{ELEMENT},
-            driver => $self );
+        return $self->webelement_class->new(
+            id => $ret_data,
+            driver => $self
+        );
     }
     else {
         croak "Bad method, expected: " . join(', ', keys %{ $self->FINDERS });
@@ -993,7 +989,8 @@ sub find_elements {
             push(
                 @$elem_obj_arr,
                 $self->webelement_class->new(
-                    id => $_->{ELEMENT}, driver => $self
+                    id => $_,
+                    driver => $self
                 )
             );
         }
@@ -1031,7 +1028,7 @@ sub find_child_element {
                 die $@;
             }
         }
-        return $self->webelement_class->new( id => $ret_data->{ELEMENT},
+        return $self->webelement_class->new( id => $ret_data,
             driver => $self );
     }
     else {
@@ -1070,8 +1067,10 @@ sub find_child_elements {
         my $i = 0;
         foreach (@$ret_data) {
             $elem_obj_arr->[$i] =
-              $self->webelement_class->new( id => $_->{ELEMENT},
-                driver => $self );
+              $self->webelement_class->new(
+                  id => $_,
+                  driver => $self
+              );
             $i++;
         }
         return wantarray ? @{$elem_obj_arr} : $elem_obj_arr;
@@ -1090,8 +1089,10 @@ sub get_active_element {
         croak $@;
     }
     else {
-        return $self->webelement_class->new( id => $ret_data->{ELEMENT},
-            driver => $self );
+        return $self->webelement_class->new(
+            id => $ret_data,
+            driver => $self
+        );
     }
 }
 
@@ -1353,7 +1354,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 1.00
+version 1.01
 
 =head1 SYNOPSIS
 
@@ -1455,7 +1456,6 @@ you please.
         'javascript'           - <boolean>  - whether javascript should be supported
         'accept_ssl_certs'     - <boolean>  - whether SSL certs should be accepted, default is true.
         'firefox_profile'      - Profile    - Use Selenium::Firefox::Profile to create a Firefox profile for the browser to use
-        'marionette_enabled'   - <boolean>  - whether Firefox should enable Marionette. default if false
         'proxy'                - HASH       - Proxy configuration with the following keys:
             'proxyType' - <string> - REQUIRED, Possible values are:
                 direct     - A direct connection - no proxy in use,
@@ -2155,24 +2155,6 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
     $driver->switch_to_window($handles->[1]);
     $driver->close;
     $driver->switch_to_window($handles->[0]);
-
-=head2 get_speed
-
- Description:
-    DEPRECATED - this function is a no-op in Webdriver, and will be
-    removed in the upcoming version of this module. See
-    https://groups.google.com/d/topic/selenium-users/oX0ZnYFPuSA/discussion
-    and
-    http://code.google.com/p/selenium/source/browse/trunk/java/client/src/org/openqa/selenium/WebDriverCommandProcessor.java
-
-=head2 set_speed
-
- Description:
-    DEPRECATED - this function is a no-op in Webdriver, and will be
-    removed in the upcoming version of this module. See
-    https://groups.google.com/d/topic/selenium-users/oX0ZnYFPuSA/discussion
-    and
-    http://code.google.com/p/selenium/source/browse/trunk/java/client/src/org/openqa/selenium/WebDriverCommandProcessor.java
 
 =head2 set_window_position
 
@@ -2963,7 +2945,7 @@ Dmitry Karasik <dmitry@karasik.eu.org>
 
 Copyright (c) 2010-2011 Aditya Ivaturi, Gordon Child
 
-Copyright (c) 2014-2015 Daniel Gempesaw
+Copyright (c) 2014-2016 Daniel Gempesaw
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

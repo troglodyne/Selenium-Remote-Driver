@@ -1,5 +1,5 @@
 package Selenium::Remote::WebElement;
-$Selenium::Remote::WebElement::VERSION = '1.00';
+$Selenium::Remote::WebElement::VERSION = '1.01';
 # ABSTRACT: Representation of an HTML Element used by Selenium Remote Driver
 
 use Moo;
@@ -9,6 +9,22 @@ use Carp qw(carp croak);
 
 has 'id' => (
     is => 'rw',
+    coerce => sub {
+        my ($value) = @_;
+        if ($value->{ELEMENT}) {
+            # The standard SRD response value object looks like
+            #
+            #     { "ELEMENT": $INTEGER_ID }
+            return $value->{ELEMENT}
+        }
+        else {
+            # but geckodriver's response value object looks like
+            #
+            #     { "element-$UUID": $UUID }
+            my @element_id = values %$value;
+            return $element_id[0];
+        }
+    }
 );
 
 has 'driver' => (
@@ -37,9 +53,13 @@ sub send_keys {
     my ( $self, @strings ) = @_;
     croak "no keys to send" unless scalar @strings >= 1;
     my $res = { 'command' => 'sendKeysToElement', 'id' => $self->id };
-    map { $_ .= "" } @strings;
+
+    # We need to send an array of single characters to be WebDriver
+    # spec compatible. That is, for @strings = ('hel', 'lo'), the
+    # corresponding value must be ('h', 'e', 'l', 'l', 'o' ).
+    my $strings = join('', map { $_ .= "" } @strings);
     my $params = {
-        'value' => \@strings,
+        'value' => [ split('', $strings) ]
     };
     return $self->_execute_command( $res, $params );
 }
@@ -187,7 +207,7 @@ Selenium::Remote::WebElement - Representation of an HTML Element used by Seleniu
 
 =head1 VERSION
 
-version 1.00
+version 1.01
 
 =head1 DESCRIPTION
 
@@ -526,7 +546,7 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 Copyright (c) 2010-2011 Aditya Ivaturi, Gordon Child
 
-Copyright (c) 2014-2015 Daniel Gempesaw
+Copyright (c) 2014-2016 Daniel Gempesaw
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
