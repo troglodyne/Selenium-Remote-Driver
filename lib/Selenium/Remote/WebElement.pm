@@ -6,33 +6,39 @@ use Moo;
 use Carp qw(carp croak);
 
 
-
 has 'id' => (
-    is => 'rw',
+    is => 'ro',
+    required => 1,
     coerce => sub {
         my ($value) = @_;
-        if ($value->{ELEMENT}) {
-            # The standard SRD response value object looks like
-            #
-            #     { "ELEMENT": $INTEGER_ID }
-            return $value->{ELEMENT}
+        if (ref($value) eq 'HASH') {
+            if (exists $value->{ELEMENT}) {
+                # The JSONWireProtocol response value object looks like
+                #
+                #     { "ELEMENT": $INTEGER_ID }
+                return $value->{ELEMENT};
+            }
+            else {
+                # but the WebDriver spec response value object looks like
+                #
+                #     { "element-$UUID1": $UUID2 }
+                my @element_id = values %$value;
+                return $element_id[0];
+            }
         }
         else {
-            # but geckodriver's response value object looks like
-            #
-            #     { "element-$UUID": $UUID }
-            my @element_id = values %$value;
-            return $element_id[0];
+            # Presumably the user has passed in a valid scalar ID already.
+            return $value;
         }
     }
 );
 
+
 has 'driver' => (
-    is => 'rw',
+    is => 'ro',
+    required => 1,
     handles => [qw(_execute_command)],
 );
-
-
 
 
 sub click {
@@ -217,6 +223,20 @@ the related elements. This module should not be instantiated directly by the end
 user. Selenium::Remote::Driver instantiates this module when required. Typically,
 the find_element method in Selenium::Remote::Driver returns this object on which
 various element related operations can be carried out.
+
+=head1 ATTRIBUTES
+
+=head2 id
+
+Required: Pass in a string representing the ID of the object. The
+string should be obtained from the response object of making one of
+the C<find_element> calls from L</Selenium::Remote::Driver>.
+
+=head2 driver
+
+Required: Pass in a Selenium::Remote::Driver instance or one of its
+subclasses. The WebElement needs the appropriate Driver session to
+execute its commands properly.
 
 =head1 FUNCTIONS
 
