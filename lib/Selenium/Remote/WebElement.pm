@@ -13,22 +13,27 @@ has 'id' => (
         my ($value) = @_;
         if (ref($value) eq 'HASH') {
             if (exists $value->{ELEMENT}) {
-                # The JSONWireProtocol response value object looks like
+                # The JSONWireProtocol web element object looks like
                 #
                 #     { "ELEMENT": $INTEGER_ID }
                 return $value->{ELEMENT};
             }
-            else {
-                # but the WebDriver spec response value object looks like
+            elsif (exists $value->{'element-6066-11e4-a52e-4f735466cecf'}) {
+                # but the WebDriver spec web element uses a magic
+                # string. See the spec for more information:
                 #
-                #     { "element-$UUID1": $UUID2 }
-                my @element_id = values %$value;
-                return $element_id[0];
+                # https://www.w3.org/TR/webdriver/#elements
+                return $value->{'element-6066-11e4-a52e-4f735466cecf'};
+            }
+            else {
+                croak 'When passing in an object to the WebElement id attribute, it must have at least one of the ELEMENT or element-6066-11e4-a52e-4f735466cecf keys.';
             }
         }
-        else {
-            # Presumably the user has passed in a valid scalar ID already.
+        elsif (ref($value) eq 'SCALAR') {
             return $value;
+        }
+        else {
+            croak 'The WebElement id attribute must either be an ELEMENT object or a scalar.';
         }
     }
 );
@@ -217,12 +222,17 @@ version 1.01
 
 =head1 DESCRIPTION
 
-Selenium Webdriver represents all the HTML elements as WebElement. This module
-provides a mechanism to represent them as objects & perform various actions on
-the related elements. This module should not be instantiated directly by the end
-user. Selenium::Remote::Driver instantiates this module when required. Typically,
-the find_element method in Selenium::Remote::Driver returns this object on which
+Selenium Webdriver represents all the HTML elements as WebElements.
+This module provides a mechanism to represent them as objects &
+perform various actions on the related elements. This module should
+not be instantiated directly by the end user. Selenium::Remote::Driver
+instantiates this module when required. Typically, the find_element
+method in Selenium::Remote::Driver returns this object on which
 various element related operations can be carried out.
+
+What is probably most useful on this page is the list of methods below
+that you can perform on an element once you've found one and S::R::D
+has made an instance of this for you.
 
 =head1 ATTRIBUTES
 
@@ -231,6 +241,36 @@ various element related operations can be carried out.
 Required: Pass in a string representing the ID of the object. The
 string should be obtained from the response object of making one of
 the C<find_element> calls from L</Selenium::Remote::Driver>.
+
+The attribute is also set up to handle spec compliant element response
+objects via its `coerce` such that any of the following will work and
+are all equivalent:
+
+    my $old_elem = Selenium::Remote::WebElement->new(
+        id => 1,
+        driver => $driver
+    );
+
+    my $new_remote_elem = Selenium::Remote::WebElement->new(
+        id => { ELEMENT => 1 },
+        driver => $driver
+    );
+
+    my $new_spec_elem = Selenium::Remote::WebElement->new(
+        id => { 'element-6066-11e4-a52e-4f735466cecf' => 1 },
+        driver => $driver
+    );
+
+and then after instantiation, all three would give the following for
+`id`:
+
+    print $elem->id; # prints 1
+
+Again, for typical usage of S::R::D and this module, none of this
+matters and it should Just Work without you having to worry about it
+at all. For further reading, the L<W3C
+spec|https://www.w3.org/TR/webdriver/#elements> strictly dictates the
+exact behavior.
 
 =head2 driver
 

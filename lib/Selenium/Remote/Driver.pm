@@ -678,7 +678,7 @@ sub execute_async_script {
         # JSON representation
         for ( my $i = 0; $i < @args; $i++ ) {
             if ( Scalar::Util::blessed( $args[$i] )
-                and $args[$i]->isa('Selenium::Remote::WebElement') )
+                 and $args[$i]->isa('Selenium::Remote::WebElement') )
             {
                 $args[$i] = { 'ELEMENT' => ( $args[$i] )->{id} };
             }
@@ -688,9 +688,9 @@ sub execute_async_script {
         my $ret = $self->_execute_command( $res, $params );
 
         # replace any ELEMENTS with WebElement
-        if (    ref($ret)
-            and ( ref($ret) eq 'HASH' )
-            and exists $ret->{'ELEMENT'} )
+        if ( ref($ret)
+             and ( ref($ret) eq 'HASH' )
+             and $self->_looks_like_element($ret) )
         {
             $ret = $self->webelement_class->new(
                 id => $ret,
@@ -733,6 +733,16 @@ sub execute_script {
     }
 }
 
+# _looks_like_element
+# An internal method to check if a return value might be an element
+
+sub _looks_like_element {
+    my ($self, $maybe_element) = @_;
+
+    return exists $maybe_element->{ELEMENT}
+      or $maybe_element->{'element-6066-11e4-a52e-4f735466cecf'};
+}
+
 # _convert_to_webelement
 # An internal method used to traverse a data structure
 # and convert any ELEMENTS with WebElements
@@ -741,8 +751,7 @@ sub _convert_to_webelement {
     my ( $self, $ret ) = @_;
 
     if ( ref($ret) and ( ref($ret) eq 'HASH' ) ) {
-        if ( ( keys %$ret == 1 ) and exists $ret->{'ELEMENT'} ) {
-
+        if ( $self->_looks_like_element($ret) ) {
             # replace an ELEMENT with WebElement
             return $self->webelement_class->new(
                 id => $ret,

@@ -1,6 +1,5 @@
 use strict;
 use warnings;
-use lib '/opt/Selenium-Remote-Driver/lib';
 
 use Test::More;
 use Selenium::Remote::Driver;
@@ -11,7 +10,8 @@ use lib $FindBin::Bin . '/lib';
 use TestHarness;
 
 my $harness = TestHarness->new(
-    this_file => $FindBin::Script
+    this_file => $FindBin::Script,
+    record => 1
 );
 my %selenium_args = %{ $harness->base_caps };
 
@@ -105,18 +105,34 @@ VISIBILITY: {
     ok($elem->is_hidden(), 'Hidden elements are hidden.');
 }
 
+EXECUTE_SCRIPT: {
+    $driver->get("$website/index.html");
+
+    my $elem = $driver->find_element('div', 'css');
+    my $script_elem = $driver->execute_script('return arguments[0]', $elem);
+    isa_ok($script_elem, 'Selenium::Remote::WebElement', 'Execute Script returns a WebElement');
+    is($elem->id, $script_elem);
+
+    my $async = q{
+        var callback = arguments[arguments.length - 1];
+        callback(arguments[0]);
+    };
+    my $async_elem = $driver->execute_async_script($async, $elem);
+    isa_ok($async_elem, 'Selenium::Remote::WebElement', 'Execute Async Script returns a WebElement');
+    is($elem->id, $async_elem);
+}
+
 QUIT: {
     $ret = $driver->quit();
     ok((not defined $driver->{'session_id'}), 'Killed the remote session');
 }
 
 OBJECT_INSTANTIATION: {
-    my $fake_driver = '';
   SRD: {
         my $value = { ELEMENT => 0 };
         my $elem = Selenium::Remote::WebElement->new(
             id => $value,
-            driver => $fake_driver
+            driver => ''
         );
         is($elem->id, 0,
            'Can make element with standard SRD response');
@@ -128,7 +144,7 @@ OBJECT_INSTANTIATION: {
         };
         my $elem = Selenium::Remote::WebElement->new(
             id => $value,
-            driver => $fake_driver
+            driver => ''
         );
         is($elem->id, '4f134cd0-4873-1148-aac8-5d496bea013f',
            'Can make element with Geckodriver response');
