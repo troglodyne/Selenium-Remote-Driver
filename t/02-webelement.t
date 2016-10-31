@@ -111,7 +111,7 @@ EXECUTE_SCRIPT: {
     my $elem = $driver->find_element('div', 'css');
     my $script_elem = $driver->execute_script('return arguments[0]', $elem);
     isa_ok($script_elem, 'Selenium::Remote::WebElement', 'Execute Script returns a WebElement');
-    is($elem->id, $script_elem);
+    is($elem->id, $script_elem->id, 'Sync script returns identical WebElement id');
 
     my $async = q{
         var callback = arguments[arguments.length - 1];
@@ -119,7 +119,7 @@ EXECUTE_SCRIPT: {
     };
     my $async_elem = $driver->execute_async_script($async, $elem);
     isa_ok($async_elem, 'Selenium::Remote::WebElement', 'Execute Async Script returns a WebElement');
-    is($elem->id, $async_elem);
+    is($elem->id, $async_elem->id, 'Async script returns identical WebElement id');
 }
 
 QUIT: {
