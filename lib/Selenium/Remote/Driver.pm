@@ -2812,7 +2812,7 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Robert Utter Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi amacleay jamadam Andy Jack lembark richi235 rouzier Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
+=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Richard Sailer Robert Utter Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi amacleay Andy Jack jamadam lembark richi235 rouzier Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
 
 =over 4
 
@@ -2874,6 +2874,10 @@ Phil Mitchell <phil.mitchell@pobox.com>
 
 =item *
 
+Richard Sailer <richard@weltraumpflege.org>
+
+=item *
+
 Robert Utter <utter.robert@gmail.com>
 
 =item *
@@ -2902,11 +2906,11 @@ amacleay <a.macleay@gmail.com>
 
 =item *
 
-jamadam <sugama@jamadam.com>
+Andy Jack <andyjack@users.noreply.github.com>
 
 =item *
 
-Andy Jack <andyjack@users.noreply.github.com>
+jamadam <sugama@jamadam.com>
 
 =item *
 
