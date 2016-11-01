@@ -29,11 +29,8 @@ has 'id' => (
                 croak 'When passing in an object to the WebElement id attribute, it must have at least one of the ELEMENT or element-6066-11e4-a52e-4f735466cecf keys.';
             }
         }
-        elsif (ref($value) eq 'SCALAR') {
-            return $value;
-        }
         else {
-            croak 'The WebElement id attribute must either be an ELEMENT object or a scalar.';
+            return $value;
         }
     }
 );
