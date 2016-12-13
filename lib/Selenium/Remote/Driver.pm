@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '1.00';
+$Selenium::Remote::Driver::VERSION = '1.01'; # TRIAL
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -678,7 +678,7 @@ sub execute_async_script {
         # JSON representation
         for ( my $i = 0; $i < @args; $i++ ) {
             if ( Scalar::Util::blessed( $args[$i] )
-                and $args[$i]->isa('Selenium::Remote::WebElement') )
+                 and $args[$i]->isa('Selenium::Remote::WebElement') )
             {
                 $args[$i] = { 'ELEMENT' => ( $args[$i] )->{id} };
             }
@@ -688,12 +688,14 @@ sub execute_async_script {
         my $ret = $self->_execute_command( $res, $params );
 
         # replace any ELEMENTS with WebElement
-        if (    ref($ret)
-            and ( ref($ret) eq 'HASH' )
-            and exists $ret->{'ELEMENT'} )
+        if ( ref($ret)
+             and ( ref($ret) eq 'HASH' )
+             and $self->_looks_like_element($ret) )
         {
-            $ret = $self->webelement_class->new( id => $ret->{ELEMENT},
-                driver => $self );
+            $ret = $self->webelement_class->new(
+                id => $ret,
+                driver => $self
+            );
         }
         return $ret;
     }
@@ -731,6 +733,16 @@ sub execute_script {
     }
 }
 
+# _looks_like_element
+# An internal method to check if a return value might be an element
+
+sub _looks_like_element {
+    my ($self, $maybe_element) = @_;
+
+    return (exists $maybe_element->{ELEMENT}
+      or exists $maybe_element->{'element-6066-11e4-a52e-4f735466cecf'});
+}
+
 # _convert_to_webelement
 # An internal method used to traverse a data structure
 # and convert any ELEMENTS with WebElements
@@ -739,11 +751,12 @@ sub _convert_to_webelement {
     my ( $self, $ret ) = @_;
 
     if ( ref($ret) and ( ref($ret) eq 'HASH' ) ) {
-        if ( ( keys %$ret == 1 ) and exists $ret->{'ELEMENT'} ) {
-
+        if ( $self->_looks_like_element($ret) ) {
             # replace an ELEMENT with WebElement
-            return $self->webelement_class->new( id => $ret->{ELEMENT},
-                driver => $self );
+            return $self->webelement_class->new(
+                id => $ret,
+                driver => $self
+            );
         }
 
         my %hash;
@@ -814,16 +827,6 @@ sub switch_to_window {
     my $res    = { 'command' => 'switchToWindow' };
     my $params = { 'name'    => $name };
     return $self->_execute_command( $res, $params );
-}
-
-
-sub get_speed {
-    carp 'get_speed is deprecated and will be removed in the upcoming version of this module';
-}
-
-
-sub set_speed {
-    carp 'set_speed is deprecated and will be removed in the upcoming version of this module';
 }
 
 
@@ -951,8 +954,10 @@ sub find_element {
                 die $@;
             }
         }
-        return $self->webelement_class->new( id => $ret_data->{ELEMENT},
-            driver => $self );
+        return $self->webelement_class->new(
+            id => $ret_data,
+            driver => $self
+        );
     }
     else {
         croak "Bad method, expected: " . join(', ', keys %{ $self->FINDERS });
@@ -993,7 +998,8 @@ sub find_elements {
             push(
                 @$elem_obj_arr,
                 $self->webelement_class->new(
-                    id => $_->{ELEMENT}, driver => $self
+                    id => $_,
+                    driver => $self
                 )
             );
         }
@@ -1031,7 +1037,7 @@ sub find_child_element {
                 die $@;
             }
         }
-        return $self->webelement_class->new( id => $ret_data->{ELEMENT},
+        return $self->webelement_class->new( id => $ret_data,
             driver => $self );
     }
     else {
@@ -1070,8 +1076,10 @@ sub find_child_elements {
         my $i = 0;
         foreach (@$ret_data) {
             $elem_obj_arr->[$i] =
-              $self->webelement_class->new( id => $_->{ELEMENT},
-                driver => $self );
+              $self->webelement_class->new(
+                  id => $_,
+                  driver => $self
+              );
             $i++;
         }
         return wantarray ? @{$elem_obj_arr} : $elem_obj_arr;
@@ -1090,8 +1098,10 @@ sub get_active_element {
         croak $@;
     }
     else {
-        return $self->webelement_class->new( id => $ret_data->{ELEMENT},
-            driver => $self );
+        return $self->webelement_class->new(
+            id => $ret_data,
+            driver => $self
+        );
     }
 }
 
@@ -1353,7 +1363,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 1.00
+version 1.01
 
 =head1 SYNOPSIS
 
@@ -1392,12 +1402,16 @@ L<Github|https://github.com/gempesaw/Selenium-Remote-Driver/issues>.
 
 =head2 Remote Driver Response
 
-Selenium::Remote::Driver uses the L<JsonWireProtocol|http://code.google.com/p/selenium/wiki/JsonWireProtocol> to communicate with the
-Selenium Server. If an error occurs while executing the command then the server
-sends back an HTTP error code with a JSON encoded reponse that indicates the
-precise L<Response Error Code|http://code.google.com/p/selenium/wiki/JsonWireProtocol#Response_Status_Codes>. The module will then croak with the error message
-associated with this code. If no error occurred, then the subroutine called will
-return the value sent back from the server (if a return value was sent).
+Selenium::Remote::Driver uses the
+L<JsonWireProtocol|http://code.google.com/p/selenium/wiki/JsonWireProtocol>
+to communicate with the Selenium Server. If an error occurs while
+executing the command then the server sends back an HTTP error code
+with a JSON encoded reponse that indicates the precise L<Response
+Error
+Code|http://code.google.com/p/selenium/wiki/JsonWireProtocol#Response_Status_Codes>. The
+module will then croak with the error message associated with this
+code. If no error occurred, then the subroutine called will return the
+value sent back from the server (if a return value was sent).
 
 So a rule of thumb while invoking methods on the driver is if the method did not
 croak when called, then you can safely assume the command was successful even if
@@ -1424,6 +1438,44 @@ by providing that class name as an option the constructor:
    my $driver = Selenium::Remote::Driver->new( webelement_class => ... );
 
 For example, a testing-subclass may extend the web-element object with testing methods.
+
+=head2 LWP Read Timeout errors
+
+It's possible to make Selenium calls that take longer than the default
+L<LWP::UserAgent> timeout. For example, setting the asynchronous
+script timeout greater than the LWP::UserAgent timeout and then
+executing a long running asynchronous snippet of javascript will
+immediately trigger an error like:
+
+    Error while executing command: executeAsyncScript: Server returned
+    error message read timeout at...
+
+You can get around this by configuring LWP's timeout value, either by
+constructing your own LWP and passing it in to ::Driver during
+instantiation
+
+    my $timeout_ua = LWP::UserAgent->new;
+    $timeout_ua->timeout(360); # this value is in seconds!
+    my $d = Selenium::Remote::Driver->new( ua => $timeout_ua );
+
+or by configuring the timeout on the fly as necessary:
+
+    use feature qw/say/;
+    use Selenium::Remote::Driver;
+
+    my $d = Selenium::Remote::Driver->new;
+    say $d->ua->timeout; # 180 seconds is the default
+
+    $d->ua->timeout(2); # LWP wants seconds, not milliseconds!
+    $d->set_timeout('script', 1000); # S::R::D wants milliseconds!
+
+    # Async scripts only return when the callback is invoked. Since there
+    # is no callback here, Selenium will block for the entire duration of
+    # the async timeout script. This will hit Selenium's async script
+    # timeout before hitting LWP::UserAgent's read timeout
+    $d->execute_async_script('return "hello"');
+
+    $d->quit;
 
 =head1 TESTING
 
@@ -1455,7 +1507,6 @@ you please.
         'javascript'           - <boolean>  - whether javascript should be supported
         'accept_ssl_certs'     - <boolean>  - whether SSL certs should be accepted, default is true.
         'firefox_profile'      - Profile    - Use Selenium::Firefox::Profile to create a Firefox profile for the browser to use
-        'marionette_enabled'   - <boolean>  - whether Firefox should enable Marionette. default if false
         'proxy'                - HASH       - Proxy configuration with the following keys:
             'proxyType' - <string> - REQUIRED, Possible values are:
                 direct     - A direct connection - no proxy in use,
@@ -2156,24 +2207,6 @@ To conveniently write the screenshot to a file, see L<capture_screenshot()>.
     $driver->close;
     $driver->switch_to_window($handles->[0]);
 
-=head2 get_speed
-
- Description:
-    DEPRECATED - this function is a no-op in Webdriver, and will be
-    removed in the upcoming version of this module. See
-    https://groups.google.com/d/topic/selenium-users/oX0ZnYFPuSA/discussion
-    and
-    http://code.google.com/p/selenium/source/browse/trunk/java/client/src/org/openqa/selenium/WebDriverCommandProcessor.java
-
-=head2 set_speed
-
- Description:
-    DEPRECATED - this function is a no-op in Webdriver, and will be
-    removed in the upcoming version of this module. See
-    https://groups.google.com/d/topic/selenium-users/oX0ZnYFPuSA/discussion
-    and
-    http://code.google.com/p/selenium/source/browse/trunk/java/client/src/org/openqa/selenium/WebDriverCommandProcessor.java
-
 =head2 set_window_position
 
  Description:
@@ -2821,7 +2854,7 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Robert Utter Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi amacleay jamadam Andy Jack lembark richi235 rouzier Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
+=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Richard Sailer Robert Utter Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi amacleay Andy Jack jamadam lembark richi235 rouzier Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
 
 =over 4
 
@@ -2883,6 +2916,10 @@ Phil Mitchell <phil.mitchell@pobox.com>
 
 =item *
 
+Richard Sailer <richard@weltraumpflege.org>
+
+=item *
+
 Robert Utter <utter.robert@gmail.com>
 
 =item *
@@ -2911,11 +2948,11 @@ amacleay <a.macleay@gmail.com>
 
 =item *
 
-jamadam <sugama@jamadam.com>
+Andy Jack <andyjack@users.noreply.github.com>
 
 =item *
 
-Andy Jack <andyjack@users.noreply.github.com>
+jamadam <sugama@jamadam.com>
 
 =item *
 
@@ -2963,7 +3000,7 @@ Dmitry Karasik <dmitry@karasik.eu.org>
 
 Copyright (c) 2010-2011 Aditya Ivaturi, Gordon Child
 
-Copyright (c) 2014-2015 Daniel Gempesaw
+Copyright (c) 2014-2016 Daniel Gempesaw
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

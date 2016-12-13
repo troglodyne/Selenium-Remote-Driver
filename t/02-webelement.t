@@ -104,9 +104,51 @@ VISIBILITY: {
     ok($elem->is_hidden(), 'Hidden elements are hidden.');
 }
 
+EXECUTE_SCRIPT: {
+    $driver->get("$website/index.html");
+
+    my $elem = $driver->find_element('div', 'css');
+    my $script_elem = $driver->execute_script('return arguments[0]', $elem);
+    isa_ok($script_elem, 'Selenium::Remote::WebElement', 'execute_script element return');
+    is($elem->id, $script_elem->id, 'Sync script returns identical WebElement id');
+
+    my $async = q{
+        var callback = arguments[arguments.length - 1];
+        callback(arguments[0]);
+    };
+    my $async_elem = $driver->execute_async_script($async, $elem);
+    isa_ok($async_elem, 'Selenium::Remote::WebElement', 'execute_async_script element return');
+    is($elem->id, $async_elem->id, 'Async script returns identical WebElement id');
+}
+
 QUIT: {
     $ret = $driver->quit();
     ok((not defined $driver->{'session_id'}), 'Killed the remote session');
+}
+
+OBJECT_INSTANTIATION: {
+  SRD: {
+        my $value = { ELEMENT => 0 };
+        my $elem = Selenium::Remote::WebElement->new(
+            id => $value,
+            driver => ''
+        );
+        is($elem->id, 0,
+           'Can make element with standard SRD response');
+    }
+
+  GECKODRIVER:{
+        my $value = {
+            'element-6066-11e4-a52e-4f735466cecf' => '4f134cd0-4873-1148-aac8-5d496bea013f'
+        };
+        my $elem = Selenium::Remote::WebElement->new(
+            id => $value,
+            driver => ''
+        );
+        is($elem->id, '4f134cd0-4873-1148-aac8-5d496bea013f',
+           'Can make element with Geckodriver response');
+
+    }
 }
 
 done_testing;

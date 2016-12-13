@@ -1,7 +1,8 @@
 package Selenium::Firefox;
-$Selenium::Firefox::VERSION = '1.00';
+$Selenium::Firefox::VERSION = '1.01'; # TRIAL
 # ABSTRACT: Use FirefoxDriver without a Selenium server
 use Moo;
+use Carp;
 use Selenium::Firefox::Binary qw/firefox_path/;
 use Selenium::CanStartBinary::FindBinary qw/coerce_simple_binary coerce_firefox_binary/;
 extends 'Selenium::Remote::Driver';
@@ -81,6 +82,33 @@ has 'firefox_binary' => (
 );
 
 
+sub get_context {
+    my $self = shift;
+
+    if ( $self->_is_old_ff ) {
+        return 0;
+    }
+    my $res = { 'command' => 'getContext' };
+    return $self->_execute_command($res);
+}
+
+
+sub set_context {
+    my ( $self, $context ) = @_;
+
+    if ( $self->_is_old_ff ) {
+        return 0;
+    }
+    if ( not defined $context ) {
+        croak "Expecting context";
+    }
+    if ( $context !~ m/chrome|content/i ) {
+        croak "Expecting context value: chrome or content";
+    }
+    my $res = { 'command' => 'setContext' };
+    return $self->_execute_command( $res, { context => $context } );
+}
+
 with 'Selenium::CanStartBinary';
 
 
@@ -98,7 +126,7 @@ Selenium::Firefox - Use FirefoxDriver without a Selenium server
 
 =head1 VERSION
 
-version 1.00
+version 1.01
 
 =head1 SYNOPSIS
 
@@ -115,16 +143,16 @@ version 1.00
 =head1 DESCRIPTION
 
 B<Breaking Changes:> There are breaking changes in v1.0+ of this
-module if you're using it to start FF47; please see L</"Breaking
-Changes">. You can ignore this if you're using v1.0+ of this module to
+module if you're using it to start FF47; please see L</"BREAKING
+CHANGES">. You can ignore this if you're using v1.0+ of this module to
 start FF48.
 
 This class allows you to use the FirefoxDriver without needing the JRE
 or a selenium server running. Unlike starting up an instance of
 S::R::D, do not pass the C<remote_server_addr> and C<port> arguments,
-and we will search for the Firefox executable in your $PATH. We'll try
-to start the binary, connect to it, and shut it down at the end of the
-test.
+and we will search for the Firefox executable in your C<$PATH>. We'll
+try to start the binary, connect to it, and shut it down at the end of
+the test.
 
 If the Firefox application is not found in the expected places, we'll
 fall back to the default L<Selenium::Remote::Driver> behavior of
@@ -148,7 +176,7 @@ browser binary, see the L</firefox_binary> attr.
 
 For Firefox 48 and greater, this is the path to your C<geckodriver>
 executable. If you don't specify anything, we'll search for
-C<geckodriver> in your $PATH.
+C<geckodriver> in your C<$PATH>.
 
 For Firefox 47 and older, this attribute does not apply, because the
 older FF browsers do not use the separate driver binary startup.
@@ -200,8 +228,8 @@ Optional: specify whether
 L<marionette|https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette>
 should be enabled or not. By default, marionette is enabled, which
 assumes you are running with Firefox 48 or newer. To use this module
-to start Firefox 47 or older, you must pass C<marionette_enabled =>
-0>.
+to start Firefox 47 or older, you must pass C<<<marionette_enabled =>
+0>>>.
 
     my $ff48 = Selenium::Firefox->new( marionette_enabled => 1 ); # defaults to 1
     my $ff47 = Selenium::Firefox->new( marionette_enabled => 0 );
@@ -209,7 +237,7 @@ to start Firefox 47 or older, you must pass C<marionette_enabled =>
 =head2 firefox_binary
 
 Optional: specify the path to the Firefox browser executable. Although
-we will attempt to locate this in your $PATH, you may specify it
+we will attempt to locate this in your C<$PATH>, you may specify it
 explicitly here. Note that path here must point to a file that exists
 and is executable, or we will croak.
 
@@ -294,12 +322,42 @@ apart from the browser itself. This means that:
     my $fx48 = Selenium::Firefox->new;
 
 As with the other drivers, Selenium::Firefox in marionette/geckodriver
-mode requires a `geckodriver` executable in the path or provided
+mode requires a C<geckodriver> executable in the path or provided
 during startup, and it will also attempt to find the path to your
 Firefox browser. During testing, we found that it was necessary for us
-to pass the Firefox browser file path to the `geckodriver` executable
-during start up, or else `geckodriver` would have trouble finding
+to pass the Firefox browser file path to the C<geckodriver> executable
+during start up, or else C<geckodriver> would have trouble finding
 Firefox.
+
+=head2 get_context
+
+ Description:
+    Firefox extension: Retrieve browser's scope (chrome or content).
+    Chrome is a privileged scope where you can access things like the
+    Firefox UI itself. Content scope is where things like webpages live.
+
+ Output:
+    STRING - context {CHROME|CONTENT}
+
+ Usage:
+    print $firefox_driver->get_context();
+
+=head2 set_context
+
+ Description:
+    Firefox extension: Set browser's scope (chrome or content).
+    Chrome is a privileged scope where you can access things like the
+    Firefox UI itself. Content scope is where things like webpages live.
+
+ Input:
+    Required:
+        <STRING> - context {CHROME|CONTENT}
+
+ Usage:
+    $firefox_driver->set_context( $context );
+
+ Output:
+    BOOLEAN - success or failure
 
 =head1 SEE ALSO
 
@@ -366,7 +424,7 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 Copyright (c) 2010-2011 Aditya Ivaturi, Gordon Child
 
-Copyright (c) 2014-2015 Daniel Gempesaw
+Copyright (c) 2014-2016 Daniel Gempesaw
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
