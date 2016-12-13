@@ -1,5 +1,5 @@
 package Selenium::Remote::Mock::RemoteConnection;
-$Selenium::Remote::Mock::RemoteConnection::VERSION = '1.01';
+$Selenium::Remote::Mock::RemoteConnection::VERSION = '1.01'; # TRIAL
 # ABSTRACT: utility class to mock the responses from Selenium server
 
 use Moo;

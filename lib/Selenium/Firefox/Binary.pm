@@ -1,5 +1,5 @@
 package Selenium::Firefox::Binary;
-$Selenium::Firefox::Binary::VERSION = '1.01';
+$Selenium::Firefox::Binary::VERSION = '1.01'; # TRIAL
 # ABSTRACT: Subroutines for locating and properly initializing the Firefox Binary
 use File::Which qw/which/;
 use Selenium::Firefox::Profile;

@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '1.01';
+$Selenium::Remote::Driver::VERSION = '1.01'; # TRIAL
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -739,8 +739,8 @@ sub execute_script {
 sub _looks_like_element {
     my ($self, $maybe_element) = @_;
 
-    return exists $maybe_element->{ELEMENT}
-      or $maybe_element->{'element-6066-11e4-a52e-4f735466cecf'};
+    return (exists $maybe_element->{ELEMENT}
+      or exists $maybe_element->{'element-6066-11e4-a52e-4f735466cecf'});
 }
 
 # _convert_to_webelement

@@ -1,5 +1,5 @@
 package Selenium::ActionChains;
-$Selenium::ActionChains::VERSION = '1.01';
+$Selenium::ActionChains::VERSION = '1.01'; # TRIAL
 # ABSTRACT: Action chains for Selenium::Remote::Driver
 use Moo;
 
