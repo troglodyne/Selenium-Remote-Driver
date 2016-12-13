@@ -2,6 +2,7 @@ package Selenium::Firefox;
 $Selenium::Firefox::VERSION = '1.01';
 # ABSTRACT: Use FirefoxDriver without a Selenium server
 use Moo;
+use Carp;
 use Selenium::Firefox::Binary qw/firefox_path/;
 use Selenium::CanStartBinary::FindBinary qw/coerce_simple_binary coerce_firefox_binary/;
 extends 'Selenium::Remote::Driver';
@@ -80,6 +81,33 @@ has 'firefox_binary' => (
     builder => 'firefox_path'
 );
 
+
+sub get_context {
+    my $self = shift;
+
+    if ( $self->_is_old_ff ) {
+        return 0;
+    }
+    my $res = { 'command' => 'getContext' };
+    return $self->_execute_command($res);
+}
+
+
+sub set_context {
+    my ( $self, $context ) = @_;
+
+    if ( $self->_is_old_ff ) {
+        return 0;
+    }
+    if ( not defined $context ) {
+        croak "Expecting context";
+    }
+    if ( $context !~ m/chrome|content/i ) {
+        croak "Expecting context value: chrome or content";
+    }
+    my $res = { 'command' => 'setContext' };
+    return $self->_execute_command( $res, { context => $context } );
+}
 
 with 'Selenium::CanStartBinary';
 
@@ -300,6 +328,36 @@ Firefox browser. During testing, we found that it was necessary for us
 to pass the Firefox browser file path to the C<geckodriver> executable
 during start up, or else C<geckodriver> would have trouble finding
 Firefox.
+
+=head2 get_context
+
+ Description:
+    Firefox extension: Retrieve browser's scope (chrome or content).
+    Chrome is a privileged scope where you can access things like the
+    Firefox UI itself. Content scope is where things like webpages live.
+
+ Output:
+    STRING - context {CHROME|CONTENT}
+
+ Usage:
+    print $firefox_driver->get_context();
+
+=head2 set_context
+
+ Description:
+    Firefox extension: Set browser's scope (chrome or content).
+    Chrome is a privileged scope where you can access things like the
+    Firefox UI itself. Content scope is where things like webpages live.
+
+ Input:
+    Required:
+        <STRING> - context {CHROME|CONTENT}
+
+ Usage:
+    $firefox_driver->set_context( $context );
+
+ Output:
+    BOOLEAN - success or failure
 
 =head1 SEE ALSO
 
