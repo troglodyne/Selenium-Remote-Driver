@@ -1,5 +1,5 @@
 package Selenium::Firefox;
-$Selenium::Firefox::VERSION = '1.01'; # TRIAL
+$Selenium::Firefox::VERSION = '1.02';
 # ABSTRACT: Use FirefoxDriver without a Selenium server
 use Moo;
 use Carp;
@@ -126,7 +126,7 @@ Selenium::Firefox - Use FirefoxDriver without a Selenium server
 
 =head1 VERSION
 
-version 1.01
+version 1.02
 
 =head1 SYNOPSIS
 

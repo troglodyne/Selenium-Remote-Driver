@@ -1,5 +1,5 @@
 package Selenium::Remote::WebElement;
-$Selenium::Remote::WebElement::VERSION = '1.01'; # TRIAL
+$Selenium::Remote::WebElement::VERSION = '1.02';
 # ABSTRACT: Representation of an HTML Element used by Selenium Remote Driver
 
 use Moo;
@@ -217,7 +217,7 @@ Selenium::Remote::WebElement - Representation of an HTML Element used by Seleniu
 
 =head1 VERSION
 
-version 1.01
+version 1.02
 
 =head1 DESCRIPTION
 
