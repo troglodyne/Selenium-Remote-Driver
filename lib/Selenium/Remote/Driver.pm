@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '1.02';
+$Selenium::Remote::Driver::VERSION = '1.03';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -825,7 +825,7 @@ sub switch_to_window {
         return 'Window name not provided';
     }
     my $res    = { 'command' => 'switchToWindow' };
-    my $params = { 'name'    => $name };
+    my $params = { 'handle'  => $name };
     return $self->_execute_command( $res, $params );
 }
 
@@ -1363,7 +1363,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 1.02
+version 1.03
 
 =head1 SYNOPSIS
 
