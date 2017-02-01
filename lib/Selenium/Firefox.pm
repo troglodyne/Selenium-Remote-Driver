@@ -1,5 +1,5 @@
 package Selenium::Firefox;
-$Selenium::Firefox::VERSION = '1.02';
+$Selenium::Firefox::VERSION = '1.10';
 # ABSTRACT: Use FirefoxDriver without a Selenium server
 use Moo;
 use Carp;
@@ -126,7 +126,7 @@ Selenium::Firefox - Use FirefoxDriver without a Selenium server
 
 =head1 VERSION
 
-version 1.02
+version 1.10
 
 =head1 SYNOPSIS
 
@@ -272,6 +272,11 @@ up to 20 seconds:
     Selenium::Firefox->new( startup_timeout => 20 );
 
 See L<Selenium::CanStartBinary/startup_timeout> for more information.
+
+=head2 fixed_ports
+
+Optional: Throw instead of searching for additional ports; see
+L<Selenium::CanStartBinary/fixed_ports> for more info.
 
 =head1 METHODS
 

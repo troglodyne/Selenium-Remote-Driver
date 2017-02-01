@@ -1,12 +1,12 @@
 package Selenium::CanStartBinary::ProbePort;
-$Selenium::CanStartBinary::ProbePort::VERSION = '1.02';
+$Selenium::CanStartBinary::ProbePort::VERSION = '1.10';
 # ABSTRACT: Utility functions for finding open ports to eventually bind to
 use IO::Socket::INET;
 use Selenium::Waiter qw/wait_until/;
 
 require Exporter;
 our @ISA = qw/Exporter/;
-our @EXPORT_OK = qw/find_open_port_above probe_port/;
+our @EXPORT_OK = qw/find_open_port_above find_open_port probe_port/;
 
 sub find_open_port_above {
     my ($port) = @_;
@@ -22,6 +22,12 @@ sub find_open_port_above {
     };
 
     return $free_port;
+}
+
+sub find_open_port {
+    my ($port) = @_;
+
+    probe_port($port) ? return 0 : return $port;
 }
 
 sub probe_port {
@@ -46,7 +52,7 @@ Selenium::CanStartBinary::ProbePort - Utility functions for finding open ports t
 
 =head1 VERSION
 
-version 1.02
+version 1.10
 
 =head1 SEE ALSO
 

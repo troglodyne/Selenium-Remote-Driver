@@ -1,5 +1,5 @@
 package Selenium::Remote::RemoteConnection;
-$Selenium::Remote::RemoteConnection::VERSION = '1.02';
+$Selenium::Remote::RemoteConnection::VERSION = '1.10';
 #ABSTRACT: Connect to a selenium server
 
 use Moo;
@@ -94,7 +94,7 @@ sub request {
         $content = $json->allow_nonref->utf8->encode($params);
     }
 
-    print "REQ: $method, $url, $content\n" if $self->debug;
+    print "REQ: $method, $fullurl, $content\n" if $self->debug;
 
     # HTTP request
     my $header =
@@ -183,7 +183,7 @@ Selenium::Remote::RemoteConnection - Connect to a selenium server
 
 =head1 VERSION
 
-version 1.02
+version 1.10
 
 =head1 SEE ALSO
 

@@ -1,8 +1,8 @@
 package Selenium::CanStartBinary;
-$Selenium::CanStartBinary::VERSION = '1.02';
+$Selenium::CanStartBinary::VERSION = '1.10';
 # ABSTRACT: Teach a WebDriver how to start its own binary aka no JRE!
 use File::Spec;
-use Selenium::CanStartBinary::ProbePort qw/find_open_port_above probe_port/;
+use Selenium::CanStartBinary::ProbePort qw/find_open_port_above find_open_port probe_port/;
 use Selenium::Firefox::Binary qw/setup_firefox_binary_env/;
 use Selenium::Waiter qw/wait_until/;
 use Moo::Role;
@@ -46,12 +46,23 @@ has '+port' => (
         my ($self) = @_;
 
         if ($self->_real_binary) {
-            return find_open_port_above($self->binary_port);
+            if ($self->fixed_ports) {
+                return find_open_port($self->binary_port);
+            }
+            else {
+                return find_open_port_above($self->binary_port);
+            }
         }
         else {
             return 4444
         }
     }
+);
+
+
+has 'fixed_ports' => (
+    is => 'lazy',
+    default => sub { 0 }
 );
 
 
@@ -70,7 +81,12 @@ has 'marionette_port' => (
             return 0;
         }
         else {
-            return find_open_port_above($self->marionette_binary_port);
+            if ($self->fixed_ports) {
+                return find_open_port($self->marionette_binary_port);
+            }
+            else {
+                return find_open_port_above($self->marionette_binary_port);
+            }
         }
     }
 );
@@ -108,6 +124,16 @@ has 'window_title' => (
         my $port = $self->port;
 
         return $file . ':' . $port;
+    }
+);
+
+
+has '_command' => (
+    is => 'lazy',
+    init_arg => undef,
+    builder => sub {
+        my ($self) = @_;
+        return $self->_construct_command;
     }
 );
 
@@ -154,11 +180,13 @@ sub _build_binary_mode {
     # Either the user asked for 4444, or we couldn't find an open port
     my $port = $self->port + 0;
     return if $port == 4444;
+    if( $self->fixed_ports && $port == 0 ){
+        die 'port ' . $self->binary_port . ' is not free and have requested fixed ports';
+    }
 
     $self->_handle_firefox_setup($port);
 
-    my $command = $self->_construct_command;
-    system($command);
+    system($self->_command);
 
     my $success = wait_until { probe_port($port) } timeout => $self->startup_timeout;
     if ($success) {
@@ -319,7 +347,7 @@ Selenium::CanStartBinary - Teach a WebDriver how to start its own binary aka no 
 
 =head1 VERSION
 
-version 1.02
+version 1.10
 
 =head1 SYNOPSIS
 
@@ -409,6 +437,23 @@ Note that if we cannot locate a suitable L</binary>, port will be set
 to 4444 so we can attempt to look for a Selenium server at
 C<127.0.0.1:4444>.
 
+=head2 fixed_ports
+
+Optional: By default, if binary_port and marionette_port are not free
+a higher free port is probed and acquired if possible, until a free one
+if found or a timeout is exceeded.
+
+    my $driver1 = Selenium::Chrome->new;
+    my $driver2 = Selenium::Chrome->new( port => 1234 );
+
+The default behavior can be overridden. In this case, only the default
+or given binary_port and marionette_port are probed, without probing
+higher ports. This ensures that either the default or given port will be
+assigned, or no port will be assigned at all.
+
+    my $driver1 = Selenium::Chrome->new( fixed_ports => 1 );
+    my $driver2 = Selenium::Chrome->new( port => 1234, fixed_ports => 1);
+
 =head2 custom_args
 
 Optional: If you want to pass additional options to the binary when it
@@ -458,6 +503,15 @@ class should attempt normal L<Selenium::Remote::Driver> behavior.
 Intended for internal use: this will build us a unique title for the
 background binary process of the Webdriver. Then, when we're cleaning
 up, we know what the window title is that we're going to C<taskkill>.
+
+=head2 command
+
+Intended for internal use: this read-only attribute is built by us,
+but it can be useful after instantiation to see exactly what command
+was run to start the webdriver server.
+
+    my $f = Selenium::Firefox->new;
+    say $f->_command;
 
 =head1 SEE ALSO
 
