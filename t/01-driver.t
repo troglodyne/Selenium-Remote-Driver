@@ -17,7 +17,7 @@ use TestHarness;
 use Test::Fatal;
 
 my $harness = TestHarness->new(
-    this_file => $FindBin::Script,
+    this_file => $FindBin::Script
 );
 my %selenium_args = %{ $harness->base_caps };
 
@@ -171,9 +171,7 @@ LOAD_PAGE: {
 
 WINDOW: {
     $ret = $driver->get_current_window_handle();
-    use Data::Dumper; use DDP;
-    p $ret;
-    ok($ret =~ m/^.*$/, 'Proper window handle received');
+    ok($ret =~ m/^{.*}$/, 'Proper window handle received');
     $ret = $driver->get_window_handles();
     is(ref $ret, 'ARRAY', 'Received all window handles');
     $ret = $driver->set_window_position(100,100);
@@ -349,8 +347,6 @@ ALERT: {
     $driver->send_keys_to_prompt("Larry Wall");
     eval {$driver->accept_alert;};
     ok(!$@,"accepted prompt");
-
-    $driver->find_element("prompt",'id')->click;
     is($driver->get_alert_text,'Larry Wall','keys sent to prompt');
     $driver->dismiss_alert;
     $driver->find_element("confirm",'id')->click;

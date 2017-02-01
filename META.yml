@@ -7,7 +7,6 @@ author:
   - 'Luke Closs <cpan@5thplane.com>'
   - 'Mark Stosberg <mark@stosberg.com>'
 build_requires:
-  DDP: '0'
   File::stat: '0'
   FindBin: '0'
   Test::Builder::Tester: '0'
