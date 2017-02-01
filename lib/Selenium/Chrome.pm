@@ -117,6 +117,11 @@ up to 20 seconds:
 
 See L<Selenium::CanStartBinary/startup_timeout> for more information.
 
+=head2 fixed_ports
+
+Optional: Throw instead of searching for additional ports; see
+L<Selenium::CanStartBinary/fixed_ports> for more info.
+
 =head1 METHODS
 
 =head2 shutdown_binary
