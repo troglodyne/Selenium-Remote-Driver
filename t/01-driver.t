@@ -18,7 +18,6 @@ use Test::Fatal;
 
 my $harness = TestHarness->new(
     this_file => $FindBin::Script,
-    record => 1
 );
 my %selenium_args = %{ $harness->base_caps };
 
@@ -172,7 +171,9 @@ LOAD_PAGE: {
 
 WINDOW: {
     $ret = $driver->get_current_window_handle();
-    ok($ret =~ m/^{.*}$/, 'Proper window handle received');
+    use Data::Dumper; use DDP;
+    p $ret;
+    ok($ret =~ m/^.*$/, 'Proper window handle received');
     $ret = $driver->get_window_handles();
     is(ref $ret, 'ARRAY', 'Received all window handles');
     $ret = $driver->set_window_position(100,100);

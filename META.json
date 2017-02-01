@@ -73,6 +73,7 @@
       },
       "test" : {
          "requires" : {
+            "DDP" : "0",
             "File::stat" : "0",
             "FindBin" : "0",
             "Test::Builder::Tester" : "0",

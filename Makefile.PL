@@ -54,6 +54,7 @@ my %WriteMakefileArgs = (
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
+    "DDP" => 0,
     "File::stat" => 0,
     "FindBin" => 0,
     "Test::Builder::Tester" => 0,
@@ -75,6 +76,7 @@ my %FallbackPrereqs = (
   "Archive::Zip" => 0,
   "Carp" => 0,
   "Cwd" => 0,
+  "DDP" => 0,
   "Data::Dumper" => 0,
   "Exporter" => 0,
   "File::Basename" => 0,
