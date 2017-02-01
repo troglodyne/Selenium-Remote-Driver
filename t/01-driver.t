@@ -349,6 +349,8 @@ ALERT: {
     $driver->send_keys_to_prompt("Larry Wall");
     eval {$driver->accept_alert;};
     ok(!$@,"accepted prompt");
+
+    $driver->find_element("prompt",'id')->click;
     is($driver->get_alert_text,'Larry Wall','keys sent to prompt');
     $driver->dismiss_alert;
     $driver->find_element("confirm",'id')->click;
