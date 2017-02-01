@@ -84,22 +84,22 @@ FIREFOX: {
             ok(Selenium::CanStartBinary::probe_port($firefox->marionette_port),
                'the firefox binary is listening on its marionette port');
 
-          EXECUTE_SCRIPT: {
-                $firefox->get("https://www.google.com");
+            EXECUTE_SCRIPT: {
+                  $firefox->get("https://www.google.com");
 
-                my $elem = $firefox->find_element('div', 'css');
-                my $script_elem = $firefox->execute_script('return arguments[0]', $elem);
-                isa_ok($script_elem, 'Selenium::Remote::WebElement', 'execute_script element return');
-                is($elem->id, $script_elem->id, 'Sync script returns identical WebElement id');
+                  my $elem = $firefox->find_element('div', 'css');
+                  my $script_elem = $firefox->execute_script('return arguments[0]', $elem);
+                  isa_ok($script_elem, 'Selenium::Remote::WebElement', 'execute_script element return');
+                  is($elem->id, $script_elem->id, 'Sync script returns identical WebElement id');
 
-                my $async = q{
+                  my $async = q{
 var callback = arguments[arguments.length - 1];
 callback(arguments[0]);
 };
-                my $async_elem = $firefox->execute_async_script($async, $elem);
-                isa_ok($async_elem, 'Selenium::Remote::WebElement', 'execute_async_script element return');
-                is($elem->id, $async_elem->id, 'Async script returns identical WebElement id');
-            }
+                  my $async_elem = $firefox->execute_async_script($async, $elem);
+                  isa_ok($async_elem, 'Selenium::Remote::WebElement', 'execute_async_script element return');
+                  is($elem->id, $async_elem->id, 'Async script returns identical WebElement id');
+              }
 
             $firefox->shutdown_binary;
         }
@@ -173,37 +173,6 @@ TIMEOUT: {
         # latency issues when starting up the browser - the important part
         # is that our timeout duration is _not_ the default 10 seconds.
         ok( time - $start < 10, 'We can specify how long to wait for a binary to be available'  );
-    }
-}
-
-FIXED_PORTS: {
-  SKIP: {
-        my $has_geckodriver = which('geckodriver');
-        skip 'Firefox geckodriver not found in path', 1
-          unless $has_geckodriver;
-
-        my $port = 50000;
-
-        my $socket = IO::Socket::INET->new(
-            LocalHost => '127.0.0.1',
-            LocalPort => $port,
-            Proto => 'tcp',
-            Listen => 5,
-        ) or BAIL_OUT("Can't bind tcp port $port: $!");
-
-        like(
-            exception { Selenium::Firefox->new(binary_port => $port, fixed_ports => 1) },
-            qr/port $port is not free and have requested fixed ports/,
-            "Driver failed to be created because input port $port is already occupied and flag fixed_ports is true"
-        );
-
-        # successful startup with skipping taken port
-        my $firefox = Selenium::Firefox->new(binary_port => $port);
-        my $non_fixed_port = $firefox->port;
-        cmp_ok($non_fixed_port, '>=', $port, "Driver could not acquire already occupied $port and a higer port $non_fixed_port was acquired");
-
-        $firefox->shutdown_binary;
-        $socket->close;
     }
 }
 

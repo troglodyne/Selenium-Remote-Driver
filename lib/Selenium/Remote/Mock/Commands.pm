@@ -1,5 +1,5 @@
 package Selenium::Remote::Mock::Commands;
-$Selenium::Remote::Mock::Commands::VERSION = '1.03';
+$Selenium::Remote::Mock::Commands::VERSION = '1.02';
 # ABSTRACT: utility class to mock Selenium::Remote::Commands
 #
 use Moo;
@@ -48,7 +48,7 @@ Selenium::Remote::Mock::Commands - utility class to mock Selenium::Remote::Comma
 
 =head1 VERSION
 
-version 1.03
+version 1.02
 
 =head1 DESCRIPTION
 

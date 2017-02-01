@@ -1,5 +1,5 @@
 package Selenium::Chrome;
-$Selenium::Chrome::VERSION = '1.03';
+$Selenium::Chrome::VERSION = '1.02';
 # ABSTRACT: Use ChromeDriver without a Selenium server
 use Moo;
 use Selenium::CanStartBinary::FindBinary qw/coerce_simple_binary/;
@@ -54,7 +54,7 @@ Selenium::Chrome - Use ChromeDriver without a Selenium server
 
 =head1 VERSION
 
-version 1.03
+version 1.02
 
 =head1 SYNOPSIS
 
@@ -116,11 +116,6 @@ up to 20 seconds:
     Selenium::Chrome->new( startup_timeout => 20 );
 
 See L<Selenium::CanStartBinary/startup_timeout> for more information.
-
-=head2 fixed_ports
-
-Optional: Throw instead of searching for additional ports; see
-L<Selenium::CanStartBinary/fixed_ports> for more info.
 
 =head1 METHODS
 
