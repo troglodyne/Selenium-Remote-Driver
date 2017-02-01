@@ -17,7 +17,8 @@ use TestHarness;
 use Test::Fatal;
 
 my $harness = TestHarness->new(
-    this_file => $FindBin::Script
+    this_file => $FindBin::Script,
+    record => 1
 );
 my %selenium_args = %{ $harness->base_caps };
 
