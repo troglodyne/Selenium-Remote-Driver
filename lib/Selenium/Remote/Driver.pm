@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '1.11';
+$Selenium::Remote::Driver::VERSION = '1.12';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -825,7 +825,7 @@ sub switch_to_window {
         return 'Window name not provided';
     }
     my $res    = { 'command' => 'switchToWindow' };
-    my $params = { 'handle'  => $name };
+    my $params = { 'name'  => $name, 'handle' => $name };
     return $self->_execute_command( $res, $params );
 }
 
@@ -1363,7 +1363,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 1.11
+version 1.12
 
 =head1 SYNOPSIS
 
@@ -1550,6 +1550,12 @@ you please.
     or
     my $driver = Selenium::Remote::Driver->new('browser_name' => 'firefox',
                                                'platform'     => 'MAC');
+    or (for Firefox 47 or lower on Selenium 3+)
+    my $driver = Selenium::Remote::Driver->new('browser_name' => 'firefox',
+                                               'platform'     => 'MAC',
+                                               'extra_capabilities' => {
+                                                    'marionette' => \\0,
+                                              });
     or
     my $driver = Selenium::Remote::Driver->new('remote_server_addr' => '10.10.1.1',
                                                'port'               => '2222',
@@ -2854,7 +2860,7 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Phil Kania Mitchell Richard Sailer Robert Utter Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi amacleay Andy Jack jamadam lembark richi235 rouzier Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
+=for stopwords A.MacLeay Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson Allen Lew Martin Gruner Phil Kania Mitchell Richard Sailer Robert Utter Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi Andy Jack amacleay jamadam lembark richi235 rouzier Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik
 
 =over 4
 
@@ -2908,6 +2914,10 @@ Allen Lew <allen@alew.org>
 
 =item *
 
+Martin Gruner <martin.gruner@otrs.com>
+
+=item *
+
 Phil Kania <phil@vivox.com>
 
 =item *
@@ -2944,11 +2954,11 @@ Vishwanath Janmanchi <jvishwanath@gmail.com>
 
 =item *
 
-amacleay <a.macleay@gmail.com>
+Andy Jack <andyjack@users.noreply.github.com>
 
 =item *
 
-Andy Jack <andyjack@users.noreply.github.com>
+amacleay <a.macleay@gmail.com>
 
 =item *
 
@@ -3000,7 +3010,7 @@ Dmitry Karasik <dmitry@karasik.eu.org>
 
 Copyright (c) 2010-2011 Aditya Ivaturi, Gordon Child
 
-Copyright (c) 2014-2016 Daniel Gempesaw
+Copyright (c) 2014-2017 Daniel Gempesaw
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
