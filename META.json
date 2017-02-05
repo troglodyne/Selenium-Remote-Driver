@@ -97,7 +97,7 @@
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver"
       }
    },
-   "version" : "1.11",
+   "version" : "1.12",
    "x_contributors" : [
       "A.MacLeay <a.macleay@gmail.com>",
       "Allen Lew <allen@alew.org>",
@@ -119,6 +119,7 @@
       "Jon Hermansen <jon.hermansen@gmail.com>",
       "Keita Sugama <sugama@jamadam.com>",
       "Ken Swanson <kswanson@genome.wustl.edu>",
+      "Martin Gruner <martin.gruner@otrs.com>",
       "Phil Kania <phil@vivox.com>",
       "Phil Mitchell <phil.mitchell@pobox.com>",
       "Richard Sailer <richard@weltraumpflege.org>",

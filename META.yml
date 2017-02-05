@@ -66,7 +66,7 @@ resources:
   bugtracker: https://github.com/gempesaw/Selenium-Remote-Driver/issues
   homepage: https://github.com/gempesaw/Selenium-Remote-Driver
   repository: https://github.com/gempesaw/Selenium-Remote-Driver.git
-version: '1.11'
+version: '1.12'
 x_contributors:
   - 'A.MacLeay <a.macleay@gmail.com>'
   - 'Allen Lew <allen@alew.org>'
@@ -88,6 +88,7 @@ x_contributors:
   - 'Jon Hermansen <jon.hermansen@gmail.com>'
   - 'Keita Sugama <sugama@jamadam.com>'
   - 'Ken Swanson <kswanson@genome.wustl.edu>'
+  - 'Martin Gruner <martin.gruner@otrs.com>'
   - 'Phil Kania <phil@vivox.com>'
   - 'Phil Mitchell <phil.mitchell@pobox.com>'
   - 'Richard Sailer <richard@weltraumpflege.org>'
