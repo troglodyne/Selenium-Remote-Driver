@@ -1,5 +1,5 @@
 package Selenium::Remote::RemoteConnection;
-$Selenium::Remote::RemoteConnection::VERSION = '1.12';
+$Selenium::Remote::RemoteConnection::VERSION = '1.19'; # TRIAL
 #ABSTRACT: Connect to a selenium server
 
 use Moo;
@@ -152,6 +152,10 @@ sub _process_response {
                 }
                 else {
                     $data->{'cmd_return'} = $decoded_json->{'value'};
+                    if (ref($data->{cmd_return}) eq 'HASH'
+                        && exists $data->{cmd_return}->{sessionId}) {
+                        $data->{sessionId} = $data->{cmd_return}->{sessionId};
+                    }
                 }
             }
             else {
@@ -183,7 +187,7 @@ Selenium::Remote::RemoteConnection - Connect to a selenium server
 
 =head1 VERSION
 
-version 1.12
+version 1.19
 
 =head1 SEE ALSO
 
