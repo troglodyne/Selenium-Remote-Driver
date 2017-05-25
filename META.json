@@ -85,7 +85,7 @@
          }
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver/issues"
@@ -97,7 +97,7 @@
          "web" : "https://github.com/gempesaw/Selenium-Remote-Driver"
       }
    },
-   "version" : "1.19",
+   "version" : "1.20",
    "x_contributors" : [
       "Allen Lew <allen@alew.org>",
       "A.MacLeay <a.macleay@gmail.com>",
@@ -120,6 +120,7 @@
       "Keita Sugama <sugama@jamadam.com>",
       "Ken Swanson <kswanson@genome.wustl.edu>",
       "lembark <lembark@wrkhors.com>",
+      "Luke Closs <lukec@users.noreply.github.com>",
       "Martin Gruner <martin.gruner@otrs.com>",
       "Peter Mottram (SysPete) <peter@sysnix.com>",
       "Phil Kania <phil@vivox.com>",

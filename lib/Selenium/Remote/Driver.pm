@@ -1,5 +1,5 @@
 package Selenium::Remote::Driver;
-$Selenium::Remote::Driver::VERSION = '1.19'; # TRIAL
+$Selenium::Remote::Driver::VERSION = '1.20';
 # ABSTRACT: Perl Client for Selenium Remote Driver
 
 use Moo;
@@ -1384,7 +1384,7 @@ Selenium::Remote::Driver - Perl Client for Selenium Remote Driver
 
 =head1 VERSION
 
-version 1.19
+version 1.20
 
 =head1 SYNOPSIS
 
@@ -2883,7 +2883,7 @@ Aditya Ivaturi <ivaturi@gmail.com>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Allen Lew A.MacLeay Andy Jack Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson lembark Martin Gruner Peter Mottram (SysPete) Phil Kania Mitchell Richard Sailer Robert Utter rouzier Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi Viťas Strádal
+=for stopwords Allen Lew A.MacLeay Andy Jack Bas Bloemsaat Brian Horakh Charles Howes Chris Davies Daniel Fackrell Dave Rolsky Dmitry Karasik Eric Johnson Gabor Szabo George S. Baugh Gordon Child GreatFlamingFoo Ivan Kurmanov Joe Higton Jon Hermansen Keita Sugama Ken Swanson lembark Luke Closs Martin Gruner Peter Mottram (SysPete) Phil Kania Mitchell Richard Sailer Robert Utter rouzier Tetsuya Tatsumi Tom Hukins Vangelis Katsikaros Vishwanath Janmanchi Viťas Strádal
 
 =over 4
 
@@ -2970,6 +2970,10 @@ Ken Swanson <kswanson@genome.wustl.edu>
 =item *
 
 lembark <lembark@wrkhors.com>
+
+=item *
+
+Luke Closs <lukec@users.noreply.github.com>
 
 =item *
 

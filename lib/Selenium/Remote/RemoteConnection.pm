@@ -1,5 +1,5 @@
 package Selenium::Remote::RemoteConnection;
-$Selenium::Remote::RemoteConnection::VERSION = '1.19'; # TRIAL
+$Selenium::Remote::RemoteConnection::VERSION = '1.20';
 #ABSTRACT: Connect to a selenium server
 
 use Moo;
@@ -71,6 +71,14 @@ sub request {
     # Construct full url.
     if ($url =~ m/^http/g) {
         $fullurl = $url;
+    }
+    elsif ($url =~ m/^\//) {
+        # This is used when we get a 302 Redirect with a Location header.
+        $fullurl =
+           "http://"
+          . $self->remote_server_addr . ":"
+          . $self->port
+          . $url;
     }
     elsif ($url =~ m/grid/g) {
         $fullurl =
@@ -187,7 +195,7 @@ Selenium::Remote::RemoteConnection - Connect to a selenium server
 
 =head1 VERSION
 
-version 1.19
+version 1.20
 
 =head1 SEE ALSO
 
