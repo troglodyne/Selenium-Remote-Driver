@@ -30,6 +30,6 @@ install:
 before_script:
   - coverage-setup
 script:
-   - AUTHOR_TESTING=1 RELEASE_TESTING=1 dzil cover -outputdir $PWD/cover_db
+   - AUTHOR_TESTING=1 RELEASE_TESTING=1 dzil cover -write $PWD/cover_db
 after_success:
   - coverage-report
