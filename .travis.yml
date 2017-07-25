@@ -30,6 +30,7 @@ install:
 before_script:
   - coverage-setup
 script:
-   - AUTHOR_TESTING=1 RELEASE_TESTING=1 dzil cover -write $PWD/cover_db
+   - AUTHOR_TESTING=1 RELEASE_TESTING=1 dzil cover
+   - export BUILDDIR=`find .build -name cover_db`; cd `dirname $BUILDDIR`
 after_success:
   - coverage-report
