@@ -86,6 +86,25 @@ has 'id' => (
     }
 );
 
+=attr selector
+The selector string used when finding the element.
+Mostly useful to the click() method if you pass the option 'method' => 'javascript'.
+Completely optional, but used internally.
+
+has 'selector' => (
+	is       => 'ro',
+)
+
+=attr selector_type
+The type of selector used when finding the element (xpath, etc.).
+Mostly useful to the click() method if you pass the option 'method' => 'javascript'.
+Completely optional, but used internally.
+
+has 'selector' => (
+	is       => 'ro',
+	default  => 'xpath'
+)
+
 =attr driver
 
 Required: Pass in a Selenium::Remote::Driver instance or one of its
@@ -109,11 +128,52 @@ has 'driver' => (
 
  Usage:
     $elem->click();
+    # Or
+    $elem->click( 'method' => 'keydown' );
+
+ Options (HASH):
+    'method' -- The way you want to click the element. Defaults to the native functionality provided by webdriver.
+    Valid values are 'native' (the default), 'keydown' (which sends the 'enter' key to the element after focusing it)
+    or 'javascript' (which sends the click event via 'execute_script'). These two additional methods have been added
+    due to somewhat controversial changes within Firefox & Chrome's drivers which aim to prevent certain actions (like clicks)
+    when the element is being overlapped by another element. Unfortunately, the implementation of these features has
+    mostly just frustrated testers instead of "doing what I mean" for it to do when calling click().
+
+    These two added methods will allow testers, for good or ill, to be able to bypass these checks as the need arises.
+    This also may allow more effective use of WebDriver if the driver for the given browser has not have fully implented click.
 
 =cut
 
 sub click {
-    my ($self) = @_;
+    my ( $self, %opts ) = @_;
+    $opts{'method'} ||= 'native';
+
+    # Choke on invalid methods
+    croak "Invalid method $opts{'method'} passed to click(). Valid methods are 'native', 'keydown' or 'javascript'."
+      if !grep { $opts{'method'} eq $_ } qw{native keydown javascript};
+
+    if( $opts{'method'} eq 'keydown' ) {
+
+        # Send the enter key. We could do { require 'Selenium::Remote::WDKeys'; }, but why import the dep only for this?
+        return $self->send_keys( "\N{U+E007}" );
+    }
+    elsif( $opts{'method'} eq 'javascript' && $self->{'selector'} ) {
+		my %scripts = (
+			'css'			    => "document.querySelectorAll('$self->{'selector'}')[0].click();",
+			'id'			    => "document.getElementById('$self->{'selector'}').click();",
+			'tag_name'		    => "document.GetElementsByTagName('$self->{'selector'}').click();",
+			'class'			    => "document.GetElementsByClassName('$self->{'selector'}').click();",
+			'class_name'        => "document.GetElementsByClassName('$self->{'selector'}').click();",
+			'name'			    => "document.GetElementsByName('$self->{'selector'}').click();",
+			'xpath'			    => "document.getElementByXpath('$self->{'selector'}').click();",
+			'link'              => "document.getElementByXpath('a[text()=\"$self->{'selector'}\"]')",
+			'link_text'         => "document.getElementByXpath('a[text()=\"$self->{'selector'}\"]')",
+			'partial_link_text' => "document.getElementByXpath('a[contains(text(),\"$self->{'selector'}\")]')",
+		);
+		return $self->execute_script( $scripts{$self->{'selector_type'}} ) if grep { $self->{'selector_type'} eq $_ } keys(%scripts);
+    }
+
+    # Fall through to default
     my $res = { 'command' => 'clickElement', 'id' => $self->id };
     return $self->_execute_command($res);
 }

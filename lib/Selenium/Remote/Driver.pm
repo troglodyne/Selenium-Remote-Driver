@@ -2021,6 +2021,8 @@ sub find_element {
     }
     return $self->webelement_class->new(
         id => $ret_data,
+        selector => $query,
+        selector_type => $method,
         driver => $self
     );
 }
@@ -2077,6 +2079,8 @@ sub find_elements {
             @$elem_obj_arr,
             $self->webelement_class->new(
                 id => $_,
+                selector => $query,
+                selector_type => $method,
                 driver => $self
             )
         );
@@ -2139,6 +2143,8 @@ sub find_child_element {
     }
     return $self->webelement_class->new(
         id => $ret_data,
+        selector => $query,
+        selector_type => $method,
         driver => $self
     );
 }
@@ -2200,6 +2206,8 @@ sub find_child_elements {
         $elem_obj_arr->[$i] =
           $self->webelement_class->new(
               id => $_,
+              selector => $query,
+              selector_type => $method,
               driver => $self
           );
         $i++;
